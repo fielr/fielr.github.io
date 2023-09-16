@@ -8920,9 +8920,9 @@ async function ForBetterClub() {
 			) {
 				return;
 			}
-			DialogAllowBlush = true;
-			DialogAllowEyebrows = true;
-			DialogAllowFluids = true;
+			// DialogAllowBlush = true;
+			// DialogAllowEyebrows = true;
+			// DialogAllowFluids = true;
 		};
 
 		SDK.hookFunction(
