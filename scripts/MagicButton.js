@@ -16,7 +16,7 @@ var bcModSdk = /*@__PURE__*/getDefaultExportFromCjs(bcmodsdk);
 const modApi = bcModSdk.registerMod({
     name: 'MagicButton',
     fullName: 'MagicButton',
-    version: '1.2.14'
+    version: '1.3.1'
 });
 const MagicButtonICONS = {
     Unlock: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAxCAYAAABznEEcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIkSURBVGhD7ZqNUcMwDEYLE8AGjMAIsAEbABMAEzACbAAbwAawATABbAAbgB5p7tIgpZYTOS7Xd/dd3Z/YlmPJstNFAJeiO9G3ogcR3x+JquNA9CR6F2md18TvT0RVwMi+iLSOpojrZ4UOaB3zarY7MpUBrbLvyM7y1Qs+gJMe/r77y6vooymugEPvNUWVY9FzU4wHp9RGE92ILOMw/lr0KdKupd5iWFEIA1I4E2nXY1yR8Gv5QqoBLfxeq6dItLIa944gU0ubVnw25DejofJ+o4i5nNMw/qHVN4sRRKocrPrwmWS8IZZGGb0+b6L7puiC+pg+fajrvCnWj3UnSCCT2V2+bjRbI2rhXxiRGp2sXGgsOLaWL5EEXom+RFoi6YJGyPWthC1atOuKVBpWilFa7BxJU9ywas51BzSZafqQY5+KmE61YPbFMqKmzrcQXNS9uGUEaXWVZ0Ma28WuFiKNYKHqKoxII9gT7Hd0KyoKUUCL1alis69FuLEHbq7oNBbugjaF+Hx0LtSntGNjWM42dpA5otPk60+UEVbqzpzeGCNI1vpOSELpPSVMInI69Y92LkRZ6fQ65vCJydkaUQuRRnRX7ND9SaQROHG7pSQqRZ2YhE8n1gRyHtcptxfLiPD0eUosIzi84gloTZiDGj2dpoRBfWyKqwwZwTFiTWQ/37aeqZWWtclKhkRuzB9QcsXpI8/L1yaNnmd2GBOSwBkkbqAWix+NvIfGLFPXswAAAABJRU5ErkJggg==",
@@ -320,11 +320,15 @@ function dialogGui() {
         next(args);
     });
 }
-function mainButton() {
+function main() {
     commonHooks();
     dialogGui();
 }
 
+const stopOrgasm = [10, 10, 60, 60];
+const resistOrgasm = [75, 10, 60, 60];
+let antiPoseChangeActive = true;
+// 导出聊天记录
 function extendPlayerID(playerID) {
     let ID = playerID;
     while (ID.length < 8) {
@@ -351,25 +355,43 @@ function downloadFile() {
     aTag.download = getFileName() + ".txt";
     aTag.click();
 }
-async function exportChatCommand() {
-    await waitFor(() => !!Commands);
-    const cmds = [
-        {
-            Tag: "expo",
-            Description: "导出聊天记录",
-            Action: () => downloadFile()
-        },
-        {
-            Tag: "magicbutton",
-            Description: "启用/关闭MagicButton",
-            Action: () => activeSwitch()
-        }
-    ];
-    CommandCombine(cmds);
+// anti-EBCH
+function validPosePermitted(newPose, oldPose) {
+    const diff = newPose.length >= oldPose.length ? newPose.filter(pose => !oldPose.includes(pose)) : oldPose.filter(pose => !newPose.includes(pose));
+    if (newPose.length === 0 || diff.length === 0) {
+        return true;
+    }
+    console.log(`diff: ${diff}`);
+    // 'BaseUpper', 'BaseLower', 'Kneel'
+    if (diff.length > 1 || !['BaseLower', 'Kneel'].includes(diff[0])) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }
-
-const stopOrgasm = [10, 10, 60, 60];
-const resistOrgasm = [75, 10, 60, 60];
+function antiPoseChange() {
+    modApi.hookFunction("ChatRoomSyncSingle", 0, (args, next) => {
+        var _a;
+        if (antiPoseChangeActive) {
+            const lastPose = Player.ActivePose;
+            const data = args[0];
+            if (data.SourceMemberNumber !== Player.MemberNumber && data.Character.MemberNumber === Player.MemberNumber && !validPosePermitted(data.Character.ActivePose, lastPose)) {
+                const sourceCharacter = ((_a = ChatRoomCharacter.find(c => c.MemberNumber === data.SourceMemberNumber)) === null || _a === void 0 ? void 0 : _a.Name) + `(${data.SourceMemberNumber})`;
+                console.log(`Pose change detected ${data.Character.ActivePose} from ${sourceCharacter}.`);
+                Player.ActivePose = lastPose;
+                ChatRoomCharacterUpdate(Player);
+                args[0].Character.ActivePose = lastPose;
+            }
+        }
+        next(args);
+    });
+}
+function antiPoseChangeSwitch() {
+    antiPoseChangeActive = !antiPoseChangeActive;
+    ChatRoomSendLocal(antiPoseChangeActive ? "Enabled" : "Disabled", 3000);
+}
+// Orgasm Control
 function orgasmControl() {
     modApi.hookFunction("ChatRoomRun", 3, (args, next) => {
         next(args);
@@ -402,47 +424,7 @@ function orgasmControl() {
         next(args);
     });
 }
-function validPosePermitted(newPose, oldPose) {
-    const diff = newPose.length >= oldPose.length ? newPose.filter(pose => !oldPose.includes(pose)) : oldPose.filter(pose => !newPose.includes(pose));
-    if (newPose.length === 0 || diff.length === 0) {
-        return true;
-    }
-    console.log(`diff: ${diff}`);
-    // 'BaseUpper', 'BaseLower', 'Kneel'
-    if (diff.length > 1 || !['BaseLower', 'Kneel'].includes(diff[0])) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-function antiPoseChange() {
-    modApi.hookFunction("ChatRoomSyncSingle", 0, (args, next) => {
-        var _a;
-        const lastPose = Player.ActivePose;
-        const data = args[0];
-        // console.log(data);
-        if (data.SourceMemberNumber !== Player.MemberNumber && data.Character.MemberNumber === Player.MemberNumber && !validPosePermitted(data.Character.ActivePose, lastPose)) {
-            const sourceCharacter = ((_a = ChatRoomCharacter.find(c => c.MemberNumber === data.SourceMemberNumber)) === null || _a === void 0 ? void 0 : _a.Name) + `(${data.SourceMemberNumber})`;
-            console.log(`Pose change detected ${data.Character.ActivePose} from ${sourceCharacter}.`);
-            Player.ActivePose = lastPose;
-            ChatRoomCharacterUpdate(Player);
-            args[0].Character.ActivePose = lastPose;
-            next(args);
-            // ServerSend("ChatRoomChat", {
-            //     Content: "PoseChangeWarn",
-            //     Type: "Action",
-            //     Dictionary: [
-            //         // Message itself
-            //         { Tag: "MISSING PLAYER DIALOG: PoseChangeWarn", Text: `Pose change from ${sourceCharacter} denied.` },
-            //     ],
-            // });
-        }
-        else {
-            next(args);
-        }
-    });
-}
+// Miscallaneous
 function immediateMaidService() {
     modApi.hookFunction("MainHallClick", 0, (args, next) => {
         next(args);
@@ -451,17 +433,56 @@ function immediateMaidService() {
         }
     });
 }
-function alwaysActive() {
+// export async function exportChatCommand() {
+//     await waitFor(() => !!Commands)
+//     const cmds = [
+//         {
+//             Tag: "expo",
+//             Description: "导出聊天记录",
+//             Action: () => downloadFile()
+//         },
+//         {
+//             Tag: "magicbutton",
+//             Description: "启用/关闭MagicButton",
+//             Action: () => activeSwitch()
+//         },
+//         {
+//             Tag: "antiposechange",
+//             Description: "启用/禁用阻止他人改变你的姿势",
+//             Action: () => antiPoseChangeSwitch()
+//         }
+//     ]
+//     CommandCombine(cmds);
+// }
+async function miscellaneous() {
     orgasmControl();
-    antiPoseChange();
     immediateMaidService();
+    antiPoseChange();
+    await waitFor(() => !!Commands);
+    const cmds = [
+        {
+            Tag: "expo",
+            Description: "导出聊天记录",
+            Action: () => downloadFile()
+        },
+        {
+            Tag: "magicbutton",
+            Description: "启用/关闭MagicButton",
+            Action: () => activeSwitch()
+        },
+        {
+            Tag: "antiposechange",
+            Description: "启用/禁用阻止他人改变你的姿势",
+            Action: () => antiPoseChangeSwitch()
+        }
+    ];
+    CommandCombine(cmds);
 }
 
 let modIsInit = false;
 function init() {
-    mainButton();
-    alwaysActive();
-    exportChatCommand();
+    main();
+    miscellaneous();
 }
 function initWait() {
     modApi.hookFunction("LoginResponse", 0, (args, next) => {
