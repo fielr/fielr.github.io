@@ -471,7 +471,7 @@ async function miscellaneous() {
             Action: () => activeSwitch()
         },
         {
-            Tag: "antiposechange",
+            Tag: "antipose",
             Description: "启用/禁用阻止他人改变你的姿势",
             Action: () => antiPoseChangeSwitch()
         }
