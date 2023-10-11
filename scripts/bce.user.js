@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements
 // @namespace https://www.bondageprojects.com/
-// @version 4.52
+// @version 4.55
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -38,20 +38,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const FBC_VERSION = "4.52";
-const settingsVersion = 51;
+const FBC_VERSION = "4.55";
+const settingsVersion = 52;
 
 const fbcChangelog = `${FBC_VERSION}
-- fix manually overridden facial expressions resetting on struggle
+- automatically add origins set by yourself to allowed 3rd party origins
 
-4.51
-- fix face getting stuck after struggle minigame (equipping, removing items, etc)
+4.54
+- fix relogin
 
-4.50
-- fix lockpicking
-
-4.49
-- fix auto-struggle for R96
+4.53
+- switch to html dialogs instead of browser prompts (/importlooks, /exportlooks, importing and exporting crafts)
+- R97Beta1 compatibility
+- R97 only
+	- add confirmation dialog for custom room contents
+	- allow extreme difficulty to load 3rd party content by default with confirmation prompt
 `;
 
 /*
@@ -68,7 +69,7 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
 async function ForBetterClub() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R95"];
+	const SUPPORTED_GAME_VERSIONS = ["R96", "R97Beta1"];
 	const CAPABILITIES = /** @type {const} */ (["clubslave"]);
 
 	const w = window;
@@ -595,6 +596,23 @@ async function ForBetterClub() {
 			description:
 				"Allows the game to control your real vibrators. For a list of supported vibrators see https://buttplug.io",
 		},
+		extremeRoomCustomization: {
+			label: "Show 3rd party room customization by default on Extreme",
+			value: false,
+			sideEffects: (newValue) => {
+				debug("extremeRoomCustomization", newValue);
+				fbcSettings.customContentDomainCheck = true;
+				if (
+					newValue &&
+					typeof Player.ImmersionSettings?.ShowRoomCustomization === "number"
+				) {
+					Player.ImmersionSettings.ShowRoomCustomization = 3;
+				}
+			},
+			category: "immersion",
+			description:
+				"Also enables 3rd party content protection under Misc. This option only impacts Extreme difficulty; on other difficulties use game immersion settings.",
+		},
 		antiAntiGarble: {
 			label: "Limited gag anti-cheat: cloth-gag equivalent garbling",
 			value: false,
@@ -775,6 +793,16 @@ async function ForBetterClub() {
 			category: "misc",
 			description:
 				"Disables drawing on the screen. This is useful for preventing accidental drawing.",
+		},
+		customContentDomainCheck: {
+			label: "Prompt before loading content from a 3rd party domain",
+			value: true,
+			sideEffects: (newValue) => {
+				debug("customContentDomainCheck", newValue);
+			},
+			category: "misc",
+			description:
+				"Show a confirmation prompt before allowing content from a 3rd party domain to be loaded.",
 		},
 		fpsCounter: {
 			label: "Show FPS counter",
@@ -1125,6 +1153,146 @@ async function ForBetterClub() {
 	 */
 	const expectedHashes = (gameVersion) => {
 		switch (gameVersion) {
+			case "R97Beta1":
+			case "R97Beta2":
+			case "R97Beta3":
+			case "R97Beta4":
+			case "R97":
+				return /** @type {const} */ ({
+					ActivityChatRoomArousalSync: "21318CAF",
+					ActivitySetArousal: "3AE28123",
+					ActivitySetArousalTimer: "1342AFE2",
+					ActivityTimerProgress: "6CD388A7",
+					AppearanceClick: "723EA7F1",
+					AppearanceExit: "AA300341",
+					AppearanceLoad: "4360C485",
+					AppearanceRun: "0BBDEE59",
+					CharacterAppearanceWardrobeLoad: "A5B63A03",
+					CharacterBuildDialog: "85F79C6E",
+					CharacterCompressWardrobe: "8D3B1AB1",
+					CharacterDecompressWardrobe: "A9FD29CC",
+					CharacterDelete: "398D1116",
+					CharacterGetCurrent: "45608177",
+					CharacterLoadCanvas: "BA6AD4FF",
+					CharacterNickname: "A794EFF5",
+					CharacterRefresh: "5BF9DA5A",
+					CharacterReleaseTotal: "396640D1",
+					CharacterSetActivePose: "5BCD2A9E",
+					CharacterSetCurrent: "F46573D8",
+					CharacterSetFacialExpression: "B06C1B8A",
+					ChatAdminRoomCustomizationClick: "222821D2",
+					ChatAdminRoomCustomizationProcess: "82475DF6",
+					ChatRoomCharacterItemUpdate: "263DB2F0",
+					ChatRoomCharacterUpdate: "9D0EEA39",
+					ChatRoomClearAllElements: "14DAAB05",
+					ChatRoomClick: "120B0F0B",
+					ChatRoomCreateElement: "9A3FD548",
+					ChatRoomCurrentTime: "A462DD3A",
+					ChatRoomDrawBackground: "AEE70C4E",
+					ChatRoomDrawCharacterOverlay: "06FB4CC3",
+					ChatRoomHTMLEntities: "0A7ADB1D",
+					ChatRoomKeyDown: "B4BFDB0C",
+					ChatRoomListManipulation: "75D28A8B",
+					ChatRoomMessage: "BBD61334",
+					ChatRoomMessageDisplay: "C7053411",
+					ChatRoomRegisterMessageHandler: "C432923A",
+					ChatRoomResize: "653445D7",
+					ChatRoomRun: "6F4C7B4D",
+					ChatRoomSendChat: "7F540ED0",
+					ChatRoomStart: "9B822A9A",
+					CommandExecute: "5C948CC3",
+					CommandParse: "C9061FE8",
+					CommonClick: "1F6DF7CB",
+					CommonColorIsValid: "390A2CE4",
+					CommonSetScreen: "E2AC00F4",
+					CraftingClick: "FF76A404",
+					CraftingConvertSelectedToItem: "EC0B58B8",
+					CraftingRun: "5BE6E125",
+					DialogClick: "D0FA2714",
+					DialogDraw: "8A814153",
+					DialogDrawItemMenu: "FCE556C2",
+					DialogLeave: "C37553DC",
+					DrawBackNextButton: "9AF4BA37",
+					DrawButton: "A7023A82",
+					DrawCharacter: "35E09A1E",
+					DrawCheckbox: "00FD87EB",
+					DrawImageEx: "3D3D74F5",
+					DrawImageResize: "8CF55F04",
+					DrawItemPreview: "A27E9228",
+					DrawProcess: "E60F65B5",
+					DrawText: "C1BF0F50",
+					DrawTextFit: "F9A1B11E",
+					ElementCreateInput: "60D2EA73",
+					ElementCreateTextArea: "81019A58",
+					ElementIsScrolledToEnd: "1CC4FE11",
+					ElementPosition: "CC4E3C82",
+					ElementRemove: "60809E60",
+					ElementScrollToEnd: "1AC45575",
+					ElementValue: "4F26C62F",
+					FriendListShowBeep: "6C0449BB",
+					GameRun: "3525631A",
+					GLDrawResetCanvas: "81214642",
+					InformationSheetRun: "E248ADC7",
+					InventoryGet: "E666F671",
+					InventoryItemMiscMistressTimerPadlockClick: "861419FC",
+					InventoryItemMiscMistressTimerPadlockDraw: "4E1628BE",
+					InventoryItemMiscMistressTimerPadlockExit: "66BC6923",
+					InventoryItemMiscMistressTimerPadlockLoad: "BE46432F",
+					InventoryItemMiscOwnerTimerPadlockClick: "C929699B",
+					InventoryItemMiscOwnerTimerPadlockDraw: "BCA80BF8",
+					InventoryItemMiscOwnerTimerPadlockExit: "1BE66B4A",
+					InventoryItemMiscOwnerTimerPadlockLoad: "8A55C0D1",
+					InventoryItemMiscTimerPasswordPadlockClick: "BAE0BAC9",
+					InventoryItemMiscTimerPasswordPadlockDraw: "0BB8E88D",
+					InventoryItemMiscTimerPasswordPadlockExit: "7323E56D",
+					InventoryItemMiscTimerPasswordPadlockLoad: "82223608",
+					LoginClick: "EE94BEC7",
+					LoginRun: "C3926C4F",
+					LoginSetSubmitted: "C88F4A8E",
+					MouseIn: "CA8B839E",
+					NotificationDrawFavicon: "AB88656B",
+					NotificationRaise: "E8F29646",
+					NotificationTitleUpdate: "0E92F3ED",
+					OnlineGameAllowChange: "3779F42C",
+					OnlineProfileClick: "CC034993",
+					OnlineProfileRun: "B0AF608D",
+					PreferenceInitPlayer: "63AC64BB",
+					RelogRun: "10AF5A60",
+					RelogExit: "2DFB2DAD",
+					ServerAccountBeep: "F16771D4",
+					ServerAppearanceBundle: "4D069622",
+					ServerAppearanceLoadFromBundle: "FB794E30",
+					ServerClickBeep: "3E6277BE",
+					ServerConnect: "845E50A6",
+					ServerDisconnect: "06C1A6B0",
+					ServerInit: "FEC6457F",
+					ServerOpenFriendList: "FA8D3CDE",
+					ServerSend: "779A1C78",
+					SkillGetWithRatio: "3EB4BC45",
+					SpeechGarble: "9D669F73",
+					SpeechGarbleByGagLevel: "5F6E16C8",
+					SpeechGetTotalGagLevel: "C55B705A",
+					StruggleDexterityProcess: "7E19ADA9",
+					StruggleFlexibilityCheck: "727CE05B",
+					StruggleFlexibilityProcess: "278D7285",
+					StruggleLockPickDraw: "2F1F603B",
+					StruggleMinigameHandleExpression: "B6E4A1A0",
+					StruggleMinigameStop: "206F85E7",
+					StruggleStrengthProcess: "D20CF698",
+					TextGet: "4DDE5794",
+					TextLoad: "ADF7C890",
+					TimerInventoryRemove: "1FA771FB",
+					TimerProcess: "52458C63",
+					TitleExit: "F13F533C",
+					WardrobeClick: "E96F7F63",
+					WardrobeExit: "EE83FF29",
+					WardrobeFastLoad: "38627DC2",
+					WardrobeFastSave: "B62385C1",
+					WardrobeFixLength: "CA3334C6",
+					WardrobeLoad: "C343A4C7",
+					WardrobeRun: "9616EB3A",
+				});
+
 			default:
 				return /** @type {const} */ ({
 					ActivityChatRoomArousalSync: "21318CAF",
@@ -1559,6 +1727,23 @@ async function ForBetterClub() {
 		}
 	};
 
+	// Delay game processes until registration is complete
+	/** @type {"init" | "enable" | "disable"} */
+	let funcsRegistered = "init";
+	SDK.hookFunction("LoginResponse", HOOK_PRIORITIES.Top, (args, next) => {
+		if (funcsRegistered === "init") {
+			funcsRegistered = "disable";
+		}
+		return next(args);
+	});
+	SDK.hookFunction("GameRun", HOOK_PRIORITIES.Top, (args, next) => {
+		if (funcsRegistered === "disable") {
+			requestAnimationFrame(GameRun);
+			return null;
+		}
+		return next(args);
+	});
+
 	await registerFunction(functionIntegrityCheck, "functionIntegrityCheck");
 	registerFunction(bceStyles, "bceStyles");
 	registerFunction(commonPatches, "commonPatches");
@@ -1600,6 +1785,8 @@ async function ForBetterClub() {
 	registerFunction(itemAntiCheat, "itemAntiCheat");
 	registerFunction(leashFix, "leashFix");
 	registerFunction(hookBCXAPI, "hookBCXAPI");
+	registerFunction(customContentDomainCheck, "customContentDomainCheck");
+	funcsRegistered = "enable";
 
 	// Post ready when in a chat room
 	await fbcNotify(`For Better Club v${w.FBC_VERSION} Loaded`);
@@ -2109,33 +2296,54 @@ async function ForBetterClub() {
 				Action: async (_, _command, args) => {
 					const [target] = args;
 					/** @type {Character} */
-					let targetMember = null;
+					let targetCharacter = null;
 					if (!target) {
-						targetMember = Player;
+						targetCharacter = Player;
 					} else {
-						targetMember = Character.find(
+						targetCharacter = Character.find(
 							(c) => c.MemberNumber === parseInt(target)
 						);
 					}
-					if (!targetMember) {
+					if (!targetCharacter) {
 						logInfo("Could not find member", target);
 						return;
 					}
-					const includeBinds = window.confirm(displayText("Include binds?"));
-					const includeLocks =
-						includeBinds && window.confirm(displayText("Include locks?"));
-					const includeBase = window.confirm(
-						displayText("Include height, body type, hair, etc?")
-					);
+					const [bindSubmit] = await showAsyncModal({
+						prompt: displayText("Include binds?"),
+						buttons: {
+							cancel: "No",
+							submit: "Yes",
+						},
+					});
+					const includeBinds = bindSubmit === "submit";
+					let includeLocks = false;
+					if (includeBinds) {
+						const [lockSubmit] = await showAsyncModal({
+							prompt: displayText("Include locks?"),
+							buttons: {
+								cancel: "No",
+								submit: "Yes",
+							},
+						});
+						includeLocks = lockSubmit === "submit";
+					}
+					const [baseSubmit] = await showAsyncModal({
+						prompt: displayText("Include height, body type, hair, etc?"),
+						buttons: {
+							cancel: "No",
+							submit: "Yes",
+						},
+					});
+					const includeBase = baseSubmit === "submit";
 
-					const base = targetMember.Appearance.filter(
+					const base = targetCharacter.Appearance.filter(
 						(a) => a.Asset.Group.IsDefault && !a.Asset.Group.Clothing
 					);
-					const clothes = targetMember.Appearance.filter(
+					const clothes = targetCharacter.Appearance.filter(
 						(a) =>
 							a.Asset.Group.Category === "Appearance" && a.Asset.Group.Clothing
 					);
-					const binds = targetMember.Appearance.filter(
+					const binds = targetCharacter.Appearance.filter(
 						(a) =>
 							a.Asset.Group.Category === "Item" &&
 							!["ItemNeck", "ItemNeckAccessories"].includes(
@@ -2172,13 +2380,25 @@ async function ForBetterClub() {
 						};
 					});
 
-					const targetName = targetMember.IsPlayer()
+					const targetName = targetCharacter.IsPlayer()
 						? "yourself"
-						: CharacterNickname(targetMember);
+						: CharacterNickname(targetCharacter);
 
-					await navigator.clipboard.writeText(
-						LZString.compressToBase64(JSON.stringify(looks))
-					);
+					const exportString = LZString.compressToBase64(JSON.stringify(looks));
+
+					showAsyncModal({
+						prompt: displayText(displayText("Copy the looks string below")),
+						input: {
+							initial: exportString,
+							readonly: true,
+							type: "textarea",
+						},
+						buttons: {
+							submit: "Done",
+						},
+					});
+
+					await navigator.clipboard.writeText(exportString);
 					fbcChatNotify(
 						displayText(`Exported looks for $TargetName copied to clipboard`, {
 							$TargetName: targetName,
@@ -2201,61 +2421,74 @@ async function ForBetterClub() {
 						return;
 					}
 
-					const bundleString = window.prompt(
-						displayText("Paste your looks here")
-					);
-					if (!bundleString) {
-						fbcChatNotify(displayText("No looks string provided"));
-						return;
-					}
-					try {
-						const bundle = /** @type {ItemBundle[]} */ (
-							bundleString.startsWith("[")
-								? JSON.parse(bundleString)
-								: JSON.parse(LZString.decompressFromBase64(bundleString))
-						);
-
-						if (
-							!Array.isArray(bundle) ||
-							bundle.length === 0 ||
-							!bundle[0].Group
-						) {
-							throw new Error("Invalid bundle");
-						}
-
-						// Keep items you cannot unlock in your appearance
-						for (const item of Player.Appearance) {
-							if (item.Property?.LockedBy && !DialogCanUnlock(Player, item)) {
-								/** @type {ItemBundle} */
-								const itemBundle = {
-									Group: item.Asset.Group.Name,
-									Name: item.Asset.Name,
-									Color: item.Color,
-									Difficulty: item.Difficulty,
-									Property: item.Property,
-								};
-								const idx = bundle.findIndex(
-									(v) => v.Group === item.Asset.Group.Name
-								);
-								if (idx < 0) {
-									bundle.push(itemBundle);
-								} else {
-									bundle[idx] = itemBundle;
-								}
+					showModal({
+						prompt: displayText("Paste your looks here"),
+						input: {
+							initial: "",
+							readonly: false,
+							type: "textarea",
+						},
+						callback: (act, bundleString) => {
+							if (act !== "submit") {
+								return;
 							}
-						}
-						ServerAppearanceLoadFromBundle(
-							Player,
-							"Female3DCG",
-							bundle,
-							Player.MemberNumber
-						);
-						ChatRoomCharacterUpdate(Player);
-						fbcChatNotify(displayText("Applied looks"));
-					} catch (e) {
-						console.error(e);
-						fbcChatNotify(displayText("Could not parse looks"));
-					}
+							if (!bundleString) {
+								fbcChatNotify(displayText("No looks string provided"));
+								return;
+							}
+							try {
+								const bundle = /** @type {ItemBundle[]} */ (
+									bundleString.startsWith("[")
+										? JSON.parse(bundleString)
+										: JSON.parse(LZString.decompressFromBase64(bundleString))
+								);
+
+								if (
+									!Array.isArray(bundle) ||
+									bundle.length === 0 ||
+									!bundle[0].Group
+								) {
+									throw new Error("Invalid bundle");
+								}
+
+								// Keep items you cannot unlock in your appearance
+								for (const item of Player.Appearance) {
+									if (
+										item.Property?.LockedBy &&
+										!DialogCanUnlock(Player, item)
+									) {
+										/** @type {ItemBundle} */
+										const itemBundle = {
+											Group: item.Asset.Group.Name,
+											Name: item.Asset.Name,
+											Color: item.Color,
+											Difficulty: item.Difficulty,
+											Property: item.Property,
+										};
+										const idx = bundle.findIndex(
+											(v) => v.Group === item.Asset.Group.Name
+										);
+										if (idx < 0) {
+											bundle.push(itemBundle);
+										} else {
+											bundle[idx] = itemBundle;
+										}
+									}
+								}
+								ServerAppearanceLoadFromBundle(
+									Player,
+									"Female3DCG",
+									bundle,
+									Player.MemberNumber
+								);
+								ChatRoomCharacterUpdate(Player);
+								fbcChatNotify(displayText("Applied looks"));
+							} catch (e) {
+								console.error(e);
+								fbcChatNotify(displayText("Could not parse looks"));
+							}
+						},
+					});
 				},
 			},
 			{
@@ -8601,7 +8834,10 @@ async function ForBetterClub() {
 				CurrentScreen === "ChatRoom" &&
 				document.getElementById("TextAreaChatLog")?.offsetParent !== null
 			) {
-				return [5, 905, 60, 60];
+				if (GameVersion.startsWith("R96")) {
+					return [5, 905, 60, 60];
+				}
+				return [5, 865, 60, 60];
 			}
 			return [70, 905, 60, 60];
 		}
@@ -8922,6 +9158,119 @@ async function ForBetterClub() {
 		for (const child of newChildren) {
 			chatMessageElement.appendChild(child);
 		}
+	}
+
+	function customContentDomainCheck() {
+		if (GameVersion.startsWith("R96")) {
+			return;
+		}
+
+		/** @type {Map<string, "allowed" | "denied">} */
+		const sessionCustomOrigins = new Map();
+		const trustedOrigins = ["https://fs.kinkop.eu", "https://i.imgur.com"];
+
+		let open = false;
+		/**
+		 * @param {string} origin
+		 */
+		function showCustomContentDomainCheckWarning(origin) {
+			if (open) {
+				return;
+			}
+			open = true;
+			showModal({
+				prompt: displayText(
+					"Do you want to allow 3rd party content to be loaded from $origin? $trusted",
+					{
+						$origin: origin,
+						$trusted: trustedOrigins.includes(origin)
+							? displayText("(This origin is trusted by authors of FBC)")
+							: "",
+					}
+				),
+				callback: (act) => {
+					open = false;
+					if (act === "submit") {
+						sessionCustomOrigins.set(origin, "allowed");
+					} else if (act === "cancel") {
+						sessionCustomOrigins.set(origin, "denied");
+					}
+				},
+				buttons: {
+					cancel: displayText("Deny for session"),
+					submit: displayText("Allow for session"),
+				},
+			});
+		}
+
+		SDK.hookFunction(
+			"ChatAdminRoomCustomizationProcess",
+			HOOK_PRIORITIES.OverrideBehaviour,
+			/**
+			 * @param {[{ ImageURL: string, MusicURL: string }]} args
+			 */
+			(args, next) => {
+				if (!fbcSettings.customContentDomainCheck) {
+					return next(args);
+				}
+
+				try {
+					const [{ ImageURL, MusicURL }] = args;
+
+					const imageOrigin = ImageURL && new URL(ImageURL).origin;
+					const musicOrigin = MusicURL && new URL(MusicURL).origin;
+
+					if (imageOrigin && !sessionCustomOrigins.has(imageOrigin)) {
+						showCustomContentDomainCheckWarning(imageOrigin);
+					} else if (musicOrigin && !sessionCustomOrigins.has(musicOrigin)) {
+						showCustomContentDomainCheckWarning(musicOrigin);
+					}
+
+					if (
+						(!ImageURL ||
+							sessionCustomOrigins.get(imageOrigin) === "allowed") &&
+						(!MusicURL || sessionCustomOrigins.get(musicOrigin) === "allowed")
+					) {
+						return next(args);
+					}
+				} catch (_) {
+					// Don't care
+				}
+
+				return null;
+			}
+		);
+
+		SDK.hookFunction(
+			"ChatAdminRoomCustomizationClick",
+			HOOK_PRIORITIES.Observe,
+			(args, next) => {
+				for (const s of [
+					ElementValue("InputImageURL").trim(),
+					ElementValue("InputMusicURL").trim(),
+				]) {
+					try {
+						const url = new URL(s);
+						sessionCustomOrigins.set(url.origin, "allowed");
+					} catch (_) {
+						// Don't care
+					}
+				}
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"PreferenceInitPlayer",
+			HOOK_PRIORITIES.Top,
+			(args, next) => {
+				const ret = next(args);
+				if (fbcSettings.extremeRoomCustomization) {
+					Player.ImmersionSettings.ShowRoomCustomization = 3;
+				}
+				return ret;
+			}
+		);
 	}
 
 	function discreetMode() {
@@ -9863,35 +10212,44 @@ async function ForBetterClub() {
 		const exportPosition = /** @type {const} */ ([1585, 15, 90, 90]);
 
 		function importCraft() {
-			const str = window.prompt(displayText("Paste the craft here")) || "";
-			if (str.length === 0) {
-				window.alert(displayText("No craft to import"));
-			}
-			try {
-				const craft = /** @type {Craft} */ (
-					JSON.parse(LZString.decompressFromBase64(str))
-				);
-				if (!isNonNullObject(craft)) {
-					logError(craft);
-					throw new Error(`invalid craft type ${typeof craft} ${str}`);
-				}
-				for (const [key, value] of Object.entries(craft)) {
-					if (
-						!isString(value) &&
-						!Number.isInteger(value) &&
-						value !== false &&
-						value !== true &&
-						value !== null &&
-						!isNonNullObject(value)
-					) {
-						logWarn("potentially invalid craft bundle:", key, "was", value);
+			showModal({
+				prompt: displayText("Paste the craft here"),
+				callback: (action, str) => {
+					if (action !== "submit" || !str) {
+						return;
 					}
-				}
-				CraftingSelectedItem = CraftingConvertItemToSelected(craft);
-				CraftingModeSet("Name");
-			} catch (e) {
-				logError("importing craft", e);
-			}
+					try {
+						const craft = /** @type {Craft} */ (
+							JSON.parse(LZString.decompressFromBase64(str))
+						);
+						if (!isNonNullObject(craft)) {
+							logError(craft);
+							throw new Error(`invalid craft type ${typeof craft} ${str}`);
+						}
+						for (const [key, value] of Object.entries(craft)) {
+							if (
+								!isString(value) &&
+								!Number.isInteger(value) &&
+								value !== false &&
+								value !== true &&
+								value !== null &&
+								!isNonNullObject(value)
+							) {
+								logWarn("potentially invalid craft bundle:", key, "was", value);
+							}
+						}
+						CraftingSelectedItem = CraftingConvertItemToSelected(craft);
+						CraftingModeSet("Name");
+					} catch (e) {
+						logError("importing craft", e);
+					}
+				},
+				input: {
+					initial: "",
+					readonly: false,
+					type: "textarea",
+				},
+			});
 		}
 
 		SDK.hookFunction(
@@ -9901,12 +10259,19 @@ async function ForBetterClub() {
 				switch (CraftingMode) {
 					case "Name":
 						if (MouseIn(...exportPosition)) {
-							window.prompt(
-								displayText("Copy the craft here"),
-								LZString.compressToBase64(
-									JSON.stringify(CraftingConvertSelectedToItem())
-								)
-							);
+							showModal({
+								prompt: displayText("Copy the craft here"),
+								input: {
+									initial: LZString.compressToBase64(
+										JSON.stringify(CraftingConvertSelectedToItem())
+									),
+									readonly: true,
+									type: "textarea",
+								},
+								callback: () => {
+									debug("exported craft");
+								},
+							});
 						} else if (MouseIn(...importPosition)) {
 							importCraft();
 						}
@@ -9959,6 +10324,161 @@ async function ForBetterClub() {
 				return ret;
 			}
 		);
+	}
+
+	let disabledUntil = 0;
+	/**
+	 * @typedef {{ prompt: string | Node, input?: { initial: string, readonly: boolean, type: "input" | "textarea" }, callback: (action: ModalAction, inputValue?: string) => void, buttons?: { submit?: string, cancel?: string } }} ModalOptions
+	 * @typedef {"submit" | "cancel" | "close"} ModalAction
+	 */
+	/**
+	 * @param {ModalOptions} opts
+	 */
+	function showModal(opts) {
+		disabledUntil = Date.now() + 500;
+		const modal = document.createElement("dialog");
+		modal.style.zIndex = "1001";
+		modal.style.display = "flex";
+		modal.style.flexDirection = "column";
+		modal.style.width = "50em";
+		modal.style.fontFamily = "Arial, Helvetica, sans-serif";
+		modal.open = true;
+
+		const prompt = document.createElement("div");
+		if (isString(opts.prompt)) {
+			prompt.textContent = opts.prompt;
+		} else {
+			prompt.append(opts.prompt);
+		}
+		modal.append(prompt);
+		document.body.append(modal);
+
+		let inputValue = "";
+
+		if (opts.input) {
+			const input = document.createElement(opts.input.type);
+			switch (opts.input.type) {
+				case "input":
+					{
+						const el = /** @type {HTMLInputElement} */ (input);
+						el.type = "text";
+					}
+					break;
+				case "textarea":
+					{
+						const el = /** @type {HTMLTextAreaElement} */ (input);
+						el.rows = 10;
+					}
+					break;
+				default:
+					// This should never happen
+					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+					throw new Error(`invalid input type ${opts.input.type}`);
+			}
+			input.style.width = "100%";
+			input.readOnly = opts.input.readonly;
+			input.addEventListener("mouseover", () => {
+				input.select();
+			});
+			input.addEventListener("focus", () => {
+				input.select();
+			});
+			input.addEventListener("change", () => {
+				inputValue = input.value;
+			});
+
+			input.value = opts.input.initial;
+			modal.append(input);
+		}
+
+		const buttonContainer = document.createElement("div");
+		buttonContainer.style.display = "flex";
+		buttonContainer.style.flexDirection = "row";
+		buttonContainer.style.justifyContent = "space-between";
+		buttonContainer.style.marginTop = "1em";
+		buttonContainer.style.width = "100%";
+		modal.append(buttonContainer);
+
+		const submit = document.createElement("button");
+		submit.textContent = opts.buttons?.submit || displayText("Submit");
+		submit.addEventListener("click", () => {
+			close("submit");
+		});
+
+		const cancel = document.createElement("button");
+		cancel.textContent = opts.buttons?.cancel || displayText("Cancel");
+		cancel.addEventListener("click", () => {
+			close("cancel");
+		});
+
+		for (const button of [submit, cancel]) {
+			button.style.padding = "0.5em";
+			button.style.flexGrow = "1";
+		}
+
+		buttonContainer.append(cancel, submit);
+
+		modal.addEventListener("click", (e) => {
+			e.stopPropagation();
+		});
+		/**
+		 * @param {KeyboardEvent} e
+		 */
+		const keyClick = (e) => {
+			e.stopPropagation();
+			if (e.key === "Escape") {
+				close();
+			}
+		};
+		document.addEventListener("keydown", keyClick);
+
+		// Click-blocker
+		const blocker = document.createElement("div");
+		blocker.style.position = "fixed";
+		blocker.style.top = "0";
+		blocker.style.left = "0";
+		blocker.style.width = "100vw";
+		blocker.style.height = "100vh";
+		blocker.style.zIndex = "1000";
+		blocker.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+		blocker.title = displayText("Click to close the modal");
+		blocker.addEventListener("click", () => {
+			close();
+		});
+		blocker.addEventListener("focus", () => {
+			close();
+		});
+		document.body.append(blocker);
+
+		/**
+		 * @param {ModalAction} action
+		 */
+		function close(action = "close") {
+			if (Date.now() < disabledUntil) {
+				return;
+			}
+			disabledUntil = Date.now() + 500;
+			modal.close();
+			modal.remove();
+			blocker.remove();
+			document.removeEventListener("keydown", keyClick);
+			opts.callback(action, inputValue);
+		}
+	}
+
+	/**
+	 * @param {Omit<ModalOptions, "callback">} opts
+	 * @returns {Promise<[ModalAction, string | null]>}
+	 */
+	function showAsyncModal(opts) {
+		return new Promise((resolve) => {
+			showModal({
+				...opts,
+				callback: (action, inputValue) => {
+					resolve([action, inputValue]);
+				},
+			});
+		});
 	}
 
 	function hideChatRoomElements() {
