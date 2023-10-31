@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements
 // @namespace https://www.bondageprojects.com/
-// @version 4.59
+// @version 4.60
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -38,10 +38,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const FBC_VERSION = "4.59";
+const FBC_VERSION = "4.60";
 const settingsVersion = 54;
 
 const fbcChangelog = `${FBC_VERSION}
+- add ability to define target for /versions command (dDeepLb)
+- preserve formatting in IM messages (dDeepLb)
+
+4.59
 - improve the client side rate limiting
 
 4.58
@@ -49,9 +53,6 @@ const fbcChangelog = `${FBC_VERSION}
 
 4.57
 - remove extreme difficulty confirmation prompt (no longer necessary since R97Beta2)
-
-4.56
-- fix layering buttons not appearing when custom backgrounds are used
 `;
 
 /*
@@ -1218,7 +1219,7 @@ async function ForBetterClub() {
 					ElementScrollToEnd: "1AC45575",
 					ElementValue: "4F26C62F",
 					FriendListShowBeep: "6C0449BB",
-					GameRun: "3525631A",
+					GameRun: "ED65B730",
 					GLDrawResetCanvas: "81214642",
 					InformationSheetRun: "E248ADC7",
 					InventoryGet: "E666F671",
@@ -1254,7 +1255,7 @@ async function ForBetterClub() {
 					ServerDisconnect: "06C1A6B0",
 					ServerInit: "FEC6457F",
 					ServerOpenFriendList: "FA8D3CDE",
-					ServerSend: "779A1C78",
+					ServerSend: "D356D537",
 					SkillGetWithRatio: "3EB4BC45",
 					SpeechGarble: "9D669F73",
 					SpeechGarbleByGagLevel: "5F6E16C8",
@@ -2412,22 +2413,7 @@ async function ForBetterClub() {
 					const [, , ...message] = command.split(" ");
 					const msg = message?.join(" ");
 					/** @type {Character[]} */
-					let targetMembers = [];
-					if (/^\d+$/u.test(target)) {
-						targetMembers = [
-							ChatRoomCharacter.find(
-								(c) => c.MemberNumber === parseInt(target)
-							),
-						];
-					} else {
-						targetMembers = ChatRoomCharacter.filter(
-							(c) =>
-								CharacterNickname(c).split(" ")[0]?.toLowerCase() ===
-									target?.toLowerCase() ||
-								c.Name.split(" ")[0].toLowerCase() === target?.toLowerCase()
-						);
-					}
-					targetMembers = targetMembers.filter((c) => c);
+					const targetMembers = findDrawnCharacters(target);
 					if (!target || !targetMembers || targetMembers.length === 0) {
 						fbcChatNotify(`Whisper target not found: ${target}`);
 					} else if (targetMembers.length > 1) {
@@ -2462,47 +2448,52 @@ async function ForBetterClub() {
 			{
 				Tag: "versions",
 				Description: displayText(
-					"show versions of the club, FBC, and BCX in use by players"
+					"show versions of the club, FBC, BCX and other mods in use by players"
 				),
-				Action: () => {
-					/** @type {(chars: Character[]) => string} */
-					const versionOutput = (chars) =>
-						chars
-							.map(
-								(a) =>
-									`${CharacterNickname(a)} (${a.MemberNumber}) club ${
-										a.OnlineSharedSettings?.GameVersion
-									}${
-										w.bcx?.getCharacterVersion(a.MemberNumber)
-											? ` BCX ${bcx.getCharacterVersion(a.MemberNumber)}`
-											: ""
-									}${
-										a.FBC
-											? `\nFBC v${
-													a.FBC
-											  } Alt Arousal: ${a.BCEArousal?.toString()}`
-											: ""
-									}${
-										a.FBCOtherAddons &&
-										a.FBCOtherAddons.some(
-											(m) => !["BCX", "FBC"].includes(m.name)
-										)
-											? `\nOther Addons:\n- ${a.FBCOtherAddons.filter(
-													(m) => !["BCX", "FBC"].includes(m.name)
-											  )
-													.map(
-														(m) =>
-															`${m.name} v${m.version} ${m.repository ?? ""}`
-													)
-													.join("\n- ")}`
-											: ""
-									}`
+				Action: (_, _command, args) => {
+					/** @type {(character: Character) => string} */
+					const getCharacterModInfo = (character) =>
+						`${CharacterNickname(character)} (${character.MemberNumber}) club ${
+							character.OnlineSharedSettings?.GameVersion
+						}${
+							w.bcx?.getCharacterVersion(character.MemberNumber)
+								? ` BCX ${bcx.getCharacterVersion(character.MemberNumber)}`
+								: ""
+						}${
+							character.FBC
+								? `\nFBC v${
+										character.FBC
+								  } Alt Arousal: ${character.BCEArousal?.toString()}`
+								: ""
+						}${
+							character.FBCOtherAddons &&
+							character.FBCOtherAddons.some(
+								(mod) => !["BCX", "FBC"].includes(mod.name)
 							)
-							.filter((a) => a)
-							.join("\n\n");
+								? `\nOther Addons:\n- ${character.FBCOtherAddons.filter(
+										(mod) => !["BCX", "FBC"].includes(mod.name)
+								  )
+										.map(
+											(mod) =>
+												`${mod.name} v${mod.version} ${mod.repository ?? ""}`
+										)
+										.join("\n- ")}`
+								: ""
+						}`;
 
-					fbcChatNotify(versionOutput(ChatRoomCharacterDrawlist));
-					debug(versionOutput(ChatRoomCharacter));
+					const targets =
+						args.length > 0 ? findDrawnCharacters(args[0], true) : [];
+
+					const printList =
+						targets.length > 0 ? targets : ChatRoomCharacterDrawlist;
+
+					const versionOutput = printList
+						.map(getCharacterModInfo)
+						.filter((info) => info)
+						.join("\n\n");
+
+					fbcChatNotify(versionOutput);
+					debug(versionOutput);
 				},
 			},
 		];
@@ -3366,6 +3357,7 @@ async function ForBetterClub() {
 		.bce-message {
 			padding: 0.2em 0.4em;
 			position: relative;
+			white-space: pre-wrap;
 		}
 		.bce-message::before {
 			content: attr(data-time);
@@ -10429,6 +10421,30 @@ async function ForBetterClub() {
 		// 5 minutes
 		createTimer(sendHeartbeat, 1000 * 60 * 5);
 	})();
+
+	/**
+	 * @param {string} target
+	 * @param {boolean} [limitVisible]
+	 */
+	function findDrawnCharacters(target, limitVisible = false) {
+		const baseList = limitVisible
+			? ChatRoomCharacterDrawlist
+			: ChatRoomCharacter;
+		let targetMembers = [];
+		if (/^\d+$/u.test(target)) {
+			targetMembers = [
+				baseList.find((c) => c.MemberNumber === parseInt(target)),
+			];
+		} else {
+			targetMembers = baseList.filter(
+				(c) =>
+					CharacterNickname(c).split(" ")[0]?.toLowerCase() ===
+						target?.toLowerCase() ||
+					c.Name.split(" ")[0].toLowerCase() === target?.toLowerCase()
+			);
+		}
+		return targetMembers.filter((c) => c);
+	}
 
 	/** @type {(x: number, y: number, width: number, text: string, align: "left" | "center") => void} */
 	function drawTooltip(x, y, width, text, align) {
