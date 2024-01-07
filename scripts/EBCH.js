@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Eli's BC Helper
 // @namespace https://www.bondageprojects.com/
-// @version 1.02.38
+// @version 1.02.39
 // @description A collection of helpful features for BC
 // @author Elicia (Help from Sid)
 // @match https://bondageprojects.elementfx.com/*
@@ -34,9 +34,9 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
 
 
 (async function () {
-  const ver = "1.02.38";
+  const ver = "1.02.39";
   var latestupdate = "EBCH updated (" + ver + "):\n" +
-  "-Update for R92.";
+  "-Update for R99.";
   const modApi = bcModSdk.registerMod({ 
     name: 'EBCH',
     fullName: "Eli's Bondage Club Helper",
@@ -268,7 +268,7 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
 
 
     const datenow = new Date(Date.now());
-    var obj = { logmsg: "[" + datenow.toLocaleDateString() + " - " + datenow.toLocaleTimeString() + " - Room: " + Player.LastChatRoom + " - AccName: " + oriname + " - AccNum: " + orinum + "]<br>" + text + "<br>"} ;
+    var obj = { logmsg: "[" + datenow.toLocaleDateString() + " - " + datenow.toLocaleTimeString() + " - Room: " + Player.LastChatRoom.Name + " - AccName: " + oriname + " - AccNum: " + orinum + "]<br>" + text + "<br>"} ;
     if (typeof blob != 'undefined')
       obj.blob = blob;
     var store = getObjectStore("logs" + JSON.stringify(Player.MemberNumber), 'readwrite');
