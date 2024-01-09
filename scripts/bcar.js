@@ -151,7 +151,7 @@ var bcModSDK=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
                                 { Tag: "Biep", Text: "msg" },
                                 { Tag: "Sonner", Text: "msg" },
                                 { Tag: "发送私聊", Text: "msg" },
-                                { Tag: "msg", Text: CharacterNickname(Player) + "摇晃她的尾巴。" }
+                                { Tag: "msg", Text: CharacterNickname(Player) + "摇晃她的尾巴." }
                             ]
                         });
                         TailWag();
