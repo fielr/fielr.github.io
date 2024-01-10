@@ -244,6 +244,7 @@
         Act_剪刀剪掉内裤: { A: createActivity("剪刀剪掉内裤", "ItemVulvaPiercings", "ItemVulvaPiercings", 50, 50, ["UseHands", "UseArms", "HasScissors"], []), B: ActivityDictionaryadd("Act_剪刀剪掉内裤", "SourceCharacter用剪刀剪掉了TargetCharacter的内裤.", "SourceCharacter用剪刀剪掉了自己的内裤.") },
         Act_剪刀剪掉袜子: { A: createActivity("剪刀剪掉袜子", "ItemBoots", "ItemBoots", 50, 50, ["UseHands", "UseArms", "HasScissors"], []), B: ActivityDictionaryadd("Act_剪刀剪掉袜子", "SourceCharacter用剪刀剪掉了TargetCharacter的袜子.", "SourceCharacter用剪刀剪掉了自己的袜子.") },
 
+        Act_骑上去: { A: createActivity("骑上去", "ItemTorso", "", 50, 50, [], []), B: ActivityDictionaryadd("Act_骑上去", "SourceCharacter骑在TargetCharacter的背上.", "") },
     };
 
     //============================================================
@@ -280,6 +281,10 @@
         "HasBra": (acting, acted, group) => !!InventoryGet(acting, "Bra"), // 有胸罩
         "HasPanties": (acting, acted, group) => !!InventoryGet(acting, "Panties"), // 有内裤
         "HasSocks": (acting, acted, group) => !!InventoryGet(acting, "Socks"), // 有袜子
+
+
+        "Hassaddle": (acting, acted, group) => // 鞍
+            !!InventoryIsItemInList(acting, "ItemTorso", "Luzi_缰绳"),
 
     }));
 
@@ -481,6 +486,9 @@
         [Activitypng + "Act_剪刀剪掉内裤.png", Scissorspng],
         [Activitypng + "Act_剪刀剪掉袜子.png", Scissorspng],
 
+        [Activitypng + "Act_骑上去.png", Activitypng + "SistersHug.png"],
+
+
     ]);
 
     // 图片加载队列
@@ -519,7 +527,8 @@
         "ChatSelf-ItemLegs-Act_站起来": null,
         "ChatSelf-ItemArms-Act_手放身前": null,
         "ChatSelf-ItemLegs-Act_宠物服立起来": "Hogtied",
-        "ChatSelf-ItemLegs-Act_宠物服趴下": "AllFours"
+        "ChatSelf-ItemLegs-Act_宠物服趴下": "AllFours",
+        // "ChatOther-ItemTorso-Act_骑上去": "Kneel",
     };
 
     mod.hookFunction("ChatRoomMessage", 0, (args, next) => {
