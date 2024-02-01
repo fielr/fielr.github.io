@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Eli's BC Helper
 // @namespace https://www.bondageprojects.com/
-// @version 1.02.39
+// @version 1.02.40
 // @description A collection of helpful features for BC
 // @author Elicia (Help from Sid)
 // @match https://bondageprojects.elementfx.com/*
@@ -34,9 +34,9 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
 
 
 (async function () {
-  const ver = "1.02.39";
+  const ver = "1.02.40";
   var latestupdate = "EBCH updated (" + ver + "):\n" +
-  "-Update for R99.";
+  "-Removed lobby switch button for BC versions greater than R99.";
   const modApi = bcModSdk.registerMod({ 
     name: 'EBCH',
     fullName: "Eli's Bondage Club Helper",
@@ -946,7 +946,7 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
     await waitFor(() => !!ChatSearchNormalDraw);
     modApi.hookFunction('ChatSearchNormalDraw', 4, (args,next) => {
       next(args);
-      if(CurrentScreen === "ChatSearch")
+      if(CurrentScreen === "ChatSearch" && GameVersion == "R99")
       {
         var curlobby;
         switch(ChatRoomSpace) {
