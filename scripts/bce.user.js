@@ -533,6 +533,23 @@ async function ForBetterClub() {
 			description:
 				"Allows you to open menus while bound, even if they're disabled in the settings.",
 		},
+		modifyDifficulty: {
+			label: "Add option to modify difficulty of restraints to layering menu",
+			value: false,
+			/**
+			 * @param {unknown} newValue 
+			 */
+			sideEffects: (newValue) => {
+				debug("modifyDifficulty", newValue);
+				if (newValue && !fbcSettings.layeringMenu) {
+					fbcSettings.layeringMenu = true;
+					defaultSettings.layeringMenu.sideEffects(true);
+				}
+			},
+			category: "cheats",
+			description:
+				"Adds an option to the layering menu to modify the difficulty of restraints.",
+		},
 		autoStruggle: {
 			label: "Make automatic progress while struggling",
 			value: false,
@@ -2992,25 +3009,16 @@ async function ForBetterClub() {
 			 */
 			(args, next) => {
 				if (fbcSettings.lockpick && StruggleLockPickOrder) {
-					const seed = parseInt(StruggleLockPickOrder.join(""));
-					const rand = newRand(seed);
-					const threshold = SkillGetWithRatio(Player, "LockPicking") / 20;
-					const hints = StruggleLockPickOrder.map((a) => {
-						const r = rand();
-						return r < threshold ? a : false;
-					});
+					const hints = StruggleLockPickOrder;
 					for (let p = 0; p < hints.length; p++) {
 						// Replicates pin rendering in the game Struggle.js
-						const xx =
-							x - pinWidth / 2 + (0.5 - hints.length / 2 + p) * pinSpacing;
-						if (hints[p] !== false) {
-							DrawText(
-								`${StruggleLockPickOrder.indexOf(p) + 1}`,
-								xx,
-								y,
-								"blue"
-							);
-						}
+						const xx = x - pinWidth / 2 + (0.5 - hints.length / 2 + p) * pinSpacing;
+						DrawText(
+							`${StruggleLockPickOrder.indexOf(p) + 1}`,
+							xx,
+							y,
+							"white"
+						);
 					}
 				}
 				return next(args);
@@ -6058,8 +6066,16 @@ async function ForBetterClub() {
 			}
 		}
 
-		let prioritySubscreen = false;
+		/** @type {"Priority" | "Difficulty"} */
+		let priorityField = "Priority",
+			prioritySubscreen = false;
 		let layerPage = 0;
+		const FIELDS = Object.freeze({
+			/** @type {"Priority"} */
+			Priority: "Priority",
+			/** @type {"Difficulty"} */
+			Difficulty: "Difficulty"
+		});
 
 		const preview = CharacterLoadSimple(
 			`LayeringPreview-${Player.MemberNumber ?? ""}`
@@ -6081,8 +6097,8 @@ async function ForBetterClub() {
 			"Layering preview affected by blindness"
 		);
 
-		/** @type {(C: Character, FocusItem: Item) => void} */
-		function prioritySubscreenEnter(C, FocusItem) {
+		/** @type {(C: Character, FocusItem: Item, field: "Priority" | "Difficulty") => void} */
+		function prioritySubscreenEnter(C, FocusItem, field) {
 			function getFocusItem() {
 				if (!DialogFocusItem) {
 					throw new Error(
@@ -6099,53 +6115,64 @@ async function ForBetterClub() {
 
 			DialogFocusItem = FocusItem;
 			prioritySubscreen = true;
+			priorityField = field;
 			advancedPriorities = false;
-			if (!C.AppearanceLayers) {
-				logWarn("C.AppearanceLayers is not defined");
-			}
-			const initialValue =
-				C.AppearanceLayers?.find((a) => a.Asset === FocusItem.Asset)
-					?.Priority ?? 0;
-			layerPriorities = {};
-			for (const layer of FocusItem.Asset.Layer) {
-				const layerName = layer.Name;
-				if (!layerName) {
-					continue;
-				}
-				const drawnLayer = C.AppearanceLayers?.find(
-					(a) => a.Asset === FocusItem.Asset && a.Name === layerName
-				);
-				let priority = layer.Priority ?? -1;
-				if (
-					isNonNullObject(FocusItem?.Property?.OverridePriority) &&
-					layerName in FocusItem.Property.OverridePriority
-				) {
-					priority = FocusItem?.Property?.OverridePriority[layerName];
-				}
-				if (drawnLayer) {
-					priority = drawnLayer.Priority ?? priority;
-				}
-				layerPriorities[layerName] = priority;
-				const el = ElementCreateInput(
-					layerElement(layerName),
-					"number",
-					"",
-					"20"
-				);
-				ElementValue(layerElement(layerName), priority.toString());
-				el.setAttribute("data-layer", layerName);
-				el.className = layerPriority;
-				// eslint-disable-next-line no-loop-func -- layerPriorities scope is outside the function, ElementValue and InventoryGet are global functions
-				el.addEventListener("change", () => {
-					layerPriorities[layerName] = parseInt(
-						ElementValue(layerElement(layerName))
-					);
-					updateItemPriorityFromLayerPriorityInput(getFocusItem());
-				});
-			}
-			hideAllLayerElements();
-			if (isNonNullObject(FocusItem?.Property?.OverridePriority)) {
-				advancedPriorities = true;
+			let initialValue = 0;
+			switch (field) {
+				case FIELDS.Priority:
+					if (!C.AppearanceLayers) {
+						logWarn("C.AppearanceLayers is not defined");
+					}
+					initialValue =
+						C.AppearanceLayers?.find((a) => a.Asset === FocusItem.Asset)
+							?.Priority ?? 0;
+					layerPriorities = {};
+					for (const layer of FocusItem.Asset.Layer) {
+						const layerName = layer.Name;
+						if (!layerName) {
+							continue;
+						}
+						const drawnLayer = C.AppearanceLayers?.find(
+							(a) => a.Asset === FocusItem.Asset && a.Name === layerName
+						);
+						let priority = layer.Priority ?? -1;
+						if (
+							isNonNullObject(FocusItem?.Property?.OverridePriority) &&
+							layerName in FocusItem.Property.OverridePriority
+						) {
+							priority = FocusItem?.Property?.OverridePriority[layerName];
+						}
+						if (drawnLayer) {
+							priority = drawnLayer.Priority ?? priority;
+						}
+						layerPriorities[layerName] = priority;
+						const el = ElementCreateInput(
+							layerElement(layerName),
+							"number",
+							"",
+							"20"
+						);
+						ElementValue(layerElement(layerName), priority.toString());
+						el.setAttribute("data-layer", layerName);
+						el.className = layerPriority;
+						// eslint-disable-next-line no-loop-func -- layerPriorities scope is outside the function, ElementValue and InventoryGet are global functions
+						el.addEventListener("change", () => {
+							layerPriorities[layerName] = parseInt(
+								ElementValue(layerElement(layerName))
+							);
+							updateItemPriorityFromLayerPriorityInput(getFocusItem());
+						});
+					}
+					hideAllLayerElements();
+					if (isNonNullObject(FocusItem?.Property?.OverridePriority)) {
+						advancedPriorities = true;
+					}
+					break;
+				case FIELDS.Difficulty:
+					initialValue = C.Appearance.find((a) => a === FocusItem)?.Difficulty ?? 0;
+					break;
+				default:
+					break;
 			}
 			ElementCreateInput(layerPriority, "number", "", "20");
 			ElementValue(layerPriority, initialValue.toString());
@@ -6159,7 +6186,9 @@ async function ForBetterClub() {
 				return;
 			}
 			priorityInput.addEventListener("change", () => {
-				updateItemPriorityFromLayerPriorityInput(getFocusItem());
+				if (field === FIELDS.Priority) {
+					updateItemPriorityFromLayerPriorityInput(getFocusItem());
+				}
 			});
 		}
 		function prioritySubscreenExit() {
@@ -6289,7 +6318,7 @@ async function ForBetterClub() {
 						if (!item) {
 							throw new Error("focus item is not defined in layering menu");
 						}
-						prioritySubscreenEnter(C, item);
+						prioritySubscreenEnter(C, item, FIELDS.Priority);
 					}
 				}
 				return next(args);
@@ -6318,6 +6347,18 @@ async function ForBetterClub() {
 						if (!focusItem) {
 							throw new Error(
 								"layering button not guarded behind focus being on a worn item"
+							);
+						}
+						if (fbcSettings.modifyDifficulty) {
+							DrawButton(
+								10,
+								890,
+								52,
+								52,
+								"",
+								"White",
+								ICONS.TIGHTEN,
+								displayText("Loosen or tighten")
 							);
 						}
 						if (
@@ -6372,10 +6413,12 @@ async function ForBetterClub() {
 		const layersPerColumn = 10;
 		const layersPerPage = layersPerColumn * 2;
 		function prioritySubscreenDraw() {
-			DrawCharacter(preview, 1300, 100, 0.9, false);
+			if (priorityField === FIELDS.Priority) {
+				DrawCharacter(preview, 1300, 100, 0.9, false);
+			}
 
 			const layerNames = Object.keys(layerPriorities);
-			if (layerNames.length > 0) {
+			if (priorityField === FIELDS.Priority && layerNames.length > 0) {
 				DrawCheckbox(100, 50, 64, 64, "", advancedPriorities, false, "White");
 				drawTextFitLeft(
 					displayText("Adjust individual layers"),
@@ -6406,7 +6449,7 @@ async function ForBetterClub() {
 				}
 			} else {
 				// Localization guide: valid options for priorityField can be seen in the "const FIELDS" object above
-				DrawText(displayText(`Set item priority`), 950, 150, "White", "Black");
+				DrawText(displayText(`Set item ${priorityField}`), 950, 150, "White", "Black");
 				ElementPosition(layerPriority, 950, 230, 100);
 				hideAllLayerElements();
 			}
@@ -6417,7 +6460,7 @@ async function ForBetterClub() {
 				"White",
 				"Icons/Accept.png",
 				// Localization guide: valid options for priorityField can be seen in the "const FIELDS" object above
-				displayText(`Set priority`)
+				displayText(`Set ${priorityField}`)
 			);
 		}
 
@@ -6492,8 +6535,16 @@ async function ForBetterClub() {
 						prioritySubscreenClick(C, focusItem);
 						return null;
 					}
-					if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
-						prioritySubscreenEnter(C, focusItem);
+					if (
+						assetWorn(C, focusItem) &&
+						MouseIn(10, 890, 52, 52) &&
+						fbcSettings.modifyDifficulty
+					) {
+						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
+						return;
+					}
+					else if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
+						prioritySubscreenEnter(C, focusItem, FIELDS.Priority);
 						return null;
 					} else if (
 						assetWorn(C, focusItem) &&
@@ -6560,7 +6611,17 @@ async function ForBetterClub() {
 
 		/** @type {(C: Character, focusItem: Item) => void} */
 		function savePrioritySubscreenChanges(C, focusItem) {
-			updateItemPriorityFromLayerPriorityInput(focusItem);
+			switch (priorityField){
+				case FIELDS.Priority:
+					updateItemPriorityFromLayerPriorityInput(focusItem);
+					break;
+				case FIELDS.Difficulty:
+					const newDifficulty = parseInt(ElementValue(layerPriority));
+					focusItem.Difficulty = newDifficulty;
+					break;
+				default:
+					break;
+			}
 			debug("updated item", focusItem);
 			CharacterRefresh(C, false, false);
 			ChatRoomCharacterItemUpdate(C, C.FocusGroup?.Name);
@@ -8128,9 +8189,9 @@ async function ForBetterClub() {
 				if (item?.Target !== Player.MemberNumber) {
 					return next(args);
 				}
-				if (Player.WhiteList.includes(data.Source)) {
-					return next(args);
-				}
+				// if (Player.WhiteList.includes(data.Source)) {
+				// 	return next(args);
+				// }
 				const sourceCharacter =
 					ChatRoomCharacter.find((a) => a.MemberNumber === data.Source) ||
 					(data.Source === Player.MemberNumber ? Player : null);
@@ -8185,9 +8246,9 @@ async function ForBetterClub() {
 				if (data.Character.MemberNumber !== Player.MemberNumber) {
 					return next(args);
 				}
-				if (Player.WhiteList.includes(data.SourceMemberNumber)) {
-					return next(args);
-				}
+				// if (Player.WhiteList.includes(data.SourceMemberNumber)) {
+				// 	return next(args);
+				// }
 
 				const sourceCharacter =
 					ChatRoomCharacter.find(
