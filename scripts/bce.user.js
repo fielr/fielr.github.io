@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements
 // @namespace https://www.bondageprojects.com/
-// @version 4.79
+// @version 5.2
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -34,42 +34,28 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const FBC_VERSION = "4.79";
-const settingsVersion = 56;
-
-const fbcChangelog = `${FBC_VERSION}
-- Fixed minor layout issues with the whisper button
-
-4.78
-- Added a setting to disable FBC's modifications to the whisper button
-- Fixed the whisper button to respect map whisper range
-- Repositioned the whisper button
-- Fixed /versions to respect character visibility in maps to match behaviour in normal rooms
-
-4.77
-- Added whisper icon to all messages with a sender
-- Updated whisper icon
-- Fixed /r <component>
-- R100 support
-- Removed accurate timer inputs
-
-4.76
-- Fixed chat augments on R100Beta1
-`;
-
-/*
- * Bondage Club Mod Development Kit
- * For more info see: https://github.com/Jomshir98/bondage-club-mod-sdk
- */
-/** @type {import('./types/bcModSdk').ModSDKGlobalAPI} */
-// eslint-disable-next-line capitalized-comments, multiline-comment-style
-// prettier-ignore
-// @ts-ignore
-// eslint-disable-next-line
-var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ERROR:\n"+e);const o=new Error(e);throw console.error(o),o}const t=new TextEncoder;function n(e){return!!e&&"object"==typeof e&&!Array.isArray(e)}function r(e){const o=new Set;return e.filter((e=>!o.has(e)&&o.add(e)))}const i=new Map,a=new Set;function d(e){a.has(e)||(a.add(e),console.warn(e))}function s(e){const o=[],t=new Map,n=new Set;for(const r of p.values()){const i=r.patching.get(e.name);if(i){o.push(...i.hooks);for(const[o,a]of i.patches.entries())t.has(o)&&t.get(o)!==a&&d(`ModSDK: Mod '${r.name}' is patching function ${e.name} with same pattern that is already applied by different mod, but with different pattern:\nPattern:\n${o}\nPatch1:\n${t.get(o)||""}\nPatch2:\n${a}`),t.set(o,a),n.add(r.name)}}o.sort(((e,o)=>o.priority-e.priority));const r=function(e,o){if(0===o.size)return e;let t=e.toString().replaceAll("\r\n","\n");for(const[n,r]of o.entries())t.includes(n)||d(`ModSDK: Patching ${e.name}: Patch ${n} not applied`),t=t.replaceAll(n,r);return(0,eval)(`(${t})`)}(e.original,t);let i=function(o){var t,i;const a=null===(i=(t=m.errorReporterHooks).hookChainExit)||void 0===i?void 0:i.call(t,e.name,n),d=r.apply(this,o);return null==a||a(),d};for(let t=o.length-1;t>=0;t--){const n=o[t],r=i;i=function(o){var t,i;const a=null===(i=(t=m.errorReporterHooks).hookEnter)||void 0===i?void 0:i.call(t,e.name,n.mod),d=n.hook.apply(this,[o,e=>{if(1!==arguments.length||!Array.isArray(o))throw new Error(`Mod ${n.mod} failed to call next hook: Expected args to be array, got ${typeof e}`);return r.call(this,e)}]);return null==a||a(),d}}return{hooks:o,patches:t,patchesSources:n,enter:i,final:r}}function c(e,o=!1){let r=i.get(e);if(r)o&&(r.precomputed=s(r));else{let o=window;const a=e.split(".");for(let t=0;t<a.length-1;t++)if(o=o[a[t]],!n(o))throw new Error(`ModSDK: Function ${e} to be patched not found; ${a.slice(0,t+1).join(".")} is not object`);const d=o[a[a.length-1]];if("function"!=typeof d)throw new Error(`ModSDK: Function ${e} to be patched not found`);const c=function(e){let o=-1;for(const n of t.encode(e)){let e=255&(o^n);for(let o=0;o<8;o++)e=1&e?-306674912^e>>>1:e>>>1;o=o>>>8^e}return((-1^o)>>>0).toString(16).padStart(8,"0").toUpperCase()}(d.toString().replaceAll("\r\n","\n")),l={name:e,original:d,originalHash:c};r=Object.assign(Object.assign({},l),{precomputed:s(l),router:()=>{},context:o,contextProperty:a[a.length-1]}),r.router=function(e){return function(...o){return e.precomputed.enter.apply(this,[o])}}(r),i.set(e,r),o[r.contextProperty]=r.router}return r}function l(){const e=new Set;for(const o of p.values())for(const t of o.patching.keys())e.add(t);for(const o of i.keys())e.add(o);for(const o of e)c(o,!0)}function f(){const e=new Map;for(const[o,t]of i)e.set(o,{name:o,original:t.original,originalHash:t.originalHash,sdkEntrypoint:t.router,currentEntrypoint:t.context[t.contextProperty],hookedByMods:r(t.precomputed.hooks.map((e=>e.mod))),patchedByMods:Array.from(t.precomputed.patchesSources)});return e}const p=new Map;function u(e){p.get(e.name)!==e&&o(`Failed to unload mod '${e.name}': Not registered`),p.delete(e.name),e.loaded=!1,l()}function g(e,t,r){"string"==typeof e&&"string"==typeof t&&(alert(`Mod SDK warning: Mod '${e}' is registering in a deprecated way.\nIt will work for now, but please inform author to update.`),e={name:e,fullName:e,version:t},t={allowReplace:!0===r}),e&&"object"==typeof e||o("Failed to register mod: Expected info object, got "+typeof e),"string"==typeof e.name&&e.name||o("Failed to register mod: Expected name to be non-empty string, got "+typeof e.name);let i=`'${e.name}'`;"string"==typeof e.fullName&&e.fullName||o(`Failed to register mod ${i}: Expected fullName to be non-empty string, got ${typeof e.fullName}`),i=`'${e.fullName} (${e.name})'`,"string"!=typeof e.version&&o(`Failed to register mod ${i}: Expected version to be string, got ${typeof e.version}`),e.repository||(e.repository=void 0),void 0!==e.repository&&"string"!=typeof e.repository&&o(`Failed to register mod ${i}: Expected repository to be undefined or string, got ${typeof e.version}`),null==t&&(t={}),t&&"object"==typeof t||o(`Failed to register mod ${i}: Expected options to be undefined or object, got ${typeof t}`);const a=!0===t.allowReplace,d=p.get(e.name);d&&(d.allowReplace&&a||o(`Refusing to load mod ${i}: it is already loaded and doesn't allow being replaced.\nWas the mod loaded multiple times?`),u(d));const s=e=>{"string"==typeof e&&e||o(`Mod ${i} failed to patch a function: Expected function name string, got ${typeof e}`);let t=g.patching.get(e);return t||(t={hooks:[],patches:new Map},g.patching.set(e,t)),t},f={unload:()=>u(g),hookFunction:(e,t,n)=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);const r=s(e);"number"!=typeof t&&o(`Mod ${i} failed to hook function '${e}': Expected priority number, got ${typeof t}`),"function"!=typeof n&&o(`Mod ${i} failed to hook function '${e}': Expected hook function, got ${typeof n}`);const a={mod:g.name,priority:t,hook:n};return r.hooks.push(a),l(),()=>{const e=r.hooks.indexOf(a);e>=0&&(r.hooks.splice(e,1),l())}},patchFunction:(e,t)=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);const r=s(e);n(t)||o(`Mod ${i} failed to patch function '${e}': Expected patches object, got ${typeof t}`);for(const[n,a]of Object.entries(t))"string"==typeof a?r.patches.set(n,a):null===a?r.patches.delete(n):o(`Mod ${i} failed to patch function '${e}': Invalid format of patch '${n}'`);l()},removePatches:e=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);s(e).patches.clear(),l()},callOriginal:(e,t,n)=>(g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`),"string"==typeof e&&e||o(`Mod ${i} failed to call a function: Expected function name string, got ${typeof e}`),Array.isArray(t)||o(`Mod ${i} failed to call a function: Expected args array, got ${typeof t}`),function(e,o,t=window){return c(e).original.apply(t,o)}(e,t,n)),getOriginalHash:e=>("string"==typeof e&&e||o(`Mod ${i} failed to get hash: Expected function name string, got ${typeof e}`),c(e).originalHash)},g={name:e.name,fullName:e.fullName,version:e.version,repository:e.repository,allowReplace:a,api:f,loaded:!0,patching:new Map};return p.set(e.name,g),Object.freeze(f)}function h(){const e=[];for(const o of p.values())e.push({name:o.name,fullName:o.fullName,version:o.version,repository:o.repository});return e}let m;const y=function(){if(void 0===window.bcModSdk)return window.bcModSdk=function(){const o={version:e,apiVersion:1,registerMod:g,getModsInfo:h,getPatchingInfo:f,errorReporterHooks:Object.seal({hookEnter:null,hookChainExit:null})};return m=o,Object.freeze(o)}();if(n(window.bcModSdk)||o("Failed to init Mod SDK: Name already in use"),1!==window.bcModSdk.apiVersion&&o(`Failed to init Mod SDK: Different version already loaded ('1.1.0' vs '${window.bcModSdk.version}')`),window.bcModSdk.version!==e&&(alert(`Mod SDK warning: Loading different but compatible versions ('1.1.0' vs '${window.bcModSdk.version}')\nOne of mods you are using is using an old version of SDK. It will work for now but please inform author to update`),window.bcModSdk.version.startsWith("1.0.")&&void 0===window.bcModSdk._shim10register)){const e=window.bcModSdk,o=Object.freeze(Object.assign(Object.assign({},e),{registerMod:(o,t,n)=>o&&"object"==typeof o&&"string"==typeof o.name&&"string"==typeof o.version?e.registerMod(o.name,o.version,"object"==typeof t&&!!t&&!0===t.allowReplace):e.registerMod(o,t,n),_shim10register:!0}));window.bcModSdk=o}return window.bcModSdk}();return"undefined"!=typeof exports&&(Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=y),y}();
-
 async function ForBetterClub() {
 	"use strict";
+
+	const FBC_VERSION = "5.2";
+	const settingsVersion = 58;
+
+	const fbcChangelog = `${FBC_VERSION}
+- Fixed resizing rich online profile
+
+5.1
+- Removed update checker; FUSAM always loads the latest version
+
+5.0
+- Added uwall anticheat to immersion settings
+- Added rich online profile to chat & social settings
+- Removed other addon loading
+- Removed support for loading without FUSAM, changed warning to error
+- Preliminary R101 support
+
+4.80
+- Added warning to non-FUSAM users
+`;
 
 	const SUPPORTED_GAME_VERSIONS = ["R100"];
 	const CAPABILITIES = /** @type {const} */ (["clubslave"]);
@@ -81,12 +67,20 @@ async function ForBetterClub() {
 		return;
 	}
 
-	if (!w.bcModSdk) {
+	if (typeof bcModSdk !== "object" || !bcModSdk) {
 		console.warn("bcModSdk not found. Skipping load.");
+		alert(
+			"bcModSdk not found. FBC will not load. Loading FBC is only supported via FUSAM."
+		);
 		return;
 	}
 
-	const SDK = w.bcModSdk.registerMod(
+	if (typeof FUSAM !== "object" || !FUSAM?.present) {
+		console.warn("FUSAM not found. Skipping load.");
+		return;
+	}
+
+	const SDK = bcModSdk.registerMod(
 		{
 			name: "FBC",
 			version: FBC_VERSION,
@@ -104,13 +98,6 @@ async function ForBetterClub() {
 
 	const DISCORD_INVITE_URL = "https://discord.gg/SHJMjEh9VH";
 	const WEBSITE_URL = "https://sidiousious.gitlab.io/bce/";
-
-	const BCX_DEVEL_SOURCE =
-			"https://jomshir98.github.io/bondage-club-extended/devel/bcx.js",
-		BCX_SOURCE = "https://jomshir98.github.io/bondage-club-extended/bcx.js",
-		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js",
-		LSCG_SOURCE = "https://littlesera.github.io/LSCG/bundle.js",
-		MBS_SOURCE = "https://bananarama92.github.io/MBS/main/mbs.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
 		BCE_LICENSE = "https://gitlab.com/Sidiousious/bce/-/blob/main/LICENSE",
@@ -140,14 +127,6 @@ async function ForBetterClub() {
 		None: "",
 		Untrusted: "none-img",
 	});
-
-	/** @type {Record<"BCX" | "EBCH" | "MBS" | "LSCG", "none" | "external" | "stable" | "devel" | "fusam">} */
-	const addonTypes = {
-		BCX: "none",
-		EBCH: "none",
-		MBS: "none",
-		LSCG: "none",
-	};
 
 	if (typeof ChatRoomCharacter === "undefined") {
 		console.warn("Bondage Club not detected. Skipping FBC initialization.");
@@ -490,6 +469,19 @@ async function ForBetterClub() {
 			description:
 				"Adds a whisper button to chat messages, allowing you to whisper to the sender more conveniently.",
 		},
+		richOnlineProfile: {
+			label: "Rich online profile",
+			value: true,
+			/**
+			 * @param {unknown} newValue
+			 */
+			sideEffects: (newValue) => {
+				debug("richOnlineProfile", newValue);
+			},
+			category: "chat",
+			description:
+				"Changes the online profile to support clickable links and embedded images.",
+		},
 		gagspeak: {
 			label: "Understand All Gagged and when Deafened",
 			value: false,
@@ -575,141 +567,6 @@ async function ForBetterClub() {
 			category: "cheats",
 			description:
 				"This setting is temporary until BCX supports a focus mode rule.",
-		},
-		shareAddons: {
-			label: "Share Addons",
-			value: true,
-			/**
-			 * @param {unknown} newValue
-			 */
-			sideEffects: (newValue) => {
-				debug("shareAddons", newValue);
-			},
-			category: "addons",
-			description:
-				"Share a list of your installed addons with other FBC users in the room, visible via /versions chat command.",
-		},
-		bcx: {
-			label: "Load BCX by Jomshir98",
-			value: false,
-			/**
-			 * @param {unknown} newValue
-			 */
-			sideEffects: (newValue) => {
-				if (newValue) {
-					fbcSettings.bcxDevel = false;
-					if (handledByFUSAM("BCX")) {
-						logInfo("BCX already loaded via FUSAM, skipping");
-					} else {
-						w.BCX_SOURCE = BCX_SOURCE;
-						loadExternalAddon("BCX", BCX_SOURCE).then((success) => {
-							if (success) {
-								addonTypes.BCX = "stable";
-							}
-						});
-					}
-				}
-				debug("bcx", newValue);
-			},
-			category: "addons",
-			description:
-				"Load Bondage Club Extended. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
-		},
-		bcxDevel: {
-			label: "Load BCX beta",
-			value: false,
-			/**
-			 * @param {unknown} newValue
-			 */
-			sideEffects: (newValue) => {
-				if (newValue) {
-					fbcSettings.bcx = false;
-					if (handledByFUSAM("BCX")) {
-						logInfo("BCX already loaded via FUSAM, skipping");
-					} else {
-						w.BCX_SOURCE = BCX_DEVEL_SOURCE;
-						loadExternalAddon("BCX", BCX_DEVEL_SOURCE).then((success) => {
-							if (success) {
-								addonTypes.BCX = "devel";
-							}
-						});
-					}
-				}
-				debug("bcxDevel", newValue);
-			},
-			category: "addons",
-			description:
-				"Load the latest beta version of BCX. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
-		},
-		ebch: {
-			label: "Load EBCH by Elicia",
-			value: false,
-			/**
-			 * @param {unknown} newValue
-			 */
-			sideEffects: (newValue) => {
-				if (newValue) {
-					if (handledByFUSAM("EBCH")) {
-						logInfo("EBCH already loaded via FUSAM, skipping");
-					} else {
-						loadExternalAddon("EBCH", EBCH_SOURCE).then((success) => {
-							if (success) {
-								addonTypes.EBCH = "stable";
-							}
-						});
-					}
-				}
-				debug("ebch", newValue);
-			},
-			category: "addons",
-			description:
-				"Load the latest stable version of EBCH. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
-		},
-		mbs: {
-			label: "Load MBS by Rama",
-			value: false,
-			/**
-			 * @param {unknown} newValue
-			 */
-			sideEffects: (newValue) => {
-				if (newValue) {
-					if (handledByFUSAM("MBS")) {
-						logInfo("MBS already loaded via FUSAM, skipping");
-					} else {
-						loadExternalAddon("MBS", MBS_SOURCE).then((success) => {
-							if (success) {
-								addonTypes.MBS = "stable";
-							}
-						});
-					}
-				}
-			},
-			category: "addons",
-			description:
-				"Load the latest stable version of MBS. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
-		},
-		lscg: {
-			label: "Load LSCG by LittleSera",
-			value: false,
-			/**
-			 * @param {unknown} newValue
-			 */
-			sideEffects: (newValue) => {
-				if (newValue) {
-					if (handledByFUSAM("LSCG")) {
-						logInfo("LSCG already loaded via FUSAM, skipping");
-					} else {
-						loadExternalAddon("LSCG", LSCG_SOURCE).then((success) => {
-							if (success) {
-								addonTypes.LSCG = "stable";
-							}
-						});
-					}
-				}
-			},
-			category: "addons",
-			description:
-				"Load the latest stable version of LSCG. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
 		},
 		toySync: {
 			label: "Enable buttplug.io (requires refresh)",
@@ -849,17 +706,26 @@ async function ForBetterClub() {
 			description:
 				"Automatically blacklist detected cheaters. Whitelisted actors are exempt from this.",
 		},
-		checkUpdates: {
-			label: "Check for updates",
+		uwall: {
+			label: "Enable uwall anti-cheat",
+			value: true,
 			/**
 			 * @param {unknown} newValue
 			 */
 			sideEffects: (newValue) => {
-				debug("checkUpdates", newValue);
+				debug("uwall", newValue);
+				if (Player?.OnlineSharedSettings && typeof newValue === "boolean") {
+					Player.OnlineSharedSettings.Uwall = newValue;
+					ServerAccountUpdate.QueueData({
+						OnlineSharedSettings: Player.OnlineSharedSettings,
+					});
+				} else {
+					logWarn("Player.OnlineSharedSettings not found, skipping uwall");
+				}
 			},
-			value: true,
-			category: "misc",
-			description: "Check for FBC updates on startup.",
+			category: "immersion",
+			description:
+				"Prevents certain other addon cheats from impacting your character.",
 		},
 		relogin: {
 			label: "Automatic Relogin on Disconnect",
@@ -950,6 +816,19 @@ async function ForBetterClub() {
 			category: "misc",
 			description:
 				"Show a confirmation prompt before allowing content from a 3rd party domain to be loaded.",
+		},
+		shareAddons: {
+			label: "Share Addons",
+			value: true,
+			/**
+			 * @param {unknown} newValue
+			 */
+			sideEffects: (newValue) => {
+				debug("shareAddons", newValue);
+			},
+			category: "misc",
+			description:
+				"Share a list of your installed addons with other FBC users in the room, visible via /versions chat command.",
 		},
 		fpsCounter: {
 			label: "Show FPS counter",
@@ -1315,7 +1194,144 @@ async function ForBetterClub() {
 	 * @param {string} gameVersion
 	 */
 	const expectedHashes = (gameVersion) => {
-		switch (gameVersion) {
+		switch (gameVersion.toLowerCase()) {
+			case "r101beta1":
+			case "r101beta2":
+			case "r101beta3":
+			case "r101beta4":
+			case "r101":
+				return /** @type {const} */ ({
+					ActivityChatRoomArousalSync: "BFF3DED7",
+					ActivitySetArousal: "3AE28123",
+					ActivitySetArousalTimer: "1342AFE2",
+					ActivityTimerProgress: "6CD388A7",
+					AppearanceClick: "4C04C15E",
+					AppearanceExit: "AA300341",
+					AppearanceLoad: "4360C485",
+					AppearanceRun: "6EC75705",
+					CharacterAppearanceWardrobeLoad: "A5B63A03",
+					CharacterBuildDialog: "85F79C6E",
+					CharacterCompressWardrobe: "2A05ECD1",
+					CharacterDecompressWardrobe: "327FADA4",
+					CharacterDelete: "398D1116",
+					CharacterGetCurrent: "45608177",
+					CharacterLoadCanvas: "EAB81BC4",
+					CharacterNickname: "A794EFF5",
+					CharacterRefresh: "F2459653",
+					CharacterReleaseTotal: "BB9C6989",
+					CharacterSetCurrent: "F46573D8",
+					CharacterSetFacialExpression: "FC680736",
+					CharacterSetActivePose: "566A14D7",
+					ChatAdminRoomCustomizationClick: "E194A605",
+					ChatAdminRoomCustomizationProcess: "B33D6388",
+					ChatRoomAppendChat: "998F2F98",
+					ChatRoomCharacterItemUpdate: "263DB2F0",
+					ChatRoomCharacterUpdate: "C444E92D",
+					ChatRoomCharacterViewDrawBackground: "BCD8B409",
+					ChatRoomClearAllElements: "14DAAB05",
+					ChatRoomClick: "AE612190",
+					ChatRoomCreateElement: "78F86423",
+					ChatRoomCurrentTime: "A462DD3A",
+					ChatRoomDrawBackground: "SKIP",
+					ChatRoomDrawCharacterStatusIcons: "198C8657",
+					ChatRoomHTMLEntities: "0A7ADB1D",
+					ChatRoomKeyDown: "DBBC9035",
+					ChatRoomListManipulation: "75D28A8B",
+					ChatRoomMessage: "BBD61334",
+					ChatRoomMessageDisplay: "37B5D4F2",
+					ChatRoomRegisterMessageHandler: "C432923A",
+					ChatRoomResize: "653445D7",
+					ChatRoomRun: "B3CE0AC6",
+					ChatRoomSendChat: "76A693E3",
+					ChatRoomStart: "9B822A9A",
+					CommandExecute: "803D6C70",
+					CommandParse: "299D1046",
+					CommonClick: "1F6DF7CB",
+					CommonColorIsValid: "390A2CE4",
+					CommonSetScreen: "E0CA772F",
+					CraftingClick: "FF1A7B21",
+					CraftingConvertSelectedToItem: "48270B42",
+					CraftingRun: "5BE6E125",
+					DialogClick: "A1B56CDF",
+					DialogDraw: "733FE9E1",
+					DialogDrawItemMenu: "FCE556C2",
+					DialogLeave: "C37553DC",
+					DrawArousalMeter: "BB0755AF",
+					DrawArousalThermometer: "7ED6D822",
+					DrawBackNextButton: "9AF4BA37",
+					DrawButton: "A7023A82",
+					DrawCharacter: "762FA8A6",
+					DrawCheckbox: "00FD87EB",
+					DrawImageEx: "E01BE7E7",
+					DrawImageResize: "D205975A",
+					DrawItemPreview: "6A7A1E2A",
+					DrawProcess: "BC1E9396",
+					DrawText: "C1BF0F50",
+					DrawTextFit: "F9A1B11E",
+					ElementCreateInput: "EB2A3EC8",
+					ElementCreateTextArea: "AA4AEDE7",
+					ElementIsScrolledToEnd: "1CC4FE11",
+					ElementPosition: "CC4E3C82",
+					ElementRemove: "60809E60",
+					ElementScrollToEnd: "1AC45575",
+					ElementValue: "4F26C62F",
+					FriendListShowBeep: "6C0449BB",
+					GameRun: "ED65B730",
+					GLDrawResetCanvas: "81214642",
+					InformationSheetRun: "90140B32",
+					InventoryGet: "E666F671",
+					LoginClick: "EE94BEC7",
+					LoginRun: "C3926C4F",
+					LoginSetSubmitted: "C88F4A8E",
+					LoginStatusReset: "18619F02",
+					MouseIn: "CA8B839E",
+					NotificationDrawFavicon: "AB88656B",
+					NotificationRaise: "E8F29646",
+					NotificationTitleUpdate: "0E92F3ED",
+					OnlineGameAllowChange: "3779F42C",
+					OnlineProfileClick: "521146DF",
+					OnlineProfileExit: "1C673DC8",
+					OnlineProfileLoad: "BE8B009B",
+					OnlineProfileRun: "7F57EF9A",
+					PoseSetActive: "22C02050",
+					RelogRun: "10AF5A60",
+					RelogExit: "2DFB2DAD",
+					ServerAccountBeep: "F16771D4",
+					ServerAppearanceBundle: "4D069622",
+					ServerAppearanceLoadFromBundle: "946537FD",
+					ServerClickBeep: "3E6277BE",
+					ServerConnect: "845E50A6",
+					ServerDisconnect: "06C1A6B0",
+					ServerInit: "B6CEF7F1",
+					ServerOpenFriendList: "FA8D3CDE",
+					ServerPlayerExtensionSettingsSync: "1776666B",
+					ServerSend: "ABE74E75",
+					ServerSendQueueProcess: "BD4277AC",
+					SkillGetWithRatio: "3EB4BC45",
+					SpeechGarble: "9D669F73",
+					SpeechGarbleByGagLevel: "3D604B82",
+					SpeechGetTotalGagLevel: "5F4F6D45",
+					StruggleDexterityProcess: "7E19ADA9",
+					StruggleFlexibilityCheck: "727CE05B",
+					StruggleFlexibilityProcess: "278D7285",
+					StruggleLockPickDraw: "2F1F603B",
+					StruggleMinigameHandleExpression: "1B3ABF55",
+					StruggleMinigameStop: "FB05E8A9",
+					StruggleStrengthProcess: "D20CF698",
+					TextGet: "4DDE5794",
+					TextLoad: "ADF7C890",
+					TimerInventoryRemove: "1FA771FB",
+					TimerProcess: "52458C63",
+					TitleExit: "F13F533C",
+					ValidationSanitizeProperties: "08E81594",
+					WardrobeClick: "33405B1D",
+					WardrobeExit: "12D14AE4",
+					WardrobeFastLoad: "5C54EA7B",
+					WardrobeFastSave: "61D02972",
+					WardrobeFixLength: "CA3334C6",
+					WardrobeLoad: "C343A4C7",
+					WardrobeRun: "633B3570",
+				});
 			default:
 				return /** @type {const} */ ({
 					ActivityChatRoomArousalSync: "BFF3DED7",
@@ -1344,12 +1360,12 @@ async function ForBetterClub() {
 					ChatRoomAppendChat: "998F2F98",
 					ChatRoomCharacterItemUpdate: "263DB2F0",
 					ChatRoomCharacterUpdate: "C444E92D",
+					ChatRoomCharacterViewDrawBackground: "SKIP",
 					ChatRoomClearAllElements: "14DAAB05",
 					ChatRoomClick: "BB1CE058",
 					ChatRoomCreateElement: "AA36E8B6",
 					ChatRoomCurrentTime: "A462DD3A",
 					ChatRoomDrawBackground: "AEE70C4E",
-					ChatRoomDrawCharacterOverlay: "4D8E24CB",
 					ChatRoomDrawCharacterStatusIcons: "198C8657",
 					ChatRoomHTMLEntities: "0A7ADB1D",
 					ChatRoomKeyDown: "48C7F35A",
@@ -1407,6 +1423,8 @@ async function ForBetterClub() {
 					NotificationTitleUpdate: "0E92F3ED",
 					OnlineGameAllowChange: "3779F42C",
 					OnlineProfileClick: "521146DF",
+					OnlineProfileExit: "1C673DC8",
+					OnlineProfileLoad: "BE8B009B",
 					OnlineProfileRun: "7F57EF9A",
 					PoseSetActive: "22C02050",
 					RelogRun: "10AF5A60",
@@ -1545,7 +1563,7 @@ async function ForBetterClub() {
 	/**
 	 * @type {(title: string, text: string) => void}
 	 */
-	const fbcBeepNotify = (title, text) => {
+	function fbcBeepNotify(title, text) {
 		SDK.callOriginal("ServerAccountBeep", [
 			{
 				MemberNumber: Player.MemberNumber,
@@ -1556,7 +1574,7 @@ async function ForBetterClub() {
 				ChatRoomSpace: "",
 			},
 		]);
-	};
+	}
 
 	/**
 	 * @type {(text: string, duration?: number, properties?: Partial<ServerBeep>) => Promise<void>}
@@ -1612,7 +1630,7 @@ async function ForBetterClub() {
 	/**
 	 * @param {boolean} [copy] - Whether to copy the report to the clipboard
 	 */
-	const fbcDebug = async (copy) => {
+	async function fbcDebug(copy) {
 		/** @type {Map<string, string>} */
 		const info = new Map();
 		info.set("Browser", navigator.userAgent);
@@ -1624,6 +1642,10 @@ async function ForBetterClub() {
 		);
 		info.set("WebGL Version", GLVersion);
 		info.set("FBC Version", FBC_VERSION);
+		info.set(
+			"Loaded via FUSAM",
+			typeof FUSAM === "object" && FUSAM?.addons?.FBC ? "Yes" : "No"
+		);
 		info.set(
 			"FBC Enabled Settings",
 			`\n- ${objEntries(fbcSettings)
@@ -1678,8 +1700,9 @@ async function ForBetterClub() {
 			);
 		}
 		return print;
-	};
+	}
 	w.fbcDebug = fbcDebug;
+	FUSAM.registerDebugMethod("FBC", fbcDebug);
 
 	/** @type {(func: () => (Promise<unknown> | unknown), label: string) => Promise<void>} */
 	const registerFunction = async (func, label) => {
@@ -1738,12 +1761,6 @@ async function ForBetterClub() {
 		}
 	);
 
-	(async function () {
-		await waitFor(() => !!w.FUSAM?.present);
-		debug("FUSAM present, registering debug methods");
-		w.FUSAM?.registerDebugMethod("FBC", fbcDebug);
-	})();
-
 	await registerFunction(functionIntegrityCheck, "functionIntegrityCheck");
 	registerFunction(bceStyles, "bceStyles");
 	registerFunction(commonPatches, "commonPatches");
@@ -1786,15 +1803,13 @@ async function ForBetterClub() {
 	registerFunction(hookBCXAPI, "hookBCXAPI");
 	registerFunction(customContentDomainCheck, "customContentDomainCheck");
 	registerFunction(numericArousalMeters, "numericArousalMeters");
+	registerFunction(richOnlineProfile, "richOnlineProfile");
 	funcsRegistered = "enable";
 
 	// Post ready when in a chat room
 	await fbcNotify(`For Better Club v${w.FBC_VERSION} Loaded`);
 
 	Player.FBC = FBC_VERSION;
-	if (fbcSettings.checkUpdates) {
-		checkUpdate();
-	}
 
 	async function functionIntegrityCheck() {
 		await waitFor(
@@ -1803,7 +1818,22 @@ async function ForBetterClub() {
 				typeof ServerIsConnected === "boolean" &&
 				ServerIsConnected
 		);
+
+		logInfo("Checking function integrity with GameVersion", GameVersion);
+
+		/**
+		 * @param {keyof ReturnType<typeof expectedHashes>} func
+		 * @param {string} hash
+		 * @returns {func is keyof typeof w}
+		 */
+		function isActiveFunction(func, hash) {
+			return hash !== "SKIP";
+		}
+
 		for (const [func, hash] of objEntries(expectedHashes(GameVersion))) {
+			if (!isActiveFunction(func, hash)) {
+				continue;
+			}
 			if (!w[func]) {
 				logWarn(`Expected function ${func} not found.`);
 				continue;
@@ -1820,52 +1850,6 @@ async function ForBetterClub() {
 				deviatingHashes.push(func);
 			}
 		}
-	}
-
-	async function checkUpdate() {
-		await sleep(5000);
-		// Version check
-		debug("checking for updates...");
-		fetch(
-			`https://sidiousious.gitlab.io/bce/bce.user.js?_=${
-				(Date.now() / 1000 / 3600) | 0
-			}`
-		)
-			.then((r) => r.text())
-			.then((r) => {
-				const result = /@version (.*)$/mu.exec(r);
-				if (!result) {
-					logWarn("FBC update checker error: no version found");
-					return;
-				}
-
-				const [, latest] = result;
-				debug("latest version:", latest);
-				if (latest !== FBC_VERSION) {
-					// Create beep
-					fbcBeepNotify(
-						displayText("Update"),
-						displayText(
-							`Your version of FBC is outdated and may not be supported. Please update.
-
-	Your version: $Version
-	Latest version: $Latest
-
-	Changelog available on GitLab (raw) and Discord:
-	- https://gitlab.com/Sidiousious/bce/-/commits/main/
-	- $DiscordUrl`,
-							{
-								$Version: FBC_VERSION,
-								$Latest: latest,
-								$DiscordUrl: DISCORD_INVITE_URL,
-							}
-						)
-					);
-				}
-			})
-			.catch((e) => {
-				logError("FBC update checker error:", e);
-			});
 	}
 
 	/**
@@ -2084,34 +2068,6 @@ async function ForBetterClub() {
 	async function hookBCXAPI() {
 		await waitFor(() => !!w.bcx);
 		BCX = w.bcx?.getModApi("FBC") ?? null;
-	}
-
-	// Load BCX
-	/** @type {(addon: keyof typeof addonTypes, source: string) => Promise<boolean>} */
-	async function loadExternalAddon(addon, source) {
-		await waitFor(settingsLoaded);
-
-		if (bcModSdk.getModsInfo().some((mod) => mod.name === addon)) {
-			addonTypes[addon] = "external";
-			debug(`${addon} already loaded, skipping loadExternalAddon()`);
-			hookBCXAPI();
-			return false;
-		}
-
-		const sourceRequestUrl = `${source}?v=${Date.now()}`;
-
-		logInfo("Loading", addon, "from", source, sourceRequestUrl);
-		await fetch(sourceRequestUrl)
-			.then((resp) => resp.text())
-			.then((resp) => {
-				resp = resp.replace(
-					/sourceMappingURL=.*?.map/u,
-					`sourceMappingURL=${source}.map`
-				);
-				eval?.(resp);
-			});
-		logInfo("Loaded", addon);
-		return true;
 	}
 
 	async function commands() {
@@ -2598,7 +2554,6 @@ async function ForBetterClub() {
 			"performance",
 			"misc",
 			"cheats",
-			"addons",
 			"buttplug",
 		];
 		const settingCategoryLabels = /** @type {const} */ ({
@@ -9612,7 +9567,10 @@ async function ForBetterClub() {
 		};
 
 		SDK.hookFunction(
-			"ChatRoomDrawBackground",
+			// @ts-ignore - R100 migration
+			GameVersion.startsWith("R100")
+				? "ChatRoomDrawBackground"
+				: "ChatRoomCharacterViewDrawBackground",
 			HOOK_PRIORITIES.Top,
 			discreetModeHook
 		);
@@ -10423,7 +10381,7 @@ async function ForBetterClub() {
 
 		SDK.hookFunction(
 			"OnlineProfileClick",
-			HOOK_PRIORITIES.AddBehaviour,
+			HOOK_PRIORITIES.OverrideBehaviour,
 			/**
 			 * @param {Parameters<typeof OnlineProfileClick>} args
 			 */
@@ -10610,6 +10568,148 @@ async function ForBetterClub() {
 				const ret = next(args);
 				c.HasHiddenItems = backup;
 				return ret;
+			}
+		);
+	}
+
+	function richOnlineProfile() {
+		const descTextArea = "DescriptionInput";
+		const descRich = "bceRichOnlineProfile";
+		let originalShown = true;
+
+		function hideOriginalTextArea() {
+			const ta = document.getElementById(descTextArea);
+			if (!ta) {
+				return;
+			}
+			originalShown = false;
+			ta.style.display = "none";
+		}
+
+		function showOriginalTextArea() {
+			const ta = document.getElementById(descTextArea);
+			if (!ta) {
+				return;
+			}
+			originalShown = true;
+			ta.style.display = "";
+		}
+
+		function enableRichTextArea() {
+			hideOriginalTextArea();
+
+			const div = document.createElement("div");
+			div.id = descRich;
+			div.style.overflowY = "scroll";
+			div.style.overflowX = "hidden";
+			div.style.overflowWrap = "break-word";
+			div.style.whiteSpace = "pre-wrap";
+			div.style.background = "rgb(244, 236, 216)";
+			div.style.color = "rgb(45, 35, 27)";
+			div.style.border = "2px solid black";
+			div.style.padding = "2px";
+			div.classList.add("bce-rich-textarea");
+			div.textContent = InformationSheetSelection?.Description || "";
+			processChatAugmentsForLine(div, () => false);
+
+			document.body.append(div);
+			resizeRichTextArea();
+		}
+
+		function resizeRichTextArea() {
+			ElementPositionFix(descRich, 36, 100, 160, 1790, 750);
+		}
+
+		function disableRichTextArea() {
+			const div = document.getElementById(descRich);
+			if (div) {
+				div.remove();
+			}
+
+			showOriginalTextArea();
+		}
+
+		SDK.hookFunction(
+			"OnlineProfileLoad",
+			HOOK_PRIORITIES.ModifyBehaviourMedium,
+			/**
+			 * @param {Parameters<typeof OnlineProfileLoad>} args
+			 */
+			(args, next) => {
+				originalShown = true;
+				const ret = next(args);
+				const ta = document.getElementById(descTextArea);
+				if (!fbcSettings.richOnlineProfile || !ta) {
+					return ret;
+				}
+
+				enableRichTextArea();
+
+				return ret;
+			}
+		);
+
+		const toggleEditButtonPos = /** @type {const} */ ([90, 60, 90, 90]);
+		SDK.hookFunction(
+			"OnlineProfileRun",
+			HOOK_PRIORITIES.ModifyBehaviourMedium,
+			/**
+			 * @param {Parameters<typeof OnlineProfileRun>} args
+			 */
+			(args, next) => {
+				if (!fbcSettings.richOnlineProfile) {
+					return next(args);
+				}
+				DrawButton(
+					...toggleEditButtonPos,
+					"",
+					"White",
+					"Icons/Crafting.png",
+					displayText("Toggle Editing Mode")
+				);
+
+				const ret = next(args);
+				if (!originalShown) {
+					hideOriginalTextArea();
+					resizeRichTextArea();
+				}
+				return ret;
+			}
+		);
+
+		SDK.hookFunction(
+			"OnlineProfileClick",
+			HOOK_PRIORITIES.ModifyBehaviourMedium,
+			/**
+			 * @param {Parameters<typeof OnlineProfileClick>} args
+			 */
+			(args, next) => {
+				if (!fbcSettings.richOnlineProfile) {
+					return next(args);
+				}
+				if (MouseIn(...toggleEditButtonPos)) {
+					if (originalShown) {
+						enableRichTextArea();
+					} else {
+						disableRichTextArea();
+					}
+					return true;
+				}
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"OnlineProfileExit",
+			HOOK_PRIORITIES.ModifyBehaviourMedium,
+			/**
+			 * @param {Parameters<typeof OnlineProfileExit>} args
+			 */
+			(args, next) => {
+				if (!originalShown) {
+					disableRichTextArea();
+				}
+				return next(args);
 			}
 		);
 	}
@@ -10995,7 +11095,7 @@ async function ForBetterClub() {
 			 * InPrivate: boolean;
 			 * InTampermonkey: boolean;
 			 * FUSAM: boolean;
-			 * FBCviaFUSAM: boolean;} & Partial<Record<keyof typeof addonTypes, string>>}
+			 * FBCviaFUSAM: boolean;}}
 			 */
 			const payload = {
 				Version: FBC_VERSION,
@@ -11005,23 +11105,9 @@ async function ForBetterClub() {
 				InPrivate: !!Player.LastChatRoom?.Private,
 				// eslint-disable-next-line camelcase
 				InTampermonkey: typeof GM_info !== "undefined",
-				FUSAM: !!w.FUSAM?.present,
-				FBCviaFUSAM: w.FUSAM?.addons?.FBC?.status === "loaded",
+				FUSAM: !!FUSAM.present,
+				FBCviaFUSAM: FUSAM.addons?.FBC?.status === "loaded",
 			};
-			for (const [key, value] of objEntries(addonTypes)) {
-				if (
-					bcModSdk.getModsInfo().some((mod) => mod.name === key) &&
-					value === "none"
-				) {
-					if (handledByFUSAM(key)) {
-						payload[key] = "fusam";
-					} else {
-						payload[key] = "external";
-					}
-				} else {
-					payload[key] = value;
-				}
-			}
 			SDK.callOriginal("ServerSend", [
 				"AccountBeep",
 				{
@@ -11120,13 +11206,6 @@ async function ForBetterClub() {
 				return next(args);
 			}
 		);
-	}
-
-	/**
-	 * @param {string} addon
-	 */
-	function handledByFUSAM(addon) {
-		return !!w.FUSAM?.addons && addon in w.FUSAM.addons;
 	}
 
 	/**
@@ -11265,4 +11344,5 @@ async function ForBetterClub() {
 	);
 }
 
-ForBetterClub();
+setTimeout(ForBetterClub, 1000);
+// ForBetterClub();
