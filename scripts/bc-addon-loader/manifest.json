@@ -314,6 +314,54 @@
 					"source": "https://fielr.github.io/scripts/MagicButton.js"
 				}
 			]
+		},
+		{
+			"id": "activity",
+			"name": "dsa's activity",
+			"description": "Echo的动作拓展",
+			"author": "dsa-87150",
+			"repository": "https://github.com/emdsa2/-mod",
+			"tags": ["enhancements", "expansion"],
+			"type": "script",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://fielr.github.io/scripts/BC_Activity.user.js"
+				}
+			]
+		},
+		{
+			"id": "fuhui-DOM",
+			"name": "浮绘的DOM动作拓展",
+			"description": "浮绘的 mod! 一些自己写的dom类的动作 (大概喵)",
+			"author": "FuhuiNeko",
+			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://github.com/FuhuiNeko/BC_Mods/raw/main/Fuhui_Dom_Activity_Main.js"
+				}
+			]
+		},
+		{
+			"id": "fuhui-SUB",
+			"name": "浮绘的SUB动作拓展",
+			"description": "浮绘的 mod! 一些自己写的sub类的动作 (大概喵)",
+			"author": "FuhuiNeko",
+			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://github.com/FuhuiNeko/BC_Mods/raw/main/Fuhui_Sub_Activity_Main.js"
+				}
+			]
 		}
 	]
 }
