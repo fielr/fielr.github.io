@@ -11344,5 +11344,5 @@ async function ForBetterClub() {
 	);
 }
 
-setTimeout(ForBetterClub, 1000);
-// ForBetterClub();
+// setTimeout(ForBetterClub, 1000);
+ForBetterClub();

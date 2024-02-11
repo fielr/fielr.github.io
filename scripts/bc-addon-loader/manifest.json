@@ -301,7 +301,7 @@
 		},
 		{
 			"id": "MagicButton",
-			"name": "MagicBUtton",
+			"name": "MagicButton",
 			"description": "Magic.",
 			"author": "Liin",
 			"repository": "",
@@ -343,7 +343,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://github.com/FuhuiNeko/BC_Mods/raw/main/Fuhui_Dom_Activity_Main.js"
+					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Dom_Activity_Main.js"
 				}
 			]
 		},
@@ -359,7 +359,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://github.com/FuhuiNeko/BC_Mods/raw/main/Fuhui_Sub_Activity_Main.js"
+					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Sub_Activity_Main.js"
 				}
 			]
 		}
