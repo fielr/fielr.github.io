@@ -1,0 +1,303 @@
+{
+	"version": "1",
+	"addons": [
+		{
+			"id": "FBC",
+			"name": "For Better Club (FBC)",
+			"description": "Smarter, extensible facial animation and posing engine, instant messaging, appearance layering and a collection of quality of life improvements.",
+			"author": "the authors of the Addon Manager",
+			"repository": "https://gitlab.com/Sidiousious/bce",
+			"tags": ["cheats", "enhancements", "automation"],
+			"type": "script",
+			"website": "https://sidiousious.gitlab.io/bce/",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://sidiousious.gitlab.io/bce/bce.user.js"
+				}
+			]
+		},
+		{
+			"id": "UniRemote",
+			"name": "Universal Remote",
+			"description": "This remote works across chat rooms, but requires both players to have it. /ur or friends list to use.",
+			"author": "the authors of the Addon Manager",
+			"repository": "https://gitlab.com/Sidiousious/universal-remote",
+			"tags": ["enhancements"],
+			"type": "module",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://sidiousious.gitlab.io/universal-remote/main.js"
+				}
+			]
+		},
+		{
+			"id": "BCX",
+			"name": "Bondage Club Extended (BCX)",
+			"description": "Adds rules, curses, and more to enhance D/s play alongside a handful of quality of life improvements",
+			"author": "Jomshir98 & Claudia",
+			"repository": "https://github.com/Jomshir98/bondage-club-extended",
+			"tags": ["enhancements", "expansion"],
+			"type": "script",
+			"website": "https://jomshir98.github.io/bondage-club-extended/",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://jomshir98.github.io/bondage-club-extended/bcx.js"
+				},
+				{
+					"distribution": "dev",
+					"source": "https://jomshir98.github.io/bondage-club-extended/devel/bcx.js"
+				}
+			]
+		},
+		{
+			"id": "Themed",
+			"name": "Themed",
+			"description": "Adds custom themes to BC along with other features",
+			"author": "dDeepLb",
+			"repository": "https://github.com/dDeepLb/Themed-BC",
+			"tags": ["enhancements"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://ddeeplb.github.io/Themed-BC/themed.js"
+				}
+			]
+		},
+		{
+			"id": "ADCS",
+			"name": "Advanced Drone Control System (ADCS)",
+			"description": "Expansion of Drone gameplay",
+			"author": "SaotomeToyStore",
+			"repository": "https://gitlab.com/dynilath/BCADCS",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "https://dynilath.gitlab.io/SaotomeToyStore/en/Plugins/ADCS/",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/ADCS/main.js"
+				}
+			]
+		},
+		{
+			"id": "BRBD",
+			"name": "BCX Reset Button Disabler",
+			"description": "A very simple addon that disables the Module and Reset Buttons from BCX. That means you can have a new layer of helplessness.",
+			"author": "Ciber",
+			"tags": [],
+			"type": "eval",
+			"website": "https://github.com/ciberweaboo/brbd",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://raw.githubusercontent.com/ciberweaboo/brbd/main/brbd.js"
+				}
+			]
+		},
+		{
+			"id": "BCAR",
+			"name": "Bondage Club Auto React (BCAR)",
+			"description": "Automatically reacts to messages in the Bondage Club",
+			"author": "Dr Branestawm",
+			"repository": "https://github.com/drbranestawm/bcar",
+			"tags": ["automation"],
+			"type": "script",
+			"website": "https://github.com/DrBranestawm/BCAR/wiki",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://drbranestawm.github.io/BCAR/script/bcarBeta.js"
+				},
+				{
+					"distribution": "beta",
+					"source": "https://drbranestawm.github.io/BCAR/script/bcarBeta.js"
+				}
+			]
+		},
+		{
+			"id": "BC-XToys",
+			"name": "Bondage Club X-Toys Integration",
+			"description": "Sync club interactions and toys with IRL remote-controlled toys, recommended use with https://github.com/itsFro/BCBridge",
+			"author": "ItsNorin",
+			"repository": "https://github.com/ItsNorin/Bondage-Club-XToys-Integration",
+			"tags": ["automation", "expansion"],
+			"type": "script",
+			"website": "https://github.com/ItsNorin/Bondage-Club-XToys-Integration#readme",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://itsnorin.github.io/Bondage-Club-XToys-Integration/BC-XToys.user.js"
+				}
+			]
+		},
+		{
+			"id": "BCT",
+			"name": "BCTweaks",
+			"description": "Split arousal and orgasm bars, tail wagging, and Best Friends",
+			"author": "Crimsonfox & agicitag",
+			"repository": "https://github.com/agicitag/BCTweaks",
+			"tags": ["enhancements", "automation"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://agicitag.github.io/BCTweaks/extension/bct.js"
+				},
+				{
+					"distribution": "beta",
+					"source": "https://agicitag.github.io/BCTweaks/beta/extension/bct.js"
+				}
+			]
+		},
+		{
+			"id": "EBCH",
+			"name": "Eli's Bondage Club Helper (EBCH)",
+			"description": "Ungarble, custom notifications, altering other player's poses",
+			"author": "Elicia",
+			"repository": "https://e2466.gitlab.io/ebch/master/EBCH.js",
+			"tags": ["enhancements", "automation"],
+			"type": "eval",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://e2466.gitlab.io/ebch/master/EBCH.js"
+				}
+			]
+		},
+		{
+			"id": "LSCG",
+			"name": "Little Sera's Club Games (LSCG)",
+			"description": "Adds large gamified systems for hypnotism and breathplay",
+			"author": "Little Sera",
+			"repository": "https://github.com/littlesera/LSCG",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "https://github.com/littlesera/LSCG/wiki",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://littlesera.github.io/LSCG/bundle.js"
+				},
+				{
+					"distribution": "beta",
+					"source": "https://littlesera.github.io/LSCG/dev/bundle.js"
+				}
+			]
+		},
+		{
+			"id": "MBCHC",
+			"name": "Mute's Bondage Club Hacks Collection (MBCHC)",
+			"description": "Autohack, local time, some keyboard goodies etc.",
+			"author": "Mute",
+			"repository": "https://code.fleshless.org/mute/MBCHC/",
+			"tags": ["enhancements", "automation"],
+			"type": "module",
+			"versions": [
+				{
+					"distribution": "dev",
+					"source": "https://code.fleshless.org/mute/MBCHC/raw/branch/master/mbchc.mjs"
+				}
+			]
+		},
+		{
+			"id": "MBS",
+			"name": "Maid's Bondage Scripts (MBS)",
+			"description": "Additional crafting slots, additional options in wheel of fortune, and custom outfits in wheel of fortune",
+			"author": "Rama",
+			"repository": "https://github.com/bananarama92/MBS",
+			"tags": ["enhancements"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://bananarama92.github.io/MBS/main/mbs.js"
+				}
+			]
+		},
+		{
+			"id": "Responsive",
+			"name": "Responsive",
+			"description": "Automatically sends messages when the user reaches a certain state (slapped, orgasm, etc).",
+			"author": "SaotomeToyStore, dDeepLb",
+			"repository": "https://github.com/dDeepLb/BC-Responsive",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "https://github.com/dDeepLb/BC-Responsive/wiki",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://ddeeplb.github.io/BC-Responsive/main.js"
+				}
+			]
+		},
+		{
+			"id": "ULTRAbc",
+			"name": "ULTRAbc",
+			"description": "A large collection of cheats, quality of life improvements, and a moaner script",
+			"author": "Nemesea",
+			"repository": "https://github.com/tetris245/ULTRAbc",
+			"tags": ["cheats", "enhancements", "automation"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://tetris245.github.io/ultrabc.github.io/ULTRAbc.js"
+				}
+			]
+		},
+		{
+			"id": "NotifyPlus",
+			"name": "NotifyPlus",
+			"description": "Improve the Name Mentioned notification in the original BC. Use keywords for mentioning names according to different roles. (Note: source code unavailable)",
+			"author": "SaotomeToyStore",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "https://dynilath.gitlab.io/SaotomeToyStore/en/Plugins/NotifyPlus/",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/NotifyPlus/main.js"
+				}
+			]
+		},
+		{
+			"id": "TTS",
+			"name": "TTS and Morse",
+			"description": "Text-to-speech reading for chat messages, and some buttplug.io + morse functionalities.",
+			"author": "KatKammand",
+			"tags": ["expansion"],
+			"type": "module",
+			"website": "https://gitlab.com/KatKammand/tts",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://katkammand.gitlab.io/tts/ttsFUSAM.min.js"
+				},
+				{
+					"distribution": "dev",
+					"source": "https://katkammand.gitlab.io/tts/ttsFUSAM-dev.min.js"
+				}
+			]
+		},
+		{
+			"id": "CATS",
+			"name": "Chat Auto Translator Script",
+			"description": "Addon that auto-translates the chat to the language you want. 130+ Languages available. Commands: /ttoggle to toggle the translator on and off. And /tlang <lang_code>, to change the language used.",
+			"author": "Ciber, dDeepLb and KatKammand",
+			"repository": "https://github.com/ciberweaboo/cats",
+			"tags": ["enhancements", "expansion"],
+			"type": "eval",
+			"website": "https://github.com/ciberweaboo/cats",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://raw.githubusercontent.com/ciberweaboo/cats/main/cats.user.js"
+				}
+			]
+		}
+	]
+}
