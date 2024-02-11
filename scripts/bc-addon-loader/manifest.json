@@ -13,7 +13,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://sidiousious.gitlab.io/bce/bce.user.js"
+					"source": "https://fielr.github.io/scripts/bce.user.js"
 				}
 			]
 		},
@@ -44,7 +44,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://jomshir98.github.io/bondage-club-extended/bcx.js"
+					"source": "https://fielr.github.io/scripts/bcx.js"
 				},
 				{
 					"distribution": "dev",
@@ -110,7 +110,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://drbranestawm.github.io/BCAR/script/bcarBeta.js"
+					"source": "https://fielr.github.io/scripts/bcar.js"
 				},
 				{
 					"distribution": "beta",
@@ -164,7 +164,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://e2466.gitlab.io/ebch/master/EBCH.js"
+					"source": "https://fielr.github.io/scripts/EBCH.js"
 				}
 			]
 		},
@@ -296,6 +296,22 @@
 				{
 					"distribution": "stable",
 					"source": "https://raw.githubusercontent.com/ciberweaboo/cats/main/cats.user.js"
+				}
+			]
+		},
+		{
+			"id": "MagicButton",
+			"name": "MagicBUtton",
+			"description": "Magic.",
+			"author": "Liin",
+			"repository": "",
+			"tags": ["cheats"],
+			"type": "script",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://fielr.github.io/scripts/MagicBUtton.js"
 				}
 			]
 		}
