@@ -311,7 +311,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://fielr.github.io/scripts/MagicBUtton.js"
+					"source": "https://fielr.github.io/scripts/MagicButton.js"
 				}
 			]
 		}
