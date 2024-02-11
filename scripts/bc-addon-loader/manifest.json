@@ -362,6 +362,22 @@
 					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Sub_Activity_Main.js"
 				}
 			]
+		},
+		{
+			"id": "dynilath's BC Responsive",
+			"name": "早乙女的BC Responsive",
+			"description": "本插件会帮助用户在BondageClub中自动触发回应，高效的动作或者说话回应，说话回应会打断聊天框的输入，提供深度的自定义选项，让你在被亲密的朋友挠鼻子和被陌生的人挠脚心之间产生不同的反应",
+			"author": "SaotomeToyStore",
+			"repository": "https://github.com/dynilath/BCResponsive",
+			"tags": ["expansion"],
+			"type": "script",
+			"website": "https://dynilath.gitlab.io/SaotomeToyStore/zh/Plugins/Responsive.html",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/Responsive/main.js"
+				}
+			]
 		}
 	]
 }
