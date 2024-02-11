@@ -338,7 +338,7 @@
 			"author": "FuhuiNeko",
 			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
 			"tags": ["expansion"],
-			"type": "script",
+			"type": "eval",
 			"website": "",
 			"versions": [
 				{
@@ -354,7 +354,7 @@
 			"author": "FuhuiNeko",
 			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
 			"tags": ["expansion"],
-			"type": "script",
+			"type": "eval",
 			"website": "",
 			"versions": [
 				{
