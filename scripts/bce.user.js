@@ -7095,17 +7095,6 @@ async function ForBetterClub() {
 	async function antiGarbling() {
 		await waitFor(() => !!SpeechGarbleByGagLevel);
 
-		/**
-		 * @param {Character} c
-		 */
-		function allowedToUngarble(c) {
-			return (
-				c.IsNpc() ||
-				(c.BCECapabilities?.includes("antigarble") &&
-					c.BCEBlockAntiGarble === false)
-			);
-		}
-
 		ChatRoomRegisterMessageHandler({
 			Priority: 1,
 			Description: "Anti-garbling by FBC",
@@ -7115,8 +7104,7 @@ async function ForBetterClub() {
 				let handled = clientGagged;
 				if (
 					fbcSettings.gagspeak &&
-					!clientGagged &&
-					allowedToUngarble(sender)
+					!clientGagged
 				) {
 					switch (data.Type) {
 						case "Whisper":
