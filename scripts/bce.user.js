@@ -22,28 +22,24 @@
 async function ForBetterClub() {
 	"use strict";
 
-	const FBC_VERSION = "5.3";
+	const FBC_VERSION = "5.6";
 	const settingsVersion = 58;
 
 	const fbcChangelog = `${FBC_VERSION}
+- Changed modals to use FUSAM's modal system
+
+5.5
+- Fixed a bug where local settings would get priority over online settings, which could cause issues when using multiple devices
+
+5.4
+- Added logging around settings
+
+5.3
 - Added support for R101
 - Updated CN translations (by Da'Inihlus)
 - Changed anti-garble to only work with other FBC users' messages, when they have opted in
 - Changed full gag anti-cheat to be enabled by default
 - Removed support for R100
-
-5.2
-- Fixed resizing rich online profile
-
-5.1
-- Removed update checker; FUSAM always loads the latest version
-
-5.0
-- Added uwall anticheat to immersion settings
-- Added rich online profile to chat & social settings
-- Removed other addon loading
-- Removed support for loading without FUSAM, changed warning to error
-- Preliminary R101 support
 `;
 
 	const SUPPORTED_GAME_VERSIONS = ["R101"];
@@ -133,8 +129,7 @@ async function ForBetterClub() {
 		deviceSettings: new Map(),
 	};
 
-	/** @type {Readonly<{Top: 11; OverrideBehaviour: 10; ModifyBehaviourHigh: 6; ModifyBehaviourMedium: 5; ModifyBehaviourLow: 4; AddBehaviour: 3; Observe: 0}>} */
-	const HOOK_PRIORITIES = {
+	const HOOK_PRIORITIES = /** @type {const} */ ({
 		Top: 11,
 		OverrideBehaviour: 10,
 		ModifyBehaviourHigh: 6,
@@ -142,7 +137,7 @@ async function ForBetterClub() {
 		ModifyBehaviourLow: 4,
 		AddBehaviour: 3,
 		Observe: 0,
-	};
+	});
 
 	/**
 	 * @type {Record<keyof defaultSettings, string | boolean> & {version: number}}
@@ -972,35 +967,47 @@ async function ForBetterClub() {
 		const key = bceSettingKey();
 		debug("loading settings");
 		if (Object.keys(fbcSettings).length === 0) {
-			let settings = /** @type {typeof fbcSettings} */ (
+			let settings = /** @type {typeof fbcSettings | null} */ (
 				parseJSON(localStorage.getItem(key))
 			);
-			const onlineSettings = /** @type {typeof fbcSettings} */ (
+			const onlineSettings = /** @type {typeof fbcSettings | null} */ (
 				parseJSON(
 					LZString.decompressFromBase64(
+						// eslint-disable-next-line deprecation/deprecation
 						Player.ExtensionSettings.FBC || (Player.OnlineSettings?.BCE ?? "")
 					) || null
 				)
 			);
+			if (!onlineSettings) {
+				logWarn("No online settings found");
+				debug("onlineSettings", Player.OnlineSettings);
+				debug("extensionSettings", Player.ExtensionSettings);
+			}
+			// eslint-disable-next-line deprecation/deprecation
 			if (Player.OnlineSettings?.BCE) {
 				Player.ExtensionSettings.FBC = Player.OnlineSettings.BCE;
 				ServerPlayerExtensionSettingsSync("FBC");
 				logInfo("Migrated online settings to extension settings");
+				// eslint-disable-next-line deprecation/deprecation
 				delete Player.OnlineSettings.BCE;
 			}
-			if (!settings?.version) {
-				if (onlineSettings && onlineSettings.version >= settings.version) {
-					settings = onlineSettings;
-				}
+			const localVersion = settings?.version || 0;
+			if (onlineSettings && onlineSettings.version >= localVersion) {
+				logInfo("using online settings");
+				settings = onlineSettings;
 			}
-			if (!settings) {
+			if (!isNonNullObject(settings)) {
 				debug("no settings", key);
 				fbcBeepNotify(
 					"Welcome to FBC",
 					`Welcome to For Better Club v${w.FBC_VERSION}! As this is your first time using FBC on this account, you may want to check out the settings page for some options to customize your experience. You can find it in the game preferences. Enjoy! In case of problems, you can contact us via Discord at ${DISCORD_INVITE_URL}`
 				);
-				// @ts-ignore -- this is fully populated in the loop below
+				// @ts-expect-error -- this is fully populated in the loop below
 				settings = {};
+			}
+
+			if (!isNonNullObject(settings)) {
+				throw new Error("failed to initialize settings");
 			}
 
 			for (const [setting] of objEntries(defaultSettings)) {
@@ -1026,6 +1033,7 @@ async function ForBetterClub() {
 	};
 
 	const bceSaveSettings = () => {
+		debug("saving settings");
 		if (toySyncState.deviceSettings.size > 0) {
 			fbcSettings.buttplugDevices = JSON.stringify(
 				Array.from(toySyncState.deviceSettings.values())
@@ -1036,6 +1044,7 @@ async function ForBetterClub() {
 			JSON.stringify(fbcSettings)
 		);
 		ServerPlayerExtensionSettingsSync("FBC");
+		debug("saved settings", fbcSettings);
 	};
 
 	/**
@@ -1332,6 +1341,7 @@ async function ForBetterClub() {
 					ChatRoomCharacterItemUpdate: "263DB2F0",
 					ChatRoomCharacterUpdate: "C444E92D",
 					ChatRoomCharacterViewDrawBackground: "BCD8B409",
+					ChatRoomCharacterViewIsActive: "D7C20A57",
 					ChatRoomClearAllElements: "14DAAB05",
 					ChatRoomClick: "AE612190",
 					ChatRoomCreateElement: "78F86423",
@@ -1340,6 +1350,9 @@ async function ForBetterClub() {
 					ChatRoomHTMLEntities: "0A7ADB1D",
 					ChatRoomKeyDown: "DBBC9035",
 					ChatRoomListManipulation: "75D28A8B",
+					ChatRoomMapViewCharacterIsVisible: "286C447D",
+					ChatRoomMapViewCharacterOnWhisperRange: "B0D08E96",
+					ChatRoomMapViewIsActive: "C5BA8D6A",
 					ChatRoomMessage: "BBD61334",
 					ChatRoomMessageDisplay: "37B5D4F2",
 					ChatRoomRegisterMessageHandler: "C432923A",
@@ -1887,6 +1900,30 @@ async function ForBetterClub() {
 			}
 		);
 
+		// Looking for settings erasure by client
+		SDK.hookFunction(
+			"ServerSend",
+			HOOK_PRIORITIES.Top,
+			/**
+			 * @param {Parameters<typeof ServerSend>} args
+			 */
+			(args, next) => {
+				const [msgType, data] = args;
+				if (msgType !== "AccountUpdate") {
+					return next(args);
+				}
+				if (!isNonNullObject(data)) {
+					return next(args);
+				}
+				if ("ExtensionSettings" in data) {
+					throw new Error(
+						"misuse of ExtensionSettings detected; write prevented"
+					);
+				}
+				return next(args);
+			}
+		);
+
 		/*
 		 * Chat scroll after relog
 		 * delay is the number of frames to delay the scroll
@@ -2065,8 +2102,8 @@ async function ForBetterClub() {
 					sender &&
 					sender !== Player.MemberNumber?.toString() &&
 					matchingCharacters.length > 0 &&
-					(!ChatRoomMapVisible ||
-						matchingCharacters.some(ChatRoomMapCharacterOnWhisperRange))
+					(ChatRoomCharacterViewIsActive() ||
+						matchingCharacters.some(ChatRoomMapViewCharacterOnWhisperRange))
 				) {
 					const repl = document.createElement("a");
 					repl.href = "#";
@@ -2130,7 +2167,7 @@ async function ForBetterClub() {
 						logInfo("Could not find member", target);
 						return;
 					}
-					const [bindSubmit] = await showAsyncModal({
+					const [bindSubmit] = await FUSAM.modals.openAsync({
 						prompt: displayText("Include binds?"),
 						buttons: {
 							cancel: "No",
@@ -2140,7 +2177,7 @@ async function ForBetterClub() {
 					const includeBinds = bindSubmit === "submit";
 					let includeLocks = false;
 					if (includeBinds) {
-						const [lockSubmit] = await showAsyncModal({
+						const [lockSubmit] = await FUSAM.modals.openAsync({
 							prompt: displayText("Include locks?"),
 							buttons: {
 								cancel: "No",
@@ -2149,7 +2186,7 @@ async function ForBetterClub() {
 						});
 						includeLocks = lockSubmit === "submit";
 					}
-					const [baseSubmit] = await showAsyncModal({
+					const [baseSubmit] = await FUSAM.modals.openAsync({
 						prompt: displayText("Include height, body type, hair, etc?"),
 						buttons: {
 							cancel: "No",
@@ -2204,7 +2241,7 @@ async function ForBetterClub() {
 
 					const exportString = LZString.compressToBase64(JSON.stringify(looks));
 
-					showAsyncModal({
+					FUSAM.modals.openAsync({
 						prompt: displayText(displayText("Copy the looks string below")),
 						input: {
 							initial: exportString,
@@ -2239,7 +2276,7 @@ async function ForBetterClub() {
 						return;
 					}
 
-					showModal({
+					FUSAM.modals.open({
 						prompt: displayText("Paste your looks here"),
 						input: {
 							initial: "",
@@ -9196,6 +9233,7 @@ async function ForBetterClub() {
 		}
 		return bundleList.map((bundle) => {
 			if (
+				// eslint-disable-next-line deprecation/deprecation
 				typeof bundle.Property?.Type === "string" &&
 				!CommonIsObject(bundle.Property?.TypeRecord)
 			) {
@@ -9203,6 +9241,7 @@ async function ForBetterClub() {
 				if (asset) {
 					bundle.Property.TypeRecord = ExtendedItemTypeToRecord(
 						asset,
+						// eslint-disable-next-line deprecation/deprecation
 						bundle.Property.Type
 					);
 				}
@@ -9220,12 +9259,15 @@ async function ForBetterClub() {
 
 		const wardrobeData =
 			Player.ExtensionSettings.FBCWardrobe ||
+			// eslint-disable-next-line deprecation/deprecation
 			Player.OnlineSettings?.BCEWardrobe;
 		if (wardrobeData) {
+			// eslint-disable-next-line deprecation/deprecation
 			if (Player.OnlineSettings?.BCEWardrobe) {
 				Player.ExtensionSettings.FBCWardrobe = wardrobeData;
 				ServerPlayerExtensionSettingsSync("FBCWardrobe");
 				logInfo("Migrated wardrobe from OnlineSettings to ExtensionSettings");
+				// eslint-disable-next-line deprecation/deprecation
 				delete Player.OnlineSettings.BCEWardrobe;
 			}
 			try {
@@ -9362,12 +9404,13 @@ async function ForBetterClub() {
 							domNode = document.createTextNode(url.href);
 							if (embedType !== EMBED_TYPE.None) {
 								const promptTrust = document.createElement("a");
+								// eslint-disable-next-line no-loop-func
 								promptTrust.onclick = (e) => {
 									e.preventDefault();
 									e.stopPropagation();
 									// eslint-disable-next-line prefer-destructuring
 									const target = /** @type {HTMLAnchorElement} */ (e.target);
-									showModal({
+									FUSAM.modals.open({
 										prompt: displayText(
 											"Do you want to add $origin to trusted origins?",
 											{
@@ -9455,7 +9498,7 @@ async function ForBetterClub() {
 				return;
 			}
 			open = true;
-			showModal({
+			FUSAM.modals.open({
 				prompt: displayText(
 					`Do you want to allow 3rd party ${
 						type ?? "content"
@@ -10708,7 +10751,7 @@ async function ForBetterClub() {
 		const exportPosition = /** @type {const} */ ([1585, 15, 90, 90]);
 
 		function importCraft() {
-			showModal({
+			FUSAM.modals.open({
 				prompt: displayText("Paste the craft here"),
 				callback: (action, str) => {
 					if (action !== "submit" || !str) {
@@ -10758,7 +10801,7 @@ async function ForBetterClub() {
 				switch (CraftingMode) {
 					case "Name":
 						if (MouseIn(...exportPosition)) {
-							showModal({
+							FUSAM.modals.open({
 								prompt: displayText("Copy the craft here"),
 								input: {
 									initial: LZString.compressToBase64(
@@ -10901,166 +10944,6 @@ async function ForBetterClub() {
 		);
 	}
 
-	let disabledUntil = 0;
-	/**
-	 * @typedef {{ prompt: string | Node, input?: { initial: string, readonly: boolean, type: "input" | "textarea" }, callback: (action: ModalAction, inputValue?: string) => void, buttons?: { submit?: string, cancel?: string } }} ModalOptions
-	 * @typedef {"submit" | "cancel" | "close"} ModalAction
-	 */
-	/**
-	 * @param {ModalOptions} opts
-	 */
-	function showModal(opts) {
-		disabledUntil = Date.now() + 500;
-		const modal = document.createElement("dialog");
-		modal.style.zIndex = "1001";
-		modal.style.display = "flex";
-		modal.style.flexDirection = "column";
-		modal.style.width = "50em";
-		modal.style.fontFamily = "Arial, Helvetica, sans-serif";
-		modal.open = true;
-
-		const prompt = document.createElement("div");
-		if (isString(opts.prompt)) {
-			prompt.textContent = opts.prompt;
-		} else {
-			prompt.append(opts.prompt);
-		}
-		modal.append(prompt);
-		document.body.append(modal);
-
-		let inputValue = "";
-
-		if (opts.input) {
-			const input = document.createElement(opts.input.type);
-			switch (opts.input.type) {
-				case "input":
-					{
-						const el = /** @type {HTMLInputElement} */ (input);
-						el.type = "text";
-					}
-					break;
-				case "textarea":
-					{
-						const el = /** @type {HTMLTextAreaElement} */ (input);
-						el.rows = 10;
-					}
-					break;
-				default:
-					// This should never happen
-					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-					throw new Error(`invalid input type ${opts.input.type}`);
-			}
-			input.style.width = "100%";
-			input.readOnly = opts.input.readonly;
-			input.addEventListener("mouseover", () => {
-				input.select();
-			});
-			input.addEventListener("focus", () => {
-				input.select();
-			});
-			input.addEventListener("change", () => {
-				inputValue = input.value;
-			});
-
-			input.addEventListener("keydown", (e) => {
-				// MBCHC compatibility: prevent chatroom keydown events from triggering at document level
-				e.stopPropagation();
-			});
-
-			input.value = opts.input.initial;
-			modal.append(input);
-		}
-
-		const buttonContainer = document.createElement("div");
-		buttonContainer.style.display = "flex";
-		buttonContainer.style.flexDirection = "row";
-		buttonContainer.style.justifyContent = "space-between";
-		buttonContainer.style.marginTop = "1em";
-		buttonContainer.style.width = "100%";
-		modal.append(buttonContainer);
-
-		const submit = document.createElement("button");
-		submit.textContent = opts.buttons?.submit || displayText("Submit");
-		submit.addEventListener("click", () => {
-			close("submit");
-		});
-
-		const cancel = document.createElement("button");
-		cancel.textContent = opts.buttons?.cancel || displayText("Cancel");
-		cancel.addEventListener("click", () => {
-			close("cancel");
-		});
-
-		for (const button of [submit, cancel]) {
-			button.style.padding = "0.5em";
-			button.style.flexGrow = "1";
-		}
-
-		buttonContainer.append(cancel, submit);
-
-		modal.addEventListener("click", (e) => {
-			e.stopPropagation();
-		});
-		/**
-		 * @param {KeyboardEvent} e
-		 */
-		const keyClick = (e) => {
-			e.stopPropagation();
-			if (e.key === "Escape") {
-				close();
-			}
-		};
-		document.addEventListener("keydown", keyClick);
-
-		// Click-blocker
-		const blocker = document.createElement("div");
-		blocker.style.position = "fixed";
-		blocker.style.top = "0";
-		blocker.style.left = "0";
-		blocker.style.width = "100vw";
-		blocker.style.height = "100vh";
-		blocker.style.zIndex = "1000";
-		blocker.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
-		blocker.title = displayText("Click to close the modal");
-		blocker.addEventListener("click", () => {
-			close();
-		});
-		blocker.addEventListener("focus", () => {
-			close();
-		});
-		document.body.append(blocker);
-
-		/**
-		 * @param {ModalAction} action
-		 */
-		function close(action = "close") {
-			if (Date.now() < disabledUntil) {
-				return;
-			}
-			disabledUntil = Date.now() + 500;
-			modal.close();
-			modal.remove();
-			blocker.remove();
-			document.removeEventListener("keydown", keyClick);
-			opts.callback(action, inputValue);
-		}
-	}
-
-	/**
-	 * @param {Omit<ModalOptions, "callback">} opts
-	 * @returns {Promise<[ModalAction, string | null]>}
-	 */
-	function showAsyncModal(opts) {
-		return new Promise((resolve) => {
-			showModal({
-				...opts,
-				callback: (action, inputValue) => {
-					resolve([action, inputValue ?? null]);
-				},
-			});
-		});
-	}
-
 	function hideChatRoomElements() {
 		const chatRoomElements = ["InputChat", "TextAreaChatLog"];
 		for (const id of chatRoomElements) {
@@ -11119,8 +11002,8 @@ async function ForBetterClub() {
 	function findDrawnCharacters(target, limitVisible = false) {
 		let baseList = limitVisible ? ChatRoomCharacterDrawlist : ChatRoomCharacter;
 
-		if (ChatRoomMapVisible) {
-			baseList = baseList.filter(ChatRoomMapCharacterIsVisible);
+		if (ChatRoomMapViewIsActive()) {
+			baseList = baseList.filter(ChatRoomMapViewCharacterIsVisible);
 		}
 
 		if (target === null) {
