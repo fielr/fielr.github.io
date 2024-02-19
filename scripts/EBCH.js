@@ -858,7 +858,7 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
         ControllerClearAreas();
         DialogDraw();
         Save();
-
+        return;
       }
       else if(poseuirender === 1 && poseui === 0 && MouseIn(...buttposeui) && CurrentCharacter.ID !== 0)
       {
@@ -866,6 +866,7 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
         ControllerClearAreas();
         DialogDraw();
         Save();
+        return;
       }
 
       if(poseuirender === 1 && poseui === 1) {
