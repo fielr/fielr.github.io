@@ -9075,7 +9075,7 @@ async function ForBetterClub() {
 			) {
 				return [5, 865, 60, 60];
 			}
-			return [70, 905, 60, 60];
+			return [126, 905, 60, 60];
 		}
 
 		SDK.hookFunction(
