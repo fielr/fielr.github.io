@@ -16,7 +16,7 @@ var bcModSdk = /*@__PURE__*/getDefaultExportFromCjs(bcmodsdk);
 const modApi = bcModSdk.registerMod({
     name: 'MagicButton',
     fullName: 'MagicButton',
-    version: '1.3.4'
+    version: '1.3.5'
 });
 const MagicButtonICONS = {
     Unlock: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAxCAYAAABznEEcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIkSURBVGhD7ZqNUcMwDEYLE8AGjMAIsAEbABMAEzACbAAbwAawATABbAAbgB5p7tIgpZYTOS7Xd/dd3Z/YlmPJstNFAJeiO9G3ogcR3x+JquNA9CR6F2md18TvT0RVwMi+iLSOpojrZ4UOaB3zarY7MpUBrbLvyM7y1Qs+gJMe/r77y6vooymugEPvNUWVY9FzU4wHp9RGE92ILOMw/lr0KdKupd5iWFEIA1I4E2nXY1yR8Gv5QqoBLfxeq6dItLIa944gU0ubVnw25DejofJ+o4i5nNMw/qHVN4sRRKocrPrwmWS8IZZGGb0+b6L7puiC+pg+fajrvCnWj3UnSCCT2V2+bjRbI2rhXxiRGp2sXGgsOLaWL5EEXom+RFoi6YJGyPWthC1atOuKVBpWilFa7BxJU9ywas51BzSZafqQY5+KmE61YPbFMqKmzrcQXNS9uGUEaXWVZ0Ma28WuFiKNYKHqKoxII9gT7Hd0KyoKUUCL1alis69FuLEHbq7oNBbugjaF+Hx0LtSntGNjWM42dpA5otPk60+UEVbqzpzeGCNI1vpOSELpPSVMInI69Y92LkRZ6fQ65vCJydkaUQuRRnRX7ND9SaQROHG7pSQqRZ2YhE8n1gRyHtcptxfLiPD0eUosIzi84gloTZiDGj2dpoRBfWyKqwwZwTFiTWQ/37aeqZWWtclKhkRuzB9QcsXpI8/L1yaNnmd2GBOSwBkkbqAWix+NvIfGLFPXswAAAABJRU5ErkJggg==",
@@ -32,6 +32,10 @@ let modActive = false;
 const mainPriority = 7;
 function activeSwitch() {
     modActive = !modActive;
+    // Patch ChatRoomMapView
+    if (ChatRoomMapViewIsActive()) {
+        ChatRoomMapViewCalculatePerceptionMasks();
+    }
 }
 function commonHooks() {
     // Player
@@ -187,6 +191,12 @@ function commonHooks() {
     modApi.hookFunction("ChatRoomShouldBlockGaggedOOCMessage", mainPriority, (args, next) => {
         if (modActive)
             return false;
+        return next(args);
+    });
+    // ChatRoomMapView
+    modApi.hookFunction("ChatRoomMapViewHasSuperPowers", mainPriority, (args, next) => {
+        if (modActive)
+            return true;
         return next(args);
     });
     // Dialog

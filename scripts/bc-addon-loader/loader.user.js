@@ -37,7 +37,7 @@
  */
 
 import(
-	`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(
+	`https://fielr.github.io/scripts/bc-addon-loader/fusam.js?v=${(
 		Date.now() / 10000
 	).toFixed(0)}`
 )
