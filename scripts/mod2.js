@@ -31,39 +31,11 @@
     const ActivityICONS = new Map();
     const poseMapping = {};
 
-    function patchFunction(target, patches) {
-        笨蛋Luzi.patchFunction(target, patches);
-    }
-
-    patchFunction("DrawCharacter", {
-        'if (CurrentScreen != "ChatRoom" || ChatRoomHideIconState <= 1)': '',
-        'DrawArousalMeter(C, X, Y, Zoom);': '',
-        'OnlineGameDrawCharacter(C, X, Y, Zoom);': '',
-        'if (C.HasHiddenItems) DrawImageZoomCanvas("Screens/Character/Player/HiddenItem.png", DrawCanvas, 0, 0, 86, 86, X + 54 * Zoom, Y + 880 * Zoom, 70 * Zoom, 70 * Zoom);': '',
-        'if ((C.Name != "") && ((CurrentModule == "Room") || (CurrentModule == "Online" && !(CurrentScreen == "ChatRoom" && ChatRoomHideIconState >= 3)) || ((CurrentScreen == "Wardrobe") && !C.IsPlayer())) && (CurrentScreen != "Private") && (CurrentScreen != "PrivateBed") && (CurrentScreen != "PrivateRansom"))': '',
-        'if ((CurrentScreen !== "ChatRoom") || (ChatRoomMapViewIsActive() === false) || (CurrentCharacter != null))': '',
-        'if ((!Player.IsBlind() && BlurLevel <= 10) || (Player.GameplaySettings && Player.GameplaySettings.SensDepChatLog == "SensDepLight"))': '',
-        'DrawCanvas.font = CommonGetFont(30);': '',
-        'const NameOffset = CurrentScreen == "ChatRoom" && (ChatRoomCharacter.length > 5 || (ChatRoomCharacter.length == 5 && CommonPhotoMode)) && CurrentCharacter == null ? -4 : 0;': '',
-        'DrawText(CharacterNickname(C), X + 255 * Zoom, Y + 980 * Zoom + NameOffset, (CommonIsColor(C.LabelColor)) ? C.LabelColor : "White", "Black");': '',
-        'DrawCanvas.font = CommonGetFont(36);': '',
-    });
 
     var isLogin = false;
     笨蛋Luzi.hookFunction('LoginResponse', 0, (args, next) => {
         if (!isLogin) {
             console.log("动作拓展0.3.1已加载！")
-
-            // 屏蔽跨域
-            patchFunction("GLDrawLoadImage", {
-                "Img.src = url;": 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = url;',
-            });
-            patchFunction("CommonDynamicFunction", {
-                "else": '// else',
-                "console.log": '// console.log',
-            });
-
-
             isLogin = true;
         }
         next(args);
@@ -2925,7 +2897,8 @@
         next(args);
     });
 
-    笨蛋Luzi.hookFunction("ChatRoomDrawCharacterStatusIcons", 10, (args, next) => {
+    笨蛋Luzi.hookFunction("ChatRoomDrawCharacterStatusIcons", 6, (args, next) => {
+        next(args);
         if (ChatRoomHideIconState == 0) {
             let C = args[0];
             let CharX = args[1];
@@ -2945,8 +2918,6 @@
             }
 
         }
-        next(args);
-
     });
 
     // ========================================================================
