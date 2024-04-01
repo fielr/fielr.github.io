@@ -1,3 +1,17 @@
+// ==UserScript==
+// @name         MagicButton
+// @namespace    https://www.bondageprojects.com/
+// @version      1.3.8
+// @description  Act as not tied.
+// @author       You
+// @match        https://bondageprojects.elementfx.com/*
+// @match        https://www.bondageprojects.elementfx.com/*
+// @match        https://bondage-europe.com/*
+// @match        https://www.bondage-europe.com/*
+// @run-at       document-end
+// @grant        none
+// ==/UserScript==
+
 function getDefaultExportFromCjs (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 }
@@ -16,7 +30,7 @@ var bcModSdk = /*@__PURE__*/getDefaultExportFromCjs(bcmodsdk);
 const modApi = bcModSdk.registerMod({
     name: 'MagicButton',
     fullName: 'MagicButton',
-    version: '1.3.6'
+    version: '1.3.8'
 });
 const MagicButtonICONS = {
     Unlock: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAxCAYAAABznEEcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIkSURBVGhD7ZqNUcMwDEYLE8AGjMAIsAEbABMAEzACbAAbwAawATABbAAbgB5p7tIgpZYTOS7Xd/dd3Z/YlmPJstNFAJeiO9G3ogcR3x+JquNA9CR6F2md18TvT0RVwMi+iLSOpojrZ4UOaB3zarY7MpUBrbLvyM7y1Qs+gJMe/r77y6vooymugEPvNUWVY9FzU4wHp9RGE92ILOMw/lr0KdKupd5iWFEIA1I4E2nXY1yR8Gv5QqoBLfxeq6dItLIa944gU0ubVnw25DejofJ+o4i5nNMw/qHVN4sRRKocrPrwmWS8IZZGGb0+b6L7puiC+pg+fajrvCnWj3UnSCCT2V2+bjRbI2rhXxiRGp2sXGgsOLaWL5EEXom+RFoi6YJGyPWthC1atOuKVBpWilFa7BxJU9ywas51BzSZafqQY5+KmE61YPbFMqKmzrcQXNS9uGUEaXWVZ0Ma28WuFiKNYKHqKoxII9gT7Hd0KyoKUUCL1alis69FuLEHbq7oNBbugjaF+Hx0LtSntGNjWM42dpA5otPk60+UEVbqzpzeGCNI1vpOSELpPSVMInI69Y92LkRZ6fQ65vCJydkaUQuRRnRX7ND9SaQROHG7pSQqRZ2YhE8n1gRyHtcptxfLiPD0eUosIzi84gloTZiDGj2dpoRBfWyKqwwZwTFiTWQ/37aeqZWWtclKhkRuzB9QcsXpI8/L1yaNnmd2GBOSwBkkbqAWix+NvIfGLFPXswAAAABJRU5ErkJggg==",
@@ -148,7 +162,30 @@ function commonHooks() {
                 "TargetHasBreasts",
                 "HasBreasts",
                 "TargetHasFlatChest",
-                "HasFlatChest"
+                "HasFlatChest",
+                // 动作拓展
+                "HasTail",
+                "HasWings",
+                "HasTailCat",
+                "HasTentacles",
+                "HasPawMittens",
+                "HasPet",
+                "HasKennel",
+                "HasItemVulvaPiercings",
+                "HasItemVulva",
+                "HasSword",
+                "HasScissors",
+                "HasCloth",
+                "HasNoCloth",
+                "HasClothLower",
+                "HasBra",
+                "HasPanties",
+                "HasSocks",
+                "Hassaddle",
+                "Hasbed",
+                "HasTentacles2",
+                "SuitLower鱼鱼尾_Luzi",
+                "阿巴阿巴"
             ].includes(args[0])) {
                 return true;
             }
@@ -169,12 +206,15 @@ function commonHooks() {
         }
         return next(args);
     });
-    modApi.hookFunction("ChatRoomCharacterViewDraw", mainPriority, (args, next) => {
+    modApi.hookFunction("ChatRoomUpdateDisplay", mainPriority, (args, next) => {
         if (modActive) {
-            ChatRoomCharacterDrawlist = ChatRoomCharacter;
-            ChatRoomCharacterViewCharacterCount = ChatRoomCharacterDrawlist.length;
+            Player.Effect = Player.Effect.filter((e) => e !== "VRAvatars");
+            next(args);
+            CharacterLoadEffect(Player);
         }
-        return next(args);
+        else {
+            next(args);
+        }
     });
     modApi.hookFunction("ChatRoomFocusCharacter", mainPriority, (args, next) => {
         if (modActive) {
