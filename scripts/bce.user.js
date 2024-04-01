@@ -22,10 +22,14 @@
 async function ForBetterClub() {
 	"use strict";
 
-	const FBC_VERSION = "5.7";
+	const FBC_VERSION = "5.8";
 	const settingsVersion = 58;
 
 	const fbcChangelog = `${FBC_VERSION}
+- Changed discreet mode to allow friend list and main hall backgrounds
+- Changed /beep to respect BCX beep restrictions
+
+5.7
 - Added support for R102
 - Changed characters with notes to have cyan FBC version number
 
@@ -34,16 +38,6 @@ async function ForBetterClub() {
 
 5.5
 - Fixed a bug where local settings would get priority over online settings, which could cause issues when using multiple devices
-
-5.4
-- Added logging around settings
-
-5.3
-- Added support for R101
-- Updated CN translations (by Da'Inihlus)
-- Changed anti-garble to only work with other FBC users' messages, when they have opted in
-- Changed full gag anti-cheat to be enabled by default
-- Removed support for R100
 `;
 
 	const SUPPORTED_GAME_VERSIONS = ["R102"];
@@ -1514,7 +1508,7 @@ async function ForBetterClub() {
 	/** @type {string[]} */
 	const skippedFunctionality = [];
 
-	/** @type {(functionName: keyof typeof window, patches: Record<string,string>, affectedFunctionality: string) => void} */
+	/** @type {(functionName: string, patches: Record<string,string>, affectedFunctionality: string) => void} */
 	const patchFunction = (functionName, patches, affectedFunctionality) => {
 		// Guard against patching a function that has been modified by another addon not using the shared SDK on supported versions.
 		if (
@@ -1555,7 +1549,8 @@ async function ForBetterClub() {
 	function fbcBeepNotify(title, text) {
 		SDK.callOriginal("ServerAccountBeep", [
 			{
-				MemberNumber: Player.MemberNumber,
+				MemberNumber: Player.MemberNumber || -1,
+				BeepType: "",
 				MemberName: "FBC",
 				ChatRoomName: title,
 				Private: true,
@@ -1930,32 +1925,35 @@ async function ForBetterClub() {
 			}
 		);
 
-		/*
-		 * Chat scroll after relog
-		 * delay is the number of frames to delay the scroll
-		 */
-		let delay = 0;
-		SDK.hookFunction(
-			"ChatRoomCreateElement",
-			HOOK_PRIORITIES.AddBehaviour,
-			/**
-			 * @param {Parameters<typeof ChatRoomCreateElement>} args
+		// GameVersion R102 - no longer required on R103
+		if (typeof RelogChatLog !== "undefined") {
+			/*
+			 * Chat scroll after relog
+			 * delay is the number of frames to delay the scroll
 			 */
-			(args, next) => {
-				const isRelog = !!RelogChatLog;
-				const ret = next(args);
-				if (isRelog) {
-					delay = 3;
-				}
-				if (delay > 0) {
-					delay--;
-					if (delay === 0) {
-						ElementScrollToEnd("TextAreaChatLog");
+			let delay = 0;
+			SDK.hookFunction(
+				"ChatRoomCreateElement",
+				HOOK_PRIORITIES.AddBehaviour,
+				/**
+				 * @param {Parameters<typeof ChatRoomCreateElement>} args
+				 */
+				(args, next) => {
+					const isRelog = !!RelogChatLog;
+					const ret = next(args);
+					if (isRelog) {
+						delay = 3;
 					}
+					if (delay > 0) {
+						delay--;
+						if (delay === 0) {
+							ElementScrollToEnd("TextAreaChatLog");
+						}
+					}
+					return ret;
 				}
-				return ret;
-			}
-		);
+			);
+		}
 
 		// Prevent friendlist results from attempting to load into the HTML outside of the appropriate view
 		SDK.hookFunction(
@@ -2356,6 +2354,11 @@ async function ForBetterClub() {
 				Tag: "beep",
 				Description: displayText("[membernumber] [message]: beep someone"),
 				Action: (_, command, args) => {
+					if (BCX?.getRuleState("speech_restrict_beep_send")?.isEnforced) {
+						fbcChatNotify(
+							displayText("Sending beeps is restricted by BCX rule.")
+						);
+					}
 					const [target] = args,
 						[, , ...message] = command.split(" "),
 						msg = message?.join(" ");
@@ -3166,7 +3169,8 @@ async function ForBetterClub() {
 			await sleep(500);
 			SDK.callOriginal("ServerAccountBeep", [
 				{
-					MemberNumber: Player.MemberNumber,
+					MemberNumber: Player.MemberNumber || -1,
+					BeepType: "",
 					MemberName: "VOID",
 					ChatRoomName: "VOID",
 					Private: true,
@@ -3188,7 +3192,8 @@ async function ForBetterClub() {
 				} else if (!breakCircuit) {
 					SDK.callOriginal("ServerAccountBeep", [
 						{
-							MemberNumber: Player.MemberNumber,
+							MemberNumber: Player.MemberNumber || -1,
+							BeepType: "",
 							MemberName: Player.Name,
 							ChatRoomName: displayText("ERROR"),
 							Private: true,
@@ -7280,7 +7285,7 @@ async function ForBetterClub() {
 							break;
 					}
 				}
-				return next([message, data, ...args.slice(2)]);
+				return next([message, data]);
 			}
 		);
 
@@ -9055,11 +9060,16 @@ async function ForBetterClub() {
 		SDK.hookFunction(
 			"ServerSend",
 			HOOK_PRIORITIES.Observe,
-			/** @type {(args: [string, ServerAccountBeepResponse], next: (args: [string, ServerAccountBeepResponse]) => void) => void} */
+			/**
+			 * @param {Parameters<typeof ServerSend>} args
+			 */
 			(args, next) => {
-				const [command, beep] = args;
+				const [command, b] = args;
+				if (command !== "AccountBeep") {
+					return next(args);
+				}
+				const beep = /** @type {ServerAccountBeepRequest} */ (b);
 				if (
-					command === "AccountBeep" &&
 					!beep?.BeepType &&
 					isString(beep?.Message) &&
 					!beep.Message.includes("\uf124")
@@ -9535,7 +9545,7 @@ async function ForBetterClub() {
 			"ChatAdminRoomCustomizationProcess",
 			HOOK_PRIORITIES.OverrideBehaviour,
 			/**
-			 * @param {[{ ImageURL: string, MusicURL: string }]} args
+			 * @param {Parameters<typeof ChatAdminRoomCustomizationProcess>} args
 			 */
 			(args, next) => {
 				if (!fbcSettings.customContentDomainCheck) {
@@ -9543,20 +9553,29 @@ async function ForBetterClub() {
 				}
 
 				try {
+					// @ts-ignore - the function's types are garbage
 					const [{ ImageURL, MusicURL }] = args;
 
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
 					const imageOrigin = ImageURL && new URL(ImageURL).origin;
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
 					const musicOrigin = MusicURL && new URL(MusicURL).origin;
 
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 					if (imageOrigin && !sessionCustomOrigins.has(imageOrigin)) {
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 						showCustomContentDomainCheckWarning(imageOrigin, "image");
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 					} else if (musicOrigin && !sessionCustomOrigins.has(musicOrigin)) {
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 						showCustomContentDomainCheckWarning(musicOrigin, "music");
 					}
 
 					if (
 						(!ImageURL ||
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 							sessionCustomOrigins.get(imageOrigin) === "allowed") &&
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 						(!MusicURL || sessionCustomOrigins.get(musicOrigin) === "allowed")
 					) {
 						return next(args);
@@ -9593,7 +9612,10 @@ async function ForBetterClub() {
 	}
 
 	function discreetMode() {
-		/** @type {(args: [unknown], next: (args: [unknown]) => unknown) => unknown} */
+		/**
+		 * @param {any} args
+		 * @param {(args: any) => void} next
+		 */
 		const discreetModeHook = (args, next) => {
 			if (fbcSettings.discreetMode) {
 				return;
@@ -9626,9 +9648,15 @@ async function ForBetterClub() {
 					if (!args) {
 						return false;
 					}
+					const isBackground =
+						isString(args[0]) && args[0].startsWith("Backgrounds/");
 					const ignoredImages =
-						/(^Backgrounds\/(?!Sheet(White)?|grey|White\.)|\b(Kneel|Arousal|Activity|Asylum|Cage|Cell|ChangeLayersMouth|Diaper|Kidnap|Logo|Player|Remote|Restriction|SpitOutPacifier|Struggle|Therapy|Orgasm\d|Poses|HouseVincula|Seducer\w+)\b|^data:|^Assets\/(?!Female3DCG\/Emoticon\/(Afk|Sleep|Read|Gaming|Hearing|Thumbs(Up|Down))\/))/u;
+						/(^Backgrounds\/(?!Sheet(White)?|grey|White\.|BrickWall\.)|\b(Kneel|Arousal|Activity|Asylum|Cage|Cell|ChangeLayersMouth|Diaper|Kidnap|Logo|Player|Remote|Restriction|SpitOutPacifier|Struggle|Therapy|Orgasm\d|Poses|HouseVincula|Seducer\w+)\b|^data:|^Assets\/(?!Female3DCG\/Emoticon\/(Afk|Sleep|Read|Gaming|Hearing|Thumbs(Up|Down))\/))/u;
 					if (isString(args[0]) && ignoredImages.test(args[0])) {
+						if (isBackground) {
+							args[0] = "Backgrounds/BrickWall.jpg";
+							return next(args);
+						}
 						return false;
 					}
 					// @ts-ignore
