@@ -615,7 +615,7 @@
             modPosture: false, modifyOwnPosture: false, postureName: ""
         },
         {
-            name: "拽链子", prerequisite: ["UseHands", "UseArms", "HasLeash"],
+            name: "拽链子", prerequisite: ["UseHands", "UseArms"],
             targetSelf: "", targetSelftext: "", maxProgressSelf: 50,
             target: "ItemNeck", targettext: "SourceCharacter拽TargetCharacter的链子.", maxProgress: 50,
             activityExpression: [],
