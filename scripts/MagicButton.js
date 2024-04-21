@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.3.8
+// @version      1.3.9
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -33,7 +33,7 @@
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.3.8'
+	    version: '1.3.9'
 	});
 	const MagicButtonICONS = {
 	    Unlock: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAxCAYAAABznEEcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIkSURBVGhD7ZqNUcMwDEYLE8AGjMAIsAEbABMAEzACbAAbwAawATABbAAbgB5p7tIgpZYTOS7Xd/dd3Z/YlmPJstNFAJeiO9G3ogcR3x+JquNA9CR6F2md18TvT0RVwMi+iLSOpojrZ4UOaB3zarY7MpUBrbLvyM7y1Qs+gJMe/r77y6vooymugEPvNUWVY9FzU4wHp9RGE92ILOMw/lr0KdKupd5iWFEIA1I4E2nXY1yR8Gv5QqoBLfxeq6dItLIa944gU0ubVnw25DejofJ+o4i5nNMw/qHVN4sRRKocrPrwmWS8IZZGGb0+b6L7puiC+pg+fajrvCnWj3UnSCCT2V2+bjRbI2rhXxiRGp2sXGgsOLaWL5EEXom+RFoi6YJGyPWthC1atOuKVBpWilFa7BxJU9ywas51BzSZafqQY5+KmE61YPbFMqKmzrcQXNS9uGUEaXWVZ0Ma28WuFiKNYKHqKoxII9gT7Hd0KyoKUUCL1alis69FuLEHbq7oNBbugjaF+Hx0LtSntGNjWM42dpA5otPk60+UEVbqzpzeGCNI1vpOSELpPSVMInI69Y92LkRZ6fQ65vCJydkaUQuRRnRX7ND9SaQROHG7pSQqRZ2YhE8n1gRyHtcptxfLiPD0eUosIzi84gloTZiDGj2dpoRBfWyKqwwZwTFiTWQ/37aeqZWWtclKhkRuzB9QcsXpI8/L1yaNnmd2GBOSwBkkbqAWix+NvIfGLFPXswAAAABJRU5ErkJggg==",
@@ -46,7 +46,7 @@
 	}
 
 	let modActive = false;
-	const mainPriority = 7;
+	const mainPriority$1 = 7;
 	function activeSwitch() {
 	    modActive = !modActive;
 	    // Patch ChatRoomMapView
@@ -56,104 +56,104 @@
 	}
 	function commonHooks() {
 	    // Player
-	    modApi.hookFunction("Player.CanChangeClothesOn", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.CanChangeClothesOn", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.CanChangeToPose", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.CanChangeToPose", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.CanInteract", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.CanInteract", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.CanWalk", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.CanWalk", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.GetBlindLevel", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.GetBlindLevel", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return 0;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.GetClumsiness", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.GetClumsiness", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return 0;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.GetBlurLevel", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.GetBlurLevel", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return 0;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.GetDeafLevel", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.GetDeafLevel", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return 0;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.GetTints", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.GetTints", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return [];
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.HasTints", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.HasTints", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return false;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.IsRestrained", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.IsRestrained", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return false;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.IsSlow", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.IsSlow", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return false;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.IsOwnedByPlayer", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.IsOwnedByPlayer", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.IsLoverOfPlayer", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.IsLoverOfPlayer", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("Player.IsEnclose", mainPriority, (args, next) => {
+	    modApi.hookFunction("Player.IsEnclose", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return false;
 	        }
 	        return next(args);
 	    });
 	    // Activity
-	    modApi.hookFunction("ActivityPossibleOnGroup", mainPriority, (args, next) => {
+	    modApi.hookFunction("ActivityPossibleOnGroup", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("ActivityCheckPrerequisite", mainPriority, (args, next) => {
+	    modApi.hookFunction("ActivityCheckPrerequisite", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            if (![
 	                "TargetMouthBlocked",
@@ -196,20 +196,20 @@
 	        return next(args);
 	    });
 	    // Character
-	    modApi.hookFunction("CharacterCanKneel", mainPriority, (args, next) => {
+	    modApi.hookFunction("CharacterCanKneel", mainPriority$1, (args, next) => {
 	        if (modActive && args[0].ID == 0 && args[0].Effect.includes("Freeze")) {
 	            return true;
 	        }
 	        return next(args);
 	    });
 	    // ChatRoom
-	    modApi.hookFunction("ChatRoomCanLeave", mainPriority, (args, next) => {
+	    modApi.hookFunction("ChatRoomCanLeave", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("ChatRoomUpdateDisplay", mainPriority, (args, next) => {
+	    modApi.hookFunction("ChatRoomUpdateDisplay", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            Player.Effect = Player.Effect.filter((e) => e !== "VRAvatars");
 	            next(args);
@@ -219,37 +219,37 @@
 	            next(args);
 	        }
 	    });
-	    modApi.hookFunction("ChatRoomFocusCharacter", mainPriority, (args, next) => {
+	    modApi.hookFunction("ChatRoomFocusCharacter", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return modApi.callOriginal("ChatRoomFocusCharacter", args);
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("ChatRoomOwnerPresenceRule", mainPriority, (args, next) => {
+	    modApi.hookFunction("ChatRoomOwnerPresenceRule", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return false;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("ChatRoomShouldBlockGaggedOOCMessage", mainPriority, (args, next) => {
+	    modApi.hookFunction("ChatRoomShouldBlockGaggedOOCMessage", mainPriority$1, (args, next) => {
 	        if (modActive)
 	            return false;
 	        return next(args);
 	    });
 	    // ChatRoomMapView
-	    modApi.hookFunction("ChatRoomMapViewHasSuperPowers", mainPriority, (args, next) => {
+	    modApi.hookFunction("ChatRoomMapViewHasSuperPowers", mainPriority$1, (args, next) => {
 	        if (modActive)
 	            return true;
 	        return next(args);
 	    });
 	    // Dialog
-	    modApi.hookFunction("DialogCanUnlock", mainPriority, (args, next) => {
+	    modApi.hookFunction("DialogCanUnlock", mainPriority$1, (args, next) => {
 	        if (modActive && args[0].ID == 0) {
 	            return true;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("DialogCanUseRemoteState", mainPriority, (args, next) => {
+	    modApi.hookFunction("DialogCanUseRemoteState", mainPriority$1, (args, next) => {
 	        if (modActive && args[0].ID == 0) {
 	            const response = modApi.callOriginal("DialogCanUseRemoteState", args);
 	            if (response == "InvalidItem") {
@@ -260,7 +260,7 @@
 	        return next(args);
 	    });
 	    // Draw
-	    modApi.hookFunction("DrawText", mainPriority, (args, next) => {
+	    modApi.hookFunction("DrawText", mainPriority$1, (args, next) => {
 	        if (modActive && args[0] === DialogFindPlayer("TimerUnknown")) {
 	            const property = DialogFocusSourceItem?.Property;
 	            args[0] = DialogFindPlayer("TimerLeft") + " " + TimerToString(property.RemoveTimer - CurrentTime);
@@ -271,13 +271,13 @@
 	        }
 	    });
 	    // Inventory
-	    modApi.hookFunction("InventoryGroupIsBlocked", mainPriority, (args, next) => {
+	    modApi.hookFunction("InventoryGroupIsBlocked", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return false;
 	        }
 	        return next(args);
 	    });
-	    modApi.hookFunction("InventoryPrerequisiteMessage", mainPriority, (args, next) => {
+	    modApi.hookFunction("InventoryPrerequisiteMessage", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            // if ([
 	            //     "RemoveClothesForItem",
@@ -299,28 +299,28 @@
 	        // "InventoryItemMiscCombinationPadlockLoad"
 	    ];
 	    for (const padLocks of PasswordPadlocks) {
-	        modApi.hookFunction(padLocks, mainPriority, (args, next) => {
+	        modApi.hookFunction(padLocks, mainPriority$1, (args, next) => {
 	            next(args);
 	            if (modActive) {
 	                document.getElementById("Password")?.setAttribute("placeholder", DialogFocusSourceItem.Property.Password);
 	            }
 	        });
 	    }
-	    modApi.hookFunction("InventoryItemMiscCombinationPadlockLoad", mainPriority, (args, next) => {
+	    modApi.hookFunction("InventoryItemMiscCombinationPadlockLoad", mainPriority$1, (args, next) => {
 	        next(args);
 	        if (modActive) {
 	            document.getElementById("CombinationNumber")?.setAttribute("placeholder", DialogFocusSourceItem.Property.CombinationNumber);
 	        }
 	    });
 	    //Server
-	    modApi.hookFunction("ServerSend", mainPriority, (args, next) => {
+	    modApi.hookFunction("ServerSend", mainPriority$1, (args, next) => {
 	        if (modActive) {
 	            return modApi.callOriginal("ServerSend", args);
 	        }
 	        return next(args);
 	    });
 	    // Struggle
-	    modApi.hookFunction("StruggleMinigameStart", mainPriority, (args, next) => {
+	    modApi.hookFunction("StruggleMinigameStart", mainPriority$1, (args, next) => {
 	        next(args);
 	        if (modActive) {
 	            StruggleProgress = 100;
@@ -486,27 +486,6 @@
 	        }
 	    });
 	}
-	// export async function exportChatCommand() {
-	//     await waitFor(() => !!Commands)
-	//     const cmds = [
-	//         {
-	//             Tag: "expo",
-	//             Description: "导出聊天记录",
-	//             Action: () => downloadFile()
-	//         },
-	//         {
-	//             Tag: "magicbutton",
-	//             Description: "启用/关闭MagicButton",
-	//             Action: () => activeSwitch()
-	//         },
-	//         {
-	//             Tag: "antiposechange",
-	//             Description: "启用/禁用阻止他人改变你的姿势",
-	//             Action: () => antiPoseChangeSwitch()
-	//         }
-	//     ]
-	//     CommandCombine(cmds);
-	// }
 	async function miscellaneous() {
 	    orgasmControl();
 	    miscallaneous();
@@ -530,6 +509,12 @@
 	        }
 	    ];
 	    CommandCombine(cmds);
+	    //Preference
+	    Player.RestrictionSettings.NoSpeechGarble = true;
+	    modApi.hookFunction("PreferenceInitPlayer", mainPriority, (args, next) => {
+	        next(args);
+	        Player.RestrictionSettings.NoSpeechGarble = true;
+	    });
 	}
 
 	let modIsInit = false;
