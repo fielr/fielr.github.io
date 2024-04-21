@@ -511,7 +511,7 @@ async function ForBetterClub() {
 			label: "Add option to modify difficulty of restraints to layering menu",
 			value: false,
 			/**
-			 * @param {unknown} newValue 
+			 * @param {unknown} newValue
 			 */
 			sideEffects: (newValue) => {
 				debug("modifyDifficulty", newValue);
@@ -3425,6 +3425,7 @@ async function ForBetterClub() {
 			background-color: #222;
 			color: #eee;
 			font-size: 1.5rem;
+			font-family: system-ui;
 		}
 		.bce-friend-list-unread {
 			background-color: #a22;
