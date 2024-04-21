@@ -11117,6 +11117,22 @@ async function ForBetterClub() {
 			/**
 			 * @param {Parameters<typeof GameRun>} args
 			 */ (args, next) => {
+				 if (document.hidden) return next(args);
+				const ts = Date.now();
+				if (ts - lastTime > intval) {
+					lastTime = ts;
+					cb();
+				}
+				return next(args);
+			}
+		);
+		SDK.hookFunction(
+			"GameRunBackground",
+			HOOK_PRIORITIES.Top,
+			/**
+			 * @param {Parameters<typeof GameRun>} args
+			 */ (args, next) => {
+				if (!document.hidden) return next(args);
 				const ts = Date.now();
 				if (ts - lastTime > intval) {
 					lastTime = ts;
