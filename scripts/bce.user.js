@@ -919,6 +919,18 @@ async function ForBetterClub() {
 			category: "hidden",
 			description: "",
 		},
+		allowGameUnGarble: {
+			label: "Enable Don't garble option",
+			value: true,
+			/**
+			 * @param {unknown} newValue
+			 */
+			sideEffects: (newValue) => {
+				debug("allowGameunGarble", newValue);
+			},
+			category: "cheats",
+			description: "Enable Don't garble option in restriction settings"
+		}
 	});
 
 	/** @type {[any, any][]} */
@@ -1287,6 +1299,10 @@ async function ForBetterClub() {
 					"在加载第三方域名的内容前提示",
 				"Share Addons": "分享插件设置",
 				"Buttplug Devices": "Buttplug设备",
+				"Enable Don't garble option":
+					"使堵嘴时不混淆聊天可选",
+				"Enable Don't garble option in restriction settings":
+					"使束缚设置中堵嘴时不混淆聊天按钮可以选定"
 			},
 		});
 
@@ -1788,6 +1804,7 @@ async function ForBetterClub() {
 	registerFunction(customContentDomainCheck, "customContentDomainCheck");
 	registerFunction(numericArousalMeters, "numericArousalMeters");
 	registerFunction(richOnlineProfile, "richOnlineProfile");
+	registerFunction(allowGameUngarble, "allowGameUngarble");
 	funcsRegistered = "enable";
 
 	// Post ready when in a chat room
@@ -6516,8 +6533,7 @@ async function ForBetterClub() {
 					) {
 						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
 						return;
-					}
-					else if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
+					} else if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
 						prioritySubscreenEnter(C, focusItem, FIELDS.Priority);
 						return null;
 					} else if (
@@ -6585,7 +6601,7 @@ async function ForBetterClub() {
 
 		/** @type {(C: Character, focusItem: Item) => void} */
 		function savePrioritySubscreenChanges(C, focusItem) {
-			switch (priorityField){
+			switch (priorityField) {
 				case FIELDS.Priority:
 					updateItemPriorityFromLayerPriorityInput(focusItem);
 					break;
@@ -8180,9 +8196,11 @@ async function ForBetterClub() {
 				if (item?.Target !== Player.MemberNumber) {
 					return next(args);
 				}
-				// if (Player.WhiteList.includes(data.Source)) {
-				// 	return next(args);
-				// }
+				/*
+				 * If (Player.WhiteList.includes(data.Source)) {
+				 * 	return next(args);
+				 * }
+				 */
 				const sourceCharacter =
 					ChatRoomCharacter.find((a) => a.MemberNumber === data.Source) ||
 					(data.Source === Player.MemberNumber ? Player : null);
@@ -8237,9 +8255,11 @@ async function ForBetterClub() {
 				if (data.Character.MemberNumber !== Player.MemberNumber) {
 					return next(args);
 				}
-				// if (Player.WhiteList.includes(data.SourceMemberNumber)) {
-				// 	return next(args);
-				// }
+				/*
+				 * If (Player.WhiteList.includes(data.SourceMemberNumber)) {
+				 * 	return next(args);
+				 * }
+				 */
 
 				const sourceCharacter =
 					ChatRoomCharacter.find(
@@ -10993,6 +11013,31 @@ async function ForBetterClub() {
 		);
 	}
 
+	function allowGameUngarble() {
+		let PreferenceInitPlayerSetDifficulty = false;
+		SDK.hookFunction("Player.GetDifficulty", HOOK_PRIORITIES.OverrideBehaviour, (args, next) => {
+			if (PreferenceInitPlayerSetDifficulty) return 0;
+			return next(args);
+		});
+
+		SDK.hookFunction("DrawCheckbox", HOOK_PRIORITIES.OverrideBehaviour, (args, next) => {
+			if (args[4] === TextGet("RestrictionNoSpeechGarble") && fbcSettings.allowGameUnGarble) {
+				args[6] = false;
+			}
+			return next(args);
+		});
+		SDK.hookFunction("PreferenceSubscreenRestrictionClick", HOOK_PRIORITIES.OverrideBehaviour, (args, next) => {
+			next(args);
+			if (MouseIn(500, 625, 64, 64) && fbcSettings.allowGameUnGarble) Player.RestrictionSettings.NoSpeechGarble = !Player.RestrictionSettings.NoSpeechGarble;
+		});
+
+		SDK.hookFunction("PreferenceInitPlayer", HOOK_PRIORITIES.ModifyBehaviourLow, (args, next) => {
+			if (fbcSettings.allowGameUnGarble) PreferenceInitPlayerSetDifficulty = true;
+			next(args);
+			PreferenceInitPlayerSetDifficulty = false;
+		});
+	}
+
 	function hideChatRoomElements() {
 		const chatRoomElements = ["InputChat", "TextAreaChatLog"];
 		for (const id of chatRoomElements) {
@@ -11117,7 +11162,9 @@ async function ForBetterClub() {
 			/**
 			 * @param {Parameters<typeof GameRun>} args
 			 */ (args, next) => {
-				 if (document.hidden) return next(args);
+				 if (document.hidden) {
+ return next(args);
+}
 				const ts = Date.now();
 				if (ts - lastTime > intval) {
 					lastTime = ts;
@@ -11132,7 +11179,9 @@ async function ForBetterClub() {
 			/**
 			 * @param {Parameters<typeof GameRun>} args
 			 */ (args, next) => {
-				if (!document.hidden) return next(args);
+				if (!document.hidden) {
+ return next(args);
+}
 				const ts = Date.now();
 				if (ts - lastTime > intval) {
 					lastTime = ts;
