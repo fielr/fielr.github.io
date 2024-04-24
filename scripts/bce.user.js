@@ -11022,6 +11022,7 @@ async function ForBetterClub() {
 
 		SDK.hookFunction("DrawCheckbox", HOOK_PRIORITIES.OverrideBehaviour, (args, next) => {
 			if (args[4] === TextGet("RestrictionNoSpeechGarble") && fbcSettings.allowGameUnGarble) {
+				args[5] = Player.RestrictionSettings.NoSpeechGarble;
 				args[6] = false;
 			}
 			return next(args);
