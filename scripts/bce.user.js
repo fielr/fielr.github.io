@@ -1300,7 +1300,7 @@ async function ForBetterClub() {
 				"Share Addons": "分享插件设置",
 				"Buttplug Devices": "Buttplug设备",
 				"Enable Don't garble option":
-					"使堵嘴时不混淆聊天可选",
+					"允许堵嘴时不混淆聊天",
 				"Enable Don't garble option in restriction settings":
 					"使束缚设置中堵嘴时不混淆聊天按钮可以选定"
 			},
