@@ -378,6 +378,37 @@
 					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/Responsive/main.js"
 				}
 			]
+		},
+		{
+			"id": "echocloth",
+			"name": "服装拓展",
+			"description": "Expansion on clothing options",
+			"author": "Echo",
+			"repository": "https://github.com/emdsa2/-mod",
+			"tags": ["expansion"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://emdsa2.github.io/-mod/mod.js"
+				}
+			]
+		},
+		{
+			"id": "echomove",
+			"name": "动作拓展",
+			"description": "Expansion on activity options",
+			"author": "Echo",
+			"repository": "https://github.com/emdsa2/-mod",
+			"tags": ["expansion"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://emdsa2.github.io/-mod/mod2.js"
+				}
+			]
 		}
+
 	]
 }
