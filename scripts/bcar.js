@@ -807,14 +807,14 @@ const TriggerAdditions = [
         if (!actions) return;
         const index = Math.floor(Math.random() * actions.length);
         //console.log(index);
-        ServerSend("ChatRoomChat", {
+        /*ServerSend("ChatRoomChat", {
             Content: "Beep", Type: "Action", Dictionary: [
                 { Tag: "Beep", Text: "msg" },
                 { Tag: "Biep", Text: "msg" },
                 { Tag: "Sonner", Text: "msg" },
                 { Tag: "发送私聊", Text: "msg" },
                 { Tag: "msg", Text: replace_template(actions[index].action, source_name) }]
-        });
+        });*/
         if (actions[index].sound.length) ServerSend("ChatRoomChat", {Type: "Chat", Content: actions[index].sound})
     }
 
