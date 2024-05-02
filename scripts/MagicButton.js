@@ -349,8 +349,8 @@
 	}
 	function DialogButton() {
 	    modApi.hookFunction("DialogDraw", HOOK_PRIORITY.addBehaviour, (args, next) => {
-	        DrawButton(...buttons.dialogSwitch, "", "white", modActive ? ICONS.Checked : "");
 	        next(args);
+	        DrawButton(...buttons.dialogSwitch, "", "white", modActive ? ICONS.Checked : "");
 	    });
 	    modApi.hookFunction("DialogClick", HOOK_PRIORITY.normal, (args, next) => {
 	        if (MouseIn(...buttons.dialogSwitch)) {
