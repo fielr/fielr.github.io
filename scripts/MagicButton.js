@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.2
+// @version      1.4.4
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -33,7 +33,7 @@
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.2'
+	    version: '1.4.4'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -441,16 +441,29 @@
 	    });
 	}
 
-	let active = true;
-	function switchActive() {
-	    active = !active;
-	    ChatRoomSendLocal(active ? "activated" : "deactivated", 3000);
+	let active = 1;
+	function switchActive(arg) {
+	    arg = arg.toString();
+	    switch (arg) {
+	        case 'off':
+	        case '0':
+	            active = 0;
+	            ChatRoomSendLocal('KeepPose: off.', 3000);
+	            break;
+	        case 'on':
+	        case '1':
+	            active = 1;
+	            ChatRoomSendLocal('KeepPose: on.', 3000);
+	            break;
+	        case 'strict':
+	        case '2':
+	            active = 2;
+	            ChatRoomSendLocal('KeepPose: strict.', 3000);
+	            break;
+	        default:
+	            active === 0 ? switchActive(1) : switchActive(0);
+	    }
 	}
-	const allowedPose = [
-	    "BaseUpper",
-	    "BaseLower",
-	    "Kneel"
-	];
 	const forbiddenPose = [
 	    "KneelingSpread",
 	    "Yoked",
@@ -468,32 +481,34 @@
 	];
 	function keepPose() {
 	    modApi.hookFunction("ChatRoomSyncSingle", HOOK_PRIORITY.overrideBehaviour, (args, next) => {
-	        if (active && !validatePose(args[0])) {
+	        if (active === 1 && !validatePose(args[0])) {
 	            args[0].Character.ActivePose = Player.Pose;
+	            setTimeout(() => next(args), 10);
 	        }
-	        next(args);
+	        else if (active === 2) {
+	            args[0].Character.ActivePose = Player.Pose;
+	            setTimeout(() => next(args), 10);
+	        }
+	        else {
+	            next(args);
+	        }
 	    });
 	    CommandCombine({
 	        Tag: "kpose",
-	        Description: "启用/禁用阻止别人改变你的姿势",
-	        Action: () => switchActive()
+	        Description: "启用/禁用阻止别人改变你的姿势，参数：无参数，'off(0)', 'on(1)', 'strict(2)'",
+	        Action: args => switchActive(args),
 	    });
 	}
 	function validatePose(data) {
-	    if (data.SourceMemberNumber === Player.MemberNumber) {
+	    const dataPose = data.Character.ActivePose ? data.Character.ActivePose : [];
+	    const currentPose = Player.ActivePose;
+	    const diff = dataPose.filter(pose => !currentPose.includes(pose));
+	    console.log(data);
+	    if (data.SourceMemberNumber === Player.MemberNumber && data.Character.MemberNumber !== Player.MemberNumber) {
 	        return true;
 	    }
-	    const dataPose = data.Character.ActivePose;
-	    const currentPose = Player.Pose;
-	    if (currentPose.includes("BackBoxTie") && currentPose.includes("LegsClosed")) {
-	        console.log("keepPose: BackBoxTie");
-	        return false;
-	    }
-	    if (dataPose?.some(pose => allowedPose.includes(pose))) {
-	        return true;
-	    }
-	    if (dataPose?.some(pose => forbiddenPose.includes(pose))) {
-	        console.log("keepPose: Forbidden");
+	    if ( /*currentPose.includes("BackBoxTie") && */currentPose.includes("LegsClosed") || diff.some(pose => forbiddenPose.includes(pose))) {
+	        console.log("keepPose: refused.");
 	        return false;
 	    }
 	    return true;
