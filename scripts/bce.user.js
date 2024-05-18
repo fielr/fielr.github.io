@@ -7328,7 +7328,7 @@ async function ForBetterClub() {
 					const isWhispering = () =>
 						w.InputChat?.value.startsWith("/w ") ||
 						w.InputChat?.value.startsWith("/whisper ") ||
-						!!w.ChatRoomTargetMemberNumber;
+						w.ChatRoomTargetMemberNumber !== -1;
 					if (
 						w.InputChat?.classList.contains(WHISPER_CLASS) &&
 						!isWhispering()
