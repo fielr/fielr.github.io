@@ -386,7 +386,7 @@
 	}
 	function getFileName() {
 	    const date = new Date().toLocaleDateString().replace(/\//g, "-").slice(2);
-	    return `${date}-${ChatRoomData.Name}`;
+	    return `${date}-${ChatRoomData?.Name}`;
 	}
 	function downloadFile() {
 	    const file = new Blob([getChatMessage()], { type: "text/plain;charset=utf-8" });
@@ -409,7 +409,7 @@
 
 	const stop = [10, 10, 60, 60];
 	const resist = [75, 10, 60, 60];
-	function orgasm() {
+	function orgasm () {
 	    modApi.hookFunction("ChatRoomRun", 3, (args, next) => {
 	        next(args);
 	        if (Player.ArousalSettings.OrgasmTimer > 0) {
@@ -505,6 +505,7 @@
 	    const diff = dataPose.filter(pose => !currentPose.includes(pose));
 	    console.log(data);
 	    if (data.SourceMemberNumber === Player.MemberNumber && data.Character.MemberNumber !== Player.MemberNumber) {
+	        console.log("keepPose: pass.");
 	        return true;
 	    }
 	    if ( /*currentPose.includes("BackBoxTie") && */currentPose.includes("LegsClosed") || diff.some(pose => forbiddenPose.includes(pose))) {
