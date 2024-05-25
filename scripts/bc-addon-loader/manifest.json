@@ -338,6 +338,21 @@
 			]
 		},
 		{
+			"id": "echocloth",
+			"name": "服装拓展",
+			"description": "Expansion on clothing options",
+			"author": "Echo",
+			"repository": "https://github.com/emdsa2/-mod",
+			"tags": ["expansion"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://emdsa2.github.io/-mod/mod.js"
+				}
+			]
+		},
+		{
 			"id": "fuhui-DOM",
 			"name": "浮绘的DOM动作拓展",
 			"description": "浮绘的 mod! 一些自己写的dom类的动作 (大概喵)",
