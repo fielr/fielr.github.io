@@ -4,7 +4,7 @@
 		{
 			"id": "FBC",
 			"name": "For Better Club (FBC)",
-			"description": "Smarter, extensible facial animation and posing engine, instant messaging, appearance layering and a collection of quality of life improvements.",
+			"description": "A dwindling collection of improvements in day-to-day use of the club.",
 			"author": "the authors of the Addon Manager",
 			"repository": "https://gitlab.com/Sidiousious/bce",
 			"tags": ["cheats", "enhancements", "automation"],
@@ -18,17 +18,22 @@
 			]
 		},
 		{
-			"id": "UniRemote",
-			"name": "Universal Remote",
-			"description": "This remote works across chat rooms, but requires both players to have it. /ur or friends list to use.",
-			"author": "the authors of the Addon Manager",
-			"repository": "https://gitlab.com/Sidiousious/universal-remote",
-			"tags": ["enhancements"],
+			"id": "WCE",
+			"name": "Wholesome Club Extensions (WCE)",
+			"description": "enhancements for the bondage club - fork of FBC 5.8",
+			"author": "Sidious & Stella",
+			"repository": "https://github.com/KittenApps/WCE",
+			"tags": ["cheats", "enhancements", "automation"],
 			"type": "module",
+			"website": "https://github.com/KittenApps/WCE?tab=readme-ov-file#wholesome-club-extensions-wce",
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://sidiousious.gitlab.io/universal-remote/main.js"
+					"source": "https://wce.netlify.app/wce.js"
+				},
+				{
+					"distribution": "dev",
+					"source": "https://beta--wce.netlify.app/wce.js"
 				}
 			]
 		},
@@ -75,7 +80,7 @@
 			"repository": "https://gitlab.com/dynilath/BCADCS",
 			"tags": ["expansion"],
 			"type": "script",
-			"website": "https://dynilath.gitlab.io/SaotomeToyStore/en/Plugins/ADCS/",
+			"website": "https://dynilath.gitlab.io/SaotomeToyStore/en/Plugins/ADCS",
 			"versions": [
 				{
 					"distribution": "stable",
@@ -252,11 +257,12 @@
 		{
 			"id": "NotifyPlus",
 			"name": "NotifyPlus",
-			"description": "Improve the Name Mentioned notification in the original BC. Use keywords for mentioning names according to different roles. (Note: source code unavailable)",
+			"description": "Improve the Name Mentioned notification in the original BC. Use keywords for mentioning names according to different roles.",
 			"author": "SaotomeToyStore",
+			"repository": "https://github.com/dynilath/BCNotifyPlus",
 			"tags": ["expansion"],
 			"type": "script",
-			"website": "https://dynilath.gitlab.io/SaotomeToyStore/en/Plugins/NotifyPlus/",
+			"website": "https://dynilath.gitlab.io/SaotomeToyStore/en/Plugins/NotifyPlus",
 			"versions": [
 				{
 					"distribution": "stable",
@@ -327,7 +333,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://fielr.github.io/scripts/mod2.js"
+					"source": "https://fielr.github.io/scripts/BC_Activity.user.js"
 				}
 			]
 		},
@@ -378,37 +384,6 @@
 					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/Responsive/main.js"
 				}
 			]
-		},
-		{
-			"id": "echocloth",
-			"name": "服装拓展",
-			"description": "Expansion on clothing options",
-			"author": "Echo",
-			"repository": "https://github.com/emdsa2/-mod",
-			"tags": ["expansion"],
-			"type": "script",
-			"versions": [
-				{
-					"distribution": "stable",
-					"source": "https://emdsa2.github.io/-mod/mod.js"
-				}
-			]
-		},
-		{
-			"id": "echomove",
-			"name": "动作拓展",
-			"description": "Expansion on activity options",
-			"author": "Echo",
-			"repository": "https://github.com/emdsa2/-mod",
-			"tags": ["expansion"],
-			"type": "script",
-			"versions": [
-				{
-					"distribution": "stable",
-					"source": "https://emdsa2.github.io/-mod/mod2.js"
-				}
-			]
 		}
-
 	]
 }
