@@ -504,7 +504,7 @@
 	    const currentPose = Player.ActivePose;
 	    const diff = dataPose.filter(pose => !currentPose.includes(pose));
 	    console.log(data);
-	    if (data.SourceMemberNumber === Player.MemberNumber && data.Character.MemberNumber !== Player.MemberNumber) {
+	    if (data.SourceMemberNumber === Player.MemberNumber || data.Character.MemberNumber !== Player.MemberNumber) {
 	        console.log("keepPose: pass.");
 	        return true;
 	    }
@@ -512,6 +512,7 @@
 	        console.log("keepPose: refused.");
 	        return false;
 	    }
+	    console.log("keepPose: pass.");
 	    return true;
 	}
 
