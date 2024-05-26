@@ -197,6 +197,7 @@ ${ze}`)}const Jt=e=>Ye(e)?l[e]:!1,Qt=e=>{switch(e.toLowerCase()){default:return{
     background-color: #222;
     color: #eee;
     font-size: 1.5rem;
+    font-family: system-ui;
   }
   .bce-friend-list-unread {
     background-color: #a22;
