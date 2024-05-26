@@ -503,16 +503,14 @@
 	    const dataPose = data.Character.ActivePose ? data.Character.ActivePose : [];
 	    const currentPose = Player.ActivePose;
 	    const diff = dataPose.filter(pose => !currentPose.includes(pose));
-	    console.log(data);
 	    if (data.SourceMemberNumber === Player.MemberNumber || data.Character.MemberNumber !== Player.MemberNumber) {
-	        console.log("keepPose: pass.");
 	        return true;
 	    }
 	    if ( /*currentPose.includes("BackBoxTie") && */currentPose.includes("LegsClosed") || diff.some(pose => forbiddenPose.includes(pose))) {
+	        console.log(data);
 	        console.log("keepPose: refused.");
 	        return false;
 	    }
-	    console.log("keepPose: pass.");
 	    return true;
 	}
 
