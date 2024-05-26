@@ -29,7 +29,7 @@
 			"versions": [
 				{
 					"distribution": "pirvate",
-					"source": "https://fielr.github.io/scripts/wce.js"
+					"source": "https://fielr.github.io/scripts/wce/wce.js"
 				},
 				{
 					"distribution": "stable",
