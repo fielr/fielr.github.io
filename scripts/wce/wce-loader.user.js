@@ -15,7 +15,7 @@
 // @run-at document-end
 // ==/UserScript==
 
-var SCRIPT_URL = 'https://fielr.github.io/scripts/wce/wce.js';
+var SCRIPT_URL = 'http://localhost:4000/wce.js';
 
 var preloadLink = document.createElement("link");
 preloadLink.href = SCRIPT_URL;

@@ -15,7 +15,7 @@
 // @run-at document-end
 // ==/UserScript==
 
-var SCRIPT_URL = 'https://fielr.github.io/scripts/wce/wce.js';
+var SCRIPT_URL = 'http://localhost:4000/wce.js';
 
 import(`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(Date.now()/10000).toFixed(0)}`).then(() => import(SCRIPT_URL));
 
