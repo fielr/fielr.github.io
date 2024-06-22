@@ -31,11 +31,39 @@
     const ActivityICONS = new Map();
     const poseMapping = {};
 
+    function patchFunction(target, patches) {
+        笨蛋Luzi.patchFunction(target, patches);
+    }
+
+    patchFunction("DrawCharacter", {
+        'if (CurrentScreen != "ChatRoom" || ChatRoomHideIconState <= 1)': '',
+        'DrawArousalMeter(C, X, Y, Zoom);': '',
+        'OnlineGameDrawCharacter(C, X, Y, Zoom);': '',
+        'if (C.HasHiddenItems) DrawImageZoomCanvas("Screens/Character/Player/HiddenItem.png", DrawCanvas, 0, 0, 86, 86, X + 54 * Zoom, Y + 880 * Zoom, 70 * Zoom, 70 * Zoom);': '',
+        'if ((C.Name != "") && ((CurrentModule == "Room") || (CurrentModule == "Online" && !(CurrentScreen == "ChatRoom" && ChatRoomHideIconState >= 3)) || ((CurrentScreen == "Wardrobe") && !C.IsPlayer())) && (CurrentScreen != "Private") && (CurrentScreen != "PrivateBed") && (CurrentScreen != "PrivateRansom"))': '',
+        'if ((CurrentScreen !== "ChatRoom") || (ChatRoomMapViewIsActive() === false) || (CurrentCharacter != null))': '',
+        'if ((!Player.IsBlind() && BlurLevel <= 10) || (Player.GameplaySettings && Player.GameplaySettings.SensDepChatLog == "SensDepLight"))': '',
+        'DrawCanvas.font = CommonGetFont(30);': '',
+        'const NameOffset = CurrentScreen == "ChatRoom" && (ChatRoomCharacter.length > 5 || (ChatRoomCharacter.length == 5 && CommonPhotoMode)) && CurrentCharacter == null ? -4 : 0;': '',
+        'DrawText(CharacterNickname(C), X + 255 * Zoom, Y + 980 * Zoom + NameOffset, (CommonIsColor(C.LabelColor)) ? C.LabelColor : "White", "Black");': '',
+        'DrawCanvas.font = CommonGetFont(36);': '',
+    });
 
     var isLogin = false;
     笨蛋Luzi.hookFunction('LoginResponse', 0, (args, next) => {
         if (!isLogin) {
             console.log("动作拓展0.3.1已加载！")
+
+            // 屏蔽跨域
+            patchFunction("GLDrawLoadImage", {
+                "Img.src = url;": 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = url;',
+            });
+            patchFunction("CommonDynamicFunction", {
+                "else": '// else',
+                "console.log": '// console.log',
+            });
+
+
             isLogin = true;
         }
         next(args);
@@ -348,7 +376,7 @@
             target: "", targettext: "", maxProgress: 50,
             activityExpression: [],
             assetgroup: "", imageName: "Wiggle",
-            modPosture: true, modifyOwnPosture: true, postureName: "BaseLower"
+            modPosture: true, modifyOwnPosture: true, postureName: ""
         },
         {
             name: "跪着张开腿", prerequisite: ["UseArms"],
@@ -455,7 +483,7 @@
             modPosture: false, modifyOwnPosture: false, postureName: ""
         },
         {
-            name: "脚托起下巴", prerequisite: ["UseFeet"],
+            name: "脚托起下巴", prerequisite: ["HasKneel"],
             targetSelf: "", targetSelftext: "", maxProgressSelf: 50,
             target: "ItemMouth", targettext: "SourceCharacter用脚托起TargetCharacter的下巴.", maxProgress: 50,
             activityExpression: [],
@@ -690,14 +718,6 @@
             name: "轻抚尾巴", prerequisite: ["HasTail"],
             targetSelf: "ItemButt", targetSelftext: "SourceCharacter轻抚PronounPossessive的尾巴.", maxProgressSelf: 50,
             target: "ItemButt", targettext: "SourceCharacter轻抚TargetCharacter的尾巴.", maxProgress: 50,
-            activityExpression: [],
-            assetgroup: "", imageName: "Caress",
-            modPosture: false, modifyOwnPosture: false, postureName: ""
-        },
-        {
-            name: "抓尾巴", prerequisite: ["HasTail"],
-            targetSelf: "ItemButt", targetSelftext: "SourceCharacter抓住PronounPossessive的尾巴.", maxProgressSelf: 50,
-            target: "ItemButt", targettext: "SourceCharacter抓住TargetCharacter的尾巴.", maxProgress: 50,
             activityExpression: [],
             assetgroup: "", imageName: "Caress",
             modPosture: false, modifyOwnPosture: false, postureName: ""
@@ -1370,6 +1390,8 @@
         "HasTentacles2": (acting, acted, group) => !!InventoryIsItemInList(acting, "TailStraps", "Tentacles"), // 触手
         "SuitLower鱼鱼尾_Luzi": (acting, acted, group) => !!InventoryIsItemInList(acting, "SuitLower", "鱼鱼尾_Luzi"),
         "阿巴阿巴": (acting, acted, group) => !!InventoryIsItemInList(acting, "ItemHandheld", "阿巴阿巴_Luzi"),
+
+
     }));
 
     笨蛋Luzi.hookFunction("ActivityCheckPrerequisite", 6, (args, next) => {
@@ -1681,8 +1703,22 @@
         ["SourceCharacter takes a selfie.", "SourceCharacter自拍了一张照片."],
         ['Wag Tail', '摇晃尾巴'],
         ['SourceCharacter wags PronounPossessive tail.', 'SourceCharacter摇晃PronounPossessive的尾巴.'],
+        ['SourceCharacter wraps TargetCharacter in a therapeutic self-hug.', 'SourceCharacter以一个治疗性的自我拥抱包裹着TargetCharacter.'],
+        ['SourceCharacter releases PronounPossessive own neck.', 'SourceCharacter松开了自己的脖子.'],
+        ['Clamp Hand over Eyes', '用手捂住眼睛.'],
+        ["SourceCharacter clamps her hand over TargetCharacter's eyes.", 'SourceCharacter将她的手捂在TargetCharacter的眼睛上.'],
+        ['SourceCharacter clamps her hand over PronounPossessive own eyes.', 'SourceCharacter将她的手捂在她自己的眼睛上.'],
+        ['SourceCharacter releases PronounPossessive own mouth.', 'SourceCharacter放开了自己的嘴.'],
+        ['Release Eyes', '放开眼睛'],
+        ["SourceCharacter removes their hand from TargetCharacter's eyes.", 'SourceCharacter 将手从TargetCharacter的眼睛上移开.'],
+        ['SourceCharacter pulls their hand away from PronounPossessive eyes.', 'SourceCharacter 将手从自己的眼睛旁抽走.'],
+        ['SourceCharacter shoves PronounPossessive foot into…rabbing their tongue with PronounPossessive toes.', 'SourceCharacter 将脚塞入……用脚趾抓挠自己的舌头.'],
 
     ]);
+
+
+
+
 
     const translationMapEN = new Map([
         ["歪头", "Tilt Head"],
@@ -2457,7 +2493,9 @@
                     ActivityFemale3DCG = ActivityFemale3DCG.filter(obj => !obj.Name.includes("笨蛋笨Luzi_"));
                     ActivityFemale3DCGOrdering = ActivityFemale3DCGOrdering.filter(item => !item.includes("笨蛋笨Luzi_"));
                     ActivityDictionary = ActivityDictionary.filter(subArray => !subArray[0].includes("笨蛋笨Luzi_"));
-                    delete Player.OnlineSettings.ECHO;
+                    Player.OnlineSettings.ECHO.炉子ActivityDictionary = "";
+                    Player.OnlineSettings.ECHO.炉子ActivityFemale3DCG = "";
+                    Player.OnlineSettings.ECHO.炉子ActivityFemale3DCGOrdering = "";
                     ServerAccountUpdate.QueueData({ OnlineSettings: Player.OnlineSettings });
                     console.log("已全部清空");
                 }
@@ -2483,11 +2521,14 @@
             DrawImageResize("https://emdsa2.github.io/-mod/image/返回白.png"
                 , 114, 75, 90, 90);
 
-            DrawText(`- 高潮计数保留设置 -`, 1000, 125, "Black");
+            DrawText(`- 杂项设置 -`, 1000, 125, "Black");
 
             DrawText(`高潮计数保留`, 450, 236, "#FFFFFF");
             DrawCheckbox(250, 200, 64, 64, "", false  /*Player.OnlineSettings.ECHO.高潮开关*/);
             DrawButton(250, 290, 390, 90, "      清空高潮次数", "White", "Icons/Trash.png");
+
+            DrawButton(1050, 290, 390, 90, "       储存制作", "White", "Icons/Crafting.png");
+            DrawButton(1450, 290, 390, 90, "       读取制作", "White", "Icons/Crafting.png");
         }
         click() {
             if (MouseIn(114, 75, 90, 90)) {
@@ -2498,6 +2539,15 @@
             }
             if (MouseIn(250, 290, 390, 90)) {
                 // pass
+            }
+            if (MouseIn(1050, 290, 290, 90)) {
+                Player.OnlineSettings.ECHO.炉子Crafting = LZString.compressToUTF16(JSON.stringify(Player.Crafting));
+                ServerAccountUpdate.QueueData({ OnlineSettings: Player.OnlineSettings });
+                console.log("已储存")
+            }
+            if (MouseIn(1450, 290, 290, 90)) {
+                Player.Crafting = JSON.parse(LZString.decompressFromUTF16(Player.OnlineSettings.ECHO.炉子Crafting));
+                console.log("已读取")
             }
         }
     }
@@ -2525,8 +2575,8 @@
             if (MouseIn(900, 220, 360, 600)) { DrawText(`自定义服装`, 1080, 356, "#FFFFFF"); }
             else { DrawText(`自定义服装`, 1080, 356, "#888888"); }
 
-            if (MouseIn(1450, 220, 360, 600)) { DrawText(`高潮计数保留`, 1624, 356, "#FFFFFF"); }
-            else { DrawText(`高潮计数保留`, 1624, 356, "#888888"); }
+            if (MouseIn(1450, 220, 360, 600)) { DrawText(`杂项`, 1624, 356, "#FFFFFF"); }
+            else { DrawText(`杂项`, 1624, 356, "#888888"); }
 
             // DrawButton(1500, 840, 390, 90, "      Discord", "White", "Icons/Trash.png");
             if (MouseIn(1500, 840, 390, 90)) {
