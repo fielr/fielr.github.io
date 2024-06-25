@@ -18,12 +18,12 @@
 import(`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(Date.now()/10000).toFixed(0)}`);
 
 var preloadLink = document.createElement("link");
-preloadLink.href = 'http://localhost:4000/wce.js';
+preloadLink.href = 'https://fielr.github.io/scripts/bc-addon-loader/wce/wce.js';
 preloadLink.rel = "modulepreload";
 document.head.appendChild(preloadLink);
 
 var dexiePreloadLink = document.createElement("link");
-dexiePreloadLink.href = 'http://localhost:4000/dexie.js';
+dexiePreloadLink.href = 'https://fielr.github.io/scripts/bc-addon-loader/wce/dexie.js';
 dexiePreloadLink.rel = "modulepreload";
 document.head.appendChild(dexiePreloadLink);
 
