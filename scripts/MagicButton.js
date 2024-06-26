@@ -271,13 +271,6 @@
 	            next(args);
 	        }
 	    });
-	    // GetUp
-	    modApi.hookFunction("GetUpPhysics", HOOK_PRIORITY.normal, (args, next) => {
-	        if (modActive) {
-	            return;
-	        }
-	        next(args);
-	    });
 	    // Inventory
 	    modApi.hookFunction("InventoryGroupIsBlocked", HOOK_PRIORITY.normal, (args, next) => {
 	        if (modActive) {
@@ -521,10 +514,36 @@
 	    return true;
 	}
 
+	const cheat = [10, 10, 60, 60];
+	function getUpHelper () {
+	    let cheating = false;
+	    modApi.hookFunction("GetUpRun", HOOK_PRIORITY.addBehaviour, (args, next) => {
+	        if (cheating) {
+	            GetUpPosition = 0;
+	        }
+	        next(args);
+	        DrawButton(...cheat, "Auto", cheating ? "aquamarine" : "white", "", "自动完成");
+	    });
+	    modApi.hookFunction("GetUpClick", HOOK_PRIORITY.addBehaviour, (args, next) => {
+	        if (MouseIn(...cheat)) {
+	            cheating = !cheating;
+	            return;
+	        }
+	        next(args);
+	    });
+	    modApi.hookFunction("GetUpPhysics", HOOK_PRIORITY.normal, (args, next) => {
+	        if (cheating) {
+	            return;
+	        }
+	        next(args);
+	    });
+	}
+
 	function additional () {
 	    exportChat().then();
 	    orgasm();
 	    keepPose();
+	    getUpHelper();
 	}
 
 	let isInit = false;
