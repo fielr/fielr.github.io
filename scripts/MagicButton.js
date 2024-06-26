@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.4
+// @version      1.4.5
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -33,7 +33,7 @@
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.4'
+	    version: '1.4.5'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -270,6 +270,13 @@
 	        else {
 	            next(args);
 	        }
+	    });
+	    // GetUp
+	    modApi.hookFunction("GetUpPhysics", HOOK_PRIORITY.normal, (args, next) => {
+	        if (modActive) {
+	            return;
+	        }
+	        next(args);
 	    });
 	    // Inventory
 	    modApi.hookFunction("InventoryGroupIsBlocked", HOOK_PRIORITY.normal, (args, next) => {
