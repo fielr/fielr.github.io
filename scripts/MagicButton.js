@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.5
+// @version      1.4.7
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -12,7 +12,7 @@
 // @grant        none
 // ==/UserScript==
 
-(function () {
+var MagicButton = (function (exports) {
 	'use strict';
 
 	function getDefaultExportFromCjs (x) {
@@ -33,7 +33,7 @@
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.5'
+	    version: '1.4.7'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -271,6 +271,13 @@
 	            next(args);
 	        }
 	    });
+	    // GetUp
+	    modApi.hookFunction("GetUpPhysics", HOOK_PRIORITY.normal, (args, next) => {
+	        if (modActive) {
+	            return;
+	        }
+	        next(args);
+	    });
 	    // Inventory
 	    modApi.hookFunction("InventoryGroupIsBlocked", HOOK_PRIORITY.normal, (args, next) => {
 	        if (modActive) {
@@ -369,6 +376,25 @@
 	    shortcuts();
 	}
 
+	const commandList = [];
+	const showCommand = {
+	    Tag: 'showmgbt',
+	    Description: '显示来自 MagicButton 的命令',
+	    Action: () => {
+	        commandList.forEach((command) => {
+	            ChatRoomSendLocal(`${command.Tag}: ${command.Description}`);
+	        });
+	    }
+	};
+	async function registerCommand(command) {
+	    commandList.push(command);
+	}
+	async function addCommands() {
+	    await Promise.all(commandList);
+	    commandList.push(showCommand);
+	    CommandCombine(commandList);
+	}
+
 	function extendPlayerID(playerID) {
 	    let ID = playerID;
 	    while (ID.length < 8) {
@@ -395,16 +421,17 @@
 	    aTag.download = getFileName() + ".txt";
 	    aTag.click();
 	}
-	function registerCommand() {
-	    CommandCombine({
-	        Tag: "expo",
-	        Description: "导出聊天记录",
-	        Action: () => downloadFile()
-	    });
-	}
+	const expoCommand = {
+	    Tag: "expo",
+	    Description: "导出聊天记录",
+	    Action: () => downloadFile()
+	};
+	// function registerCommand() {
+	//     CommandCombine(expoCommand);
+	// }
 	async function exportChat() {
 	    await waitFor(() => !!Commands);
-	    registerCommand();
+	    await registerCommand(expoCommand);
 	}
 
 	const stop = [10, 10, 60, 60];
@@ -479,7 +506,12 @@
 	    "TapedHands",
 	    "LegsOpen"
 	];
-	function keepPose() {
+	const command$1 = {
+	    Tag: "kpose",
+	    Description: "启用/禁用阻止别人改变你的姿势，参数：无参数，'off(0)', 'on(1)', 'strict(2)'",
+	    Action: args => switchActive(args),
+	};
+	async function keepPose() {
 	    modApi.hookFunction("ChatRoomSyncSingle", HOOK_PRIORITY.overrideBehaviour, (args, next) => {
 	        if (active === 1 && !validatePose(args[0])) {
 	            args[0].Character.ActivePose = Player.Pose;
@@ -493,11 +525,7 @@
 	            next(args);
 	        }
 	    });
-	    CommandCombine({
-	        Tag: "kpose",
-	        Description: "启用/禁用阻止别人改变你的姿势，参数：无参数，'off(0)', 'on(1)', 'strict(2)'",
-	        Action: args => switchActive(args),
-	    });
+	    await registerCommand(command$1);
 	}
 	function validatePose(data) {
 	    const dataPose = data.Character.ActivePose ? data.Character.ActivePose : [];
@@ -539,25 +567,69 @@
 	    });
 	}
 
+	// Out of sight, out of mind.
+	globalThis.osomActive = true;
+	const command = {
+	    Tag: 'ghostuser',
+	    Description: '隐藏无视名单玩家角色',
+	    Action: () => {
+	        globalThis.osomActive = !globalThis.osomActive;
+	    }
+	};
+	async function ghostUser() {
+	    modApi.hookFunction("ChatRoomCharacterViewIsActive", HOOK_PRIORITY.normal, (args, next) => {
+	        if (globalThis.osomActive) {
+	            ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0));
+	            const RenderSingle = Player.GameplaySettings?.SensDepChatLog == "SensDepExtreme" && Player.GetBlindLevel() >= 3 && !Player.Effect.includes("VRAvatars");
+	            ChatRoomCharacterViewCharacterCount = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
+	            ChatRoomCharacterViewCharacterCountTotal = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
+	        }
+	        return next(args);
+	    });
+	    ChatRoomRegisterMessageHandler({
+	        Description: "Hide activity target to ghosted player",
+	        Priority: -194,
+	        Callback: (data, sender, msg, metadata) => {
+	            const targetCharacter = data.Dictionary?.find(item => item.TargetCharacter)?.TargetCharacter;
+	            if (globalThis.osomActive && data.Type === "Activity" && Player.GhostList?.includes(targetCharacter)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    });
+	    await registerCommand(command);
+	}
+
 	function additional () {
 	    exportChat().then();
 	    orgasm();
 	    keepPose();
 	    getUpHelper();
+	    ghostUser();
 	}
 
-	let isInit = false;
+	let isInit;
+	async function onInit() {
+	    return isInit;
+	}
 	function init() {
 	    cheatHooks();
 	    gui();
 	    additional();
+	    addCommands();
 	}
 	modApi.hookFunction("LoginResponse", HOOK_PRIORITY.observe, (args, next) => {
 	    next(args);
 	    if (CommonIsObject(args[0]) && !isInit) {
 	        init();
-	        isInit = true;
+	        isInit = Promise.resolve();
 	    }
 	});
 
-})();
+	exports.onInit = onInit;
+
+	return exports;
+
+})({});
