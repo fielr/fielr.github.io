@@ -511,22 +511,6 @@ var MagicButton = (function (exports) {
 	    Description: "启用/禁用阻止别人改变你的姿势，参数：无参数，'off(0)', 'on(1)', 'strict(2)'",
 	    Action: args => switchActive(args),
 	};
-	async function keepPose() {
-	    modApi.hookFunction("ChatRoomSyncSingle", HOOK_PRIORITY.overrideBehaviour, (args, next) => {
-	        if (active === 1 && !validatePose(args[0])) {
-	            args[0].Character.ActivePose = Player.Pose;
-	            setTimeout(() => next(args), 10);
-	        }
-	        else if (active === 2) {
-	            args[0].Character.ActivePose = Player.Pose;
-	            setTimeout(() => next(args), 10);
-	        }
-	        else {
-	            next(args);
-	        }
-	    });
-	    await registerCommand(command$1);
-	}
 	function validatePose(data) {
 	    const dataPose = data.Character.ActivePose ? data.Character.ActivePose : [];
 	    const currentPose = Player.ActivePose;
@@ -540,6 +524,23 @@ var MagicButton = (function (exports) {
 	        return false;
 	    }
 	    return true;
+	}
+	modApi.hookFunction("ChatRoomSyncSingle", HOOK_PRIORITY.overrideBehaviour, (args, next) => {
+	    if (active === 1 && !validatePose(args[0])) {
+	        args[0].Character.ActivePose = Player.Pose;
+	    }
+	    else if (active === 2 && args[0].Character.MemberNumber === Player.MemberNumber || Player.GhostList?.includes(args[0].SourceMemberNumber)) {
+	        args[0].Character.ActivePose = Player.Pose;
+	    }
+	    next(args);
+	});
+	modApi.hookFunction("ChatRoomSyncPose", HOOK_PRIORITY.observe, (args, next) => {
+	    console.log("ChatRoomSyncPose data:");
+	    console.log(args);
+	    next(args);
+	});
+	async function keepPose() {
+	    await registerCommand(command$1);
 	}
 
 	const cheat = [10, 10, 60, 60];
@@ -568,37 +569,55 @@ var MagicButton = (function (exports) {
 	}
 
 	// Out of sight, out of mind.
+	// @ts-expect-error: Suppress TS7017 error
 	globalThis.osomActive = true;
 	const command = {
 	    Tag: 'ghostuser',
 	    Description: '隐藏无视名单玩家角色',
 	    Action: () => {
+	        // @ts-expect-error: Suppress TS7017 error
 	        globalThis.osomActive = !globalThis.osomActive;
 	    }
 	};
+	// 不显示忽视名单玩家角色
+	modApi.hookFunction("ChatRoomCharacterViewIsActive", HOOK_PRIORITY.normal, (args, next) => {
+	    // @ts-expect-error: Suppress TS7017 error
+	    if (globalThis.osomActive) {
+	        ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0));
+	        const RenderSingle = !modActive && Player.GameplaySettings?.SensDepChatLog == "SensDepExtreme" && Player.GetBlindLevel() >= 3 && !Player.Effect.includes("VRAvatars");
+	        ChatRoomCharacterViewCharacterCount = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
+	        ChatRoomCharacterViewCharacterCountTotal = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
+	    }
+	    return next(args);
+	});
+	// 禁止对自己使用道具
+	modApi.hookFunction("ChatRoomSyncItem", HOOK_PRIORITY.normal, (args, next) => {
+	    if (Player.MemberNumber === args[0].Item.Target && Player.GhostList?.includes(args[0].Source)) {
+	        ChatRoomCharacterUpdate(Player);
+	    }
+	    else {
+	        next(args);
+	    }
+	});
+	modApi.hookFunction("ChatRoomSyncSingle", HOOK_PRIORITY.normal, (args, next) => {
+	    if (Player.GhostList?.includes(args[0].SourceMemberNumber) && Player.MemberNumber === args[0].Character.MemberNumber) {
+	        ChatRoomCharacterUpdate(Player);
+	    }
+	    else {
+	        next(args);
+	    }
+	});
+	// 隐藏其他玩家对忽视名单角色的动作
+	ChatRoomRegisterMessageHandler({
+	    Description: "Hide activity TargetMember ghosted player",
+	    Priority: -194,
+	    Callback: (data /*, sender, msg, metadata*/) => {
+	        // @ts-expect-error: Suppress TS7017 error
+	        return globalThis.osomActive && data.Type === "Activity" && Player.GhostList?.includes(data.Dictionary[1].TargetCharacter);
+	    }
+	});
 	async function ghostUser() {
-	    modApi.hookFunction("ChatRoomCharacterViewIsActive", HOOK_PRIORITY.normal, (args, next) => {
-	        if (globalThis.osomActive) {
-	            ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0));
-	            const RenderSingle = Player.GameplaySettings?.SensDepChatLog == "SensDepExtreme" && Player.GetBlindLevel() >= 3 && !Player.Effect.includes("VRAvatars");
-	            ChatRoomCharacterViewCharacterCount = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
-	            ChatRoomCharacterViewCharacterCountTotal = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
-	        }
-	        return next(args);
-	    });
-	    ChatRoomRegisterMessageHandler({
-	        Description: "Hide activity target to ghosted player",
-	        Priority: -194,
-	        Callback: (data, sender, msg, metadata) => {
-	            const targetCharacter = data.Dictionary?.find(item => item.TargetCharacter)?.TargetCharacter;
-	            if (globalThis.osomActive && data.Type === "Activity" && Player.GhostList?.includes(targetCharacter)) {
-	                return true;
-	            }
-	            else {
-	                return false;
-	            }
-	        }
-	    });
+	    // 回滚忽视名单玩家对自己使用道具
 	    await registerCommand(command);
 	}
 
