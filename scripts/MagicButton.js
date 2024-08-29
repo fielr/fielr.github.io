@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.7
+// @version      1.4.8
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -33,7 +33,7 @@ var MagicButton = (function (exports) {
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.7'
+	    version: '1.4.8'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -382,12 +382,17 @@ var MagicButton = (function (exports) {
 	    Description: '显示来自 MagicButton 的命令',
 	    Action: () => {
 	        commandList.forEach((command) => {
-	            ChatRoomSendLocal(`${command.Tag}: ${command.Description}`);
+	            ChatRoomSendLocal(`${command.Tag}: ${command.Description}`, 6000);
 	        });
 	    }
 	};
 	async function registerCommand(command) {
-	    commandList.push(command);
+	    if (Array.isArray(command)) {
+	        command.forEach((c) => commandList.push(c));
+	    }
+	    else {
+	        commandList.push(command);
+	    }
 	}
 	async function addCommands() {
 	    await Promise.all(commandList);
@@ -506,7 +511,7 @@ var MagicButton = (function (exports) {
 	    "TapedHands",
 	    "LegsOpen"
 	];
-	const command$1 = {
+	const command$2 = {
 	    Tag: "kpose",
 	    Description: "启用/禁用阻止别人改变你的姿势，参数：无参数，'off(0)', 'on(1)', 'strict(2)'",
 	    Action: args => switchActive(args),
@@ -540,7 +545,7 @@ var MagicButton = (function (exports) {
 	    next(args);
 	});
 	async function keepPose() {
-	    await registerCommand(command$1);
+	    await registerCommand(command$2);
 	}
 
 	const cheat = [10, 10, 60, 60];
@@ -571,7 +576,7 @@ var MagicButton = (function (exports) {
 	// Out of sight, out of mind.
 	// @ts-expect-error: Suppress TS7017 error
 	globalThis.osomActive = true;
-	const command = {
+	const command$1 = {
 	    Tag: 'ghostuser',
 	    Description: '隐藏无视名单玩家角色',
 	    Action: () => {
@@ -618,6 +623,54 @@ var MagicButton = (function (exports) {
 	});
 	async function ghostUser() {
 	    // 回滚忽视名单玩家对自己使用道具
+	    await registerCommand(command$1);
+	}
+
+	let autoWhitelistAdd = false;
+	let autoWhitelistRemove = false;
+	const command = [
+	    {
+	        Tag: 'autowhiteadd',
+	        Description: '根据对方是否对自己有白名单进行添加',
+	        Action: () => {
+	            autoWhitelistAdd = !autoWhitelistAdd;
+	            const word = autoWhitelistAdd ? "开启" : "关闭";
+	            ChatRoomSendLocal(`白名单自动添加${word}`, 3000);
+	        }
+	    },
+	    {
+	        Tag: 'autowhiteremove',
+	        Description: '根据对方是否对自己有白名单进行移除',
+	        Action: () => {
+	            autoWhitelistRemove = !autoWhitelistRemove;
+	            const word = autoWhitelistAdd ? "开启" : "关闭";
+	            ChatRoomSendLocal(`白名单自动移除${word}`, 3000);
+	        }
+	    }
+	];
+	modApi.hookFunction("ChatRoomMenuBuild", HOOK_PRIORITY.addBehaviour, (args, next) => {
+	    if (autoWhitelistAdd) {
+	        // 找出将自己加入白名单的人
+	        const whitelistTarget = ChatRoomCharacter.filter((c) => c.WhiteList.includes(Player.MemberNumber ?? -1));
+	        whitelistTarget.forEach((c) => {
+	            if (c.MemberNumber && !Player.WhiteList.includes(c.MemberNumber)) {
+	                Player.WhiteList.push(c.MemberNumber);
+	            }
+	        });
+	    }
+	    if (autoWhitelistRemove) {
+	        // 找出自己加了但是对方没有加入白名单的
+	        const myWhitelistSet = new Set(Player.WhiteList);
+	        ChatRoomCharacter.forEach((c) => {
+	            if (c.MemberNumber && myWhitelistSet.has(c.MemberNumber) && Player.MemberNumber && !c.WhiteList.includes(Player.MemberNumber)) {
+	                myWhitelistSet.delete(c.MemberNumber);
+	            }
+	        });
+	        Player.WhiteList = Player.WhiteList.filter((c) => myWhitelistSet.has(c));
+	    }
+	    next(args);
+	});
+	async function autoWhite() {
 	    await registerCommand(command);
 	}
 
@@ -627,6 +680,7 @@ var MagicButton = (function (exports) {
 	    keepPose();
 	    getUpHelper();
 	    ghostUser();
+	    autoWhite();
 	}
 
 	let isInit;
