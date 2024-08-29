@@ -241,6 +241,10 @@
 				{
 					"distribution": "stable",
 					"source": "https://ddeeplb.github.io/BC-Responsive/main.js"
+				},
+				{
+					"distribution": "pirvate",
+					"source":"https://fielr.github.io/scripts/scripts/BC-Responsive/main.js"
 				}
 			]
 		},
