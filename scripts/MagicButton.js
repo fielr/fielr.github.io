@@ -585,15 +585,8 @@ var MagicButton = (function (exports) {
 	    }
 	};
 	// 不显示忽视名单玩家角色
-	modApi.hookFunction("ChatRoomCharacterViewIsActive", HOOK_PRIORITY.normal, (args, next) => {
-	    // @ts-expect-error: Suppress TS7017 error
-	    if (globalThis.osomActive) {
-	        ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0));
-	        const RenderSingle = !modActive && Player.GameplaySettings?.SensDepChatLog == "SensDepExtreme" && Player.GetBlindLevel() >= 3 && !Player.Effect.includes("VRAvatars");
-	        ChatRoomCharacterViewCharacterCount = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
-	        ChatRoomCharacterViewCharacterCountTotal = RenderSingle ? 1 : ChatRoomCharacterDrawlist.length;
-	    }
-	    return next(args);
+	modApi.patchFunction("ChatRoomUpdateDisplay", {
+	    "// Keeps the current character count and total": "if (globalThis.osomActive) ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0));"
 	});
 	// 禁止对自己使用道具
 	modApi.hookFunction("ChatRoomSyncItem", HOOK_PRIORITY.normal, (args, next) => {
