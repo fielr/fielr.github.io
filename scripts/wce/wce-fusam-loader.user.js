@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name WCE local loader with FUSAM
 // @namespace https://www.bondageprojects.com/
-// @version 1.4
+// @version 1.5
 // @description Wholesome Club Extensions (WCE) - enhancements for the bondage club - fork of FBC 5.8
 // @author Sidious, Stella
 // @supportURL https://github.com/KittenApps/WCE
@@ -11,17 +11,15 @@
 // @run-at document-end
 // ==/UserScript==
 
-var URL = 'http://localhost:4000';
-
-import(`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(Date.now()/10000).toFixed(0)}`).then(() => import(`${URL}/wce.js`));
+import(`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(Date.now()/10000).toFixed(0)}`).then(() => import("https://fielr.github.io/scripts/wce//wce.js"));
 
 var preloadLink = document.createElement("link");
-preloadLink.href = `${URL}/wce.js`;
+preloadLink.href = "https://fielr.github.io/scripts/wce//wce.js";
 preloadLink.rel = "modulepreload";
 document.head.appendChild(preloadLink);
 
 var dexiePreloadLink = document.createElement("link");
-dexiePreloadLink.href = `${URL}/dexie.js`;
+dexiePreloadLink.href = "https://fielr.github.io/scripts/wce//dexie.js";
 dexiePreloadLink.rel = "modulepreload";
 document.head.appendChild(dexiePreloadLink);
 
