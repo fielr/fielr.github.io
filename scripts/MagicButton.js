@@ -345,7 +345,7 @@ var MagicButton = (function (exports) {
 	};
 	function ChatroomButton() {
 	    modApi.hookFunction("ChatRoomMenuDraw", HOOK_PRIORITY.addBehaviour, (args, next) => {
-	        DrawButton(...buttons.chatroomButton, "M", modActive ? "aquamarine" : "white");
+	        DrawButton(...buttons.chatroomButton, "❤️", modActive ? "aquamarine" : "white");
 	        next(args);
 	    });
 	    modApi.hookFunction("ChatRoomClick", HOOK_PRIORITY.normal, (args, next) => {
@@ -582,6 +582,9 @@ var MagicButton = (function (exports) {
 	    Action: () => {
 	        // @ts-expect-error: Suppress TS7017 error
 	        globalThis.osomActive = !globalThis.osomActive;
+	        // @ts-expect-error: Suppress TS7017 error
+	        const word = globalThis.osomActive ? "开启" : "关闭";
+	        ChatRoomSendLocal(`白名单自动添加${word}`, 3000);
 	    }
 	};
 	// 不显示忽视名单玩家角色
