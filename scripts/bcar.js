@@ -108,6 +108,7 @@ var bcModSDK=function(){"use strict";const o="1.2.0";function e(o){alert("Mod ER
                                     { Tag: "Beep", Text: "msg" },
                                     { Tag: "Biep", Text: "msg" },
                                     { Tag: "Sonner", Text: "msg" },
+                                    { Tag: "发送私聊", Text: "msg" },
                                     { Tag: "msg", Text: CharacterNickname(Player) + " wiggles " + Player.BCAR.bcarSettings.genderDefault.capPossessive.toLocaleLowerCase() + " ears." }
                                 ]
                             });
