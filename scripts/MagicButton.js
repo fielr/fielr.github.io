@@ -574,17 +574,14 @@ var MagicButton = (function (exports) {
 	}
 
 	// Out of sight, out of mind.
-	// @ts-expect-error: Suppress TS7017 error
 	globalThis.osomActive = true;
 	const command$1 = {
 	    Tag: 'ghostuser',
 	    Description: '隐藏无视名单玩家角色',
 	    Action: () => {
-	        // @ts-expect-error: Suppress TS7017 error
 	        globalThis.osomActive = !globalThis.osomActive;
-	        // @ts-expect-error: Suppress TS7017 error
 	        const word = globalThis.osomActive ? "开启" : "关闭";
-	        ChatRoomSendLocal(`白名单自动添加${word}`, 3000);
+	        ChatRoomSendLocal(`自动忽略幽灵名单成员${word}`, 3000);
 	    }
 	};
 	// 不显示忽视名单玩家角色
@@ -613,8 +610,12 @@ var MagicButton = (function (exports) {
 	    Description: "Hide activity TargetMember ghosted player",
 	    Priority: -194,
 	    Callback: (data /*, sender, msg, metadata*/) => {
-	        // @ts-expect-error: Suppress TS7017 error
-	        return globalThis.osomActive && data.Type === "Activity" && Player.GhostList?.includes(data.Dictionary[1].TargetCharacter);
+	        if (globalThis.osomActive && data.Type === "Activity") {
+	            const target = data.Dictionary?.find((dict) => Object.hasOwn(dict, 'TargetCharacter'));
+	            return !!(target && Player.GhostList?.includes("TargetCharacter" in target ? target.TargetCharacter : -1));
+	        }
+	        return false;
+	        // return globalThis.osomActive && data.Type === "Activity" && Player.GhostList?.includes(data.Dictionary[1].TargetCharacter);
 	    }
 	});
 	async function ghostUser() {
