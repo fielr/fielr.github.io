@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.8
+// @version      1.4.9
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -33,7 +33,7 @@ var MagicButton = (function (exports) {
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.8'
+	    version: '1.4.9'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -48,11 +48,6 @@ var MagicButton = (function (exports) {
 	let modActive = false;
 	function switchActive$1() {
 	    modActive = !modActive;
-	}
-	async function waitFor(func) {
-	    while (!func()) {
-	        await new Promise((resolve) => setTimeout(resolve, 10));
-	    }
 	}
 
 	function cheatHooks () {
@@ -382,22 +377,24 @@ var MagicButton = (function (exports) {
 	    Description: '显示来自 MagicButton 的命令',
 	    Action: () => {
 	        commandList.forEach((command) => {
-	            ChatRoomSendLocal(`${command.Tag}: ${command.Description}`, 6000);
+	            ChatRoomSendLocal(`${command.Tag}: ${command.Description}`, 10000);
 	        });
 	    }
 	};
-	async function registerCommand(command) {
+	function addCommand(command) {
 	    if (Array.isArray(command)) {
 	        command.forEach((c) => commandList.push(c));
 	    }
 	    else {
 	        commandList.push(command);
 	    }
+	    CommandCombine(command);
 	}
-	async function addCommands() {
-	    await Promise.all(commandList);
-	    commandList.push(showCommand);
-	    CommandCombine(commandList);
+	async function addSelf() {
+	    // await Promise.all(commandList);
+	    // commandList.push(showCommand);
+	    // CommandCombine(commandList);
+	    CommandCombine(showCommand);
 	}
 
 	function extendPlayerID(playerID) {
@@ -434,9 +431,8 @@ var MagicButton = (function (exports) {
 	// function registerCommand() {
 	//     CommandCombine(expoCommand);
 	// }
-	async function exportChat() {
-	    await waitFor(() => !!Commands);
-	    await registerCommand(expoCommand);
+	function exportChat() {
+	    addCommand(expoCommand);
 	}
 
 	const stop = [10, 10, 60, 60];
@@ -511,7 +507,7 @@ var MagicButton = (function (exports) {
 	    "TapedHands",
 	    "LegsOpen"
 	];
-	const command$2 = {
+	const command$3 = {
 	    Tag: "kpose",
 	    Description: "启用/禁用阻止别人改变你的姿势，参数：无参数，'off(0)', 'on(1)', 'strict(2)'",
 	    Action: args => switchActive(args),
@@ -544,8 +540,8 @@ var MagicButton = (function (exports) {
 	    console.log(args);
 	    next(args);
 	});
-	async function keepPose() {
-	    await registerCommand(command$2);
+	function keepPose () {
+	    addCommand(command$3);
 	}
 
 	const cheat = [10, 10, 60, 60];
@@ -575,7 +571,7 @@ var MagicButton = (function (exports) {
 
 	// Out of sight, out of mind.
 	globalThis.osomActive = true;
-	const command$1 = {
+	const command$2 = {
 	    Tag: 'ghostuser',
 	    Description: '隐藏无视名单玩家角色',
 	    Action: () => {
@@ -586,7 +582,7 @@ var MagicButton = (function (exports) {
 	};
 	// 不显示忽视名单玩家角色
 	modApi.patchFunction("ChatRoomUpdateDisplay", {
-	    "// Keeps the current character count and total": "if (globalThis.osomActive) ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0));"
+	    "// Keeps the current character count and total": "if (globalThis.osomActive) ChatRoomCharacterDrawlist = ChatRoomCharacterDrawlist.filter((c) => !Player.GhostList?.includes(c.MemberNumber ?? 0)); // Keeps the current character count and total"
 	});
 	// 禁止对自己使用道具
 	modApi.hookFunction("ChatRoomSyncItem", HOOK_PRIORITY.normal, (args, next) => {
@@ -618,14 +614,14 @@ var MagicButton = (function (exports) {
 	        // return globalThis.osomActive && data.Type === "Activity" && Player.GhostList?.includes(data.Dictionary[1].TargetCharacter);
 	    }
 	});
-	async function ghostUser() {
+	function ghostUser () {
 	    // 回滚忽视名单玩家对自己使用道具
-	    await registerCommand(command$1);
+	    addCommand(command$2);
 	}
 
 	let autoWhitelistAdd = false;
 	let autoWhitelistRemove = false;
-	const command = [
+	const command$1 = [
 	    {
 	        Tag: 'autowhiteadd',
 	        Description: '根据对方是否对自己有白名单进行添加',
@@ -667,17 +663,43 @@ var MagicButton = (function (exports) {
 	    }
 	    next(args);
 	});
-	async function autoWhite() {
-	    await registerCommand(command);
+	function autoWhite() {
+	    addCommand(command$1);
+	}
+
+	let block = false;
+	const command = {
+	    Tag: "blockfriendlist",
+	    Description: "不访问好友列表",
+	    Action: () => {
+	        block = !block;
+	    }
+	};
+	modApi.hookFunction("DrawButton", HOOK_PRIORITY.addBehaviour, (args, next) => {
+	    if (block && args[6] === "Icons/FriendList.png") {
+	        args[5] = "Gray";
+	        args[8] = true;
+	    }
+	    next(args);
+	});
+	modApi.hookFunction("InformationSheetClick", HOOK_PRIORITY.normal, (args, next) => {
+	    if (block && MouseIn(1815, 420, 90, 90)) {
+	        return;
+	    }
+	    next(args);
+	});
+	function blockFriendList () {
+	    addCommand(command);
 	}
 
 	function additional () {
-	    exportChat().then();
+	    exportChat();
 	    orgasm();
 	    keepPose();
 	    getUpHelper();
 	    ghostUser();
 	    autoWhite();
+	    blockFriendList();
 	}
 
 	let isInit;
@@ -688,7 +710,7 @@ var MagicButton = (function (exports) {
 	    cheatHooks();
 	    gui();
 	    additional();
-	    addCommands();
+	    addSelf();
 	}
 	modApi.hookFunction("LoginResponse", HOOK_PRIORITY.observe, (args, next) => {
 	    next(args);
