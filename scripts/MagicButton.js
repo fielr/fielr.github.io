@@ -688,6 +688,12 @@ var MagicButton = (function (exports) {
 	    }
 	    next(args);
 	});
+	modApi.hookFunction("ChatSearchClick", HOOK_PRIORITY.normal, (args, next) => {
+	    if (block && ChatSearchMode === "" && MouseIn(1775, 25, 90, 90)) {
+	        return;
+	    }
+	    next(args);
+	});
 	function blockFriendList () {
 	    addCommand(command);
 	}
