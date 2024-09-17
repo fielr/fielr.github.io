@@ -12,12 +12,12 @@
 // ==/UserScript==
 
 var preloadLink = document.createElement("link");
-preloadLink.href = "https://fielr.github.io/scripts/wce//wce.js";
+preloadLink.href = "http://localhost:4000/wce.js";
 preloadLink.rel = "modulepreload";
 document.head.appendChild(preloadLink);
 
 var dexiePreloadLink = document.createElement("link");
-dexiePreloadLink.href = "https://fielr.github.io/scripts/wce//dexie.js";
+dexiePreloadLink.href = "http://localhost:4000/dexie.js";
 dexiePreloadLink.rel = "modulepreload";
 document.head.appendChild(dexiePreloadLink);
 
@@ -28,13 +28,13 @@ delete fusam.enabledDistributions.FBC;
 localStorage.setItem("fusam.settings", JSON.stringify(fusam));
 
 if (typeof FUSAM === "object" && FUSAM?.present) {
-  import("https://fielr.github.io/scripts/wce//wce.js");
+  import("http://localhost:4000/wce.js");
 } else {
   let storeFUSAM;
   Object.defineProperty(window, "FUSAM", {
     set(n) {
       storeFUSAM = n;
-      import("https://fielr.github.io/scripts/wce//wce.js");
+      import("http://localhost:4000/wce.js");
     },
     get() {
       return storeFUSAM;

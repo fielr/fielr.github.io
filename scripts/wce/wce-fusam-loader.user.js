@@ -11,15 +11,15 @@
 // @run-at document-end
 // ==/UserScript==
 
-import(`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(Date.now()/10000).toFixed(0)}`).then(() => import("https://fielr.github.io/scripts/wce//wce.js"));
+import(`https://sidiousious.gitlab.io/bc-addon-loader/fusam.js?v=${(Date.now()/10000).toFixed(0)}`).then(() => import("http://localhost:4000/wce.js"));
 
 var preloadLink = document.createElement("link");
-preloadLink.href = "https://fielr.github.io/scripts/wce//wce.js";
+preloadLink.href = "http://localhost:4000/wce.js";
 preloadLink.rel = "modulepreload";
 document.head.appendChild(preloadLink);
 
 var dexiePreloadLink = document.createElement("link");
-dexiePreloadLink.href = "https://fielr.github.io/scripts/wce//dexie.js";
+dexiePreloadLink.href = "http://localhost:4000/dexie.js";
 dexiePreloadLink.rel = "modulepreload";
 document.head.appendChild(dexiePreloadLink);
 
