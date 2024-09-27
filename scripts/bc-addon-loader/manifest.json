@@ -199,7 +199,7 @@
 				{
 					"distribution": "private",
 					"source": "https://fielr.github.io/scripts/EBCH.js"
-				}
+				},
 				{
 					"distribution": "stable",
 					"source": "https://e2466.gitlab.io/ebch/master/EBCH.js"
