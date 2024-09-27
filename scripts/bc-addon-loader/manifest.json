@@ -341,8 +341,12 @@
 			"website": "",
 			"versions": [
 				{
-					"distribution": "stable",
+					"distribution": "private",
 					"source": "https://fielr.github.io/scripts/mod2.js"
+				},
+				{
+					"distribution":"stable",
+					"source": "https://emdsa2.github.io/-mod/mod2.js"
 				}
 			]
 		},
