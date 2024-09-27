@@ -2,6 +2,22 @@
 	"version": "1",
 	"addons": [
 		{
+			"id": "MagicButton",
+			"name": "MagicButton",
+			"description": "Magic.",
+			"author": "Liin",
+			"repository": "",
+			"tags": ["cheats"],
+			"type": "script",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://fielr.github.io/scripts/MagicButton.js"
+				}
+			]
+		},
+		{
 			"id": "FBC",
 			"name": "For Better Club (FBC)",
 			"description": "A dwindling collection of improvements in day-to-day use of the club.",
@@ -13,7 +29,7 @@
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://fielr.github.io/scripts/bce.user.js"
+					"source": "https://sidiousious.gitlab.io/bce/bce.user.js"
 				}
 			]
 		},
@@ -29,7 +45,7 @@
 			"website": "https://wce-docs.vercel.app",
 			"versions": [
 				{
-					"distribution": "pirvate",
+					"distribution": "private",
 					"source": "https://fielr.github.io/scripts/wce/wce.js"
 				},
 				{
@@ -53,8 +69,12 @@
 			"website": "https://jomshir98.github.io/bondage-club-extended/",
 			"versions": [
 				{
-					"distribution": "stable",
+					"distribution": "private",
 					"source": "https://fielr.github.io/scripts/bcx.js"
+				},
+				{
+					"distribution": "stable",
+					"source": "https://jomshir98.github.io/bondage-club-extended/bcx.js"
 				},
 				{
 					"distribution": "dev",
@@ -119,8 +139,12 @@
 			"website": "https://github.com/DrBranestawm/BCAR/wiki",
 			"versions": [
 				{
-					"distribution": "stable",
+					"distribution": "private",
 					"source": "https://fielr.github.io/scripts/bcar.js"
+				},
+				{
+					"distribution": "stable",
+					"source": "https://drbranestawm.github.io/BCAR/script/bcarBeta.js"
 				},
 				{
 					"distribution": "beta",
@@ -173,8 +197,12 @@
 			"type": "eval",
 			"versions": [
 				{
-					"distribution": "stable",
+					"distribution": "private",
 					"source": "https://fielr.github.io/scripts/EBCH.js"
+				}
+				{
+					"distribution": "stable",
+					"source": "https://e2466.gitlab.io/ebch/master/EBCH.js"
 				}
 			]
 		},
@@ -239,12 +267,12 @@
 			"website": "https://github.com/dDeepLb/BC-Responsive/wiki",
 			"versions": [
 				{
-					"distribution": "stable",
-					"source": "https://ddeeplb.github.io/BC-Responsive/main.js"
+					"distribution": "private",
+					"source":"https://fielr.github.io/scripts/BC-Responsive/main.js"
 				},
 				{
-					"distribution": "pirvate",
-					"source":"https://fielr.github.io/scripts/BC-Responsive/main.js"
+					"distribution": "stable",
+					"source": "https://ddeeplb.github.io/BC-Responsive/main.js"
 				}
 			]
 		},
@@ -300,7 +328,7 @@
 		},
 		{
 			"id": "CATS",
-			"name": "Chat Auto Translator Script",
+			"name": "CATS (Chat Auto Translator Script)",
 			"description": "Addon that auto-translates the chat to the language you want. 130+ Languages available. Commands: /ttoggle to toggle the translator on and off. And /tlang <lang_code>, to change the language used.",
 			"author": "Ciber, dDeepLb and KatKammand",
 			"repository": "https://github.com/ciberweaboo/cats",
@@ -315,39 +343,37 @@
 			]
 		},
 		{
-			"id": "MagicButton",
-			"name": "MagicButton",
-			"description": "Magic.",
-			"author": "Liin",
-			"repository": "",
-			"tags": ["cheats"],
+			"id": "DOGS",
+			"name": "DOGS (Devious Obligate Great Stuff)",
+			"description": "Adds devious stuff, which will increase your helplessness.... or dominance",
+			"author": "Zoi",
+			"repository": "https://github.com/FurryZoi/Devious-Obligate-Great-Stuff.git",
+			"tags": ["enhancements", "expansion"],
 			"type": "script",
-			"website": "",
 			"versions": [
 				{
 					"distribution": "stable",
-					"source": "https://fielr.github.io/scripts/MagicButton.js"
+					"source": "https://furryzoi.github.io/Devious-Obligate-Great-Stuff/bundle.js"
 				}
 			]
 		},
 		{
-			"id": "activity",
-			"name": "dsa's activity",
-			"description": "Echo的动作拓展",
-			"author": "dsa-87150",
-			"repository": "https://github.com/emdsa2/-mod",
-			"tags": ["enhancements", "expansion"],
+			"id": "MBCFS",
+			"name": "Maple's BC FetishShare",
+			"description": "Displays user Fetish and Arousal preferences in Bios, and calculates compatibility between players.",
+			"author": "maple",
+			"tags": ["enhancements"],
 			"type": "script",
-			"website": "",
+			"website": "https://maplesyrup.gitgud.site/maples-bc-plugin-library/plugins/fetish-share/",
 			"versions": [
-				{
-					"distribution": "private",
-					"source": "https://fielr.github.io/scripts/mod2.js"
-				},
-				{
-					"distribution":"stable",
-					"source": "https://emdsa2.github.io/-mod/mod2.js"
-				}
+			  {
+				"distribution": "stable",
+				"source": "https://maplesyrup.gitgud.site/maples-bc-plugin-library/raw-plugins/stable/fetish-share/main.js"
+			  },
+			  {
+				"distribution": "dev",
+				"source": "https://maplesyrup.gitgud.site/maples-bc-plugin-library/raw-plugins/dev/fetish-share/main.js"
+			  }
 			]
 		},
 		{
@@ -366,54 +392,59 @@
 			]
 		},
 		{
-			"id": "fuhui-DOM",
-			"name": "浮绘的DOM动作拓展",
-			"description": "浮绘的 mod! 一些自己写的dom类的动作 (大概喵)",
-			"author": "FuhuiNeko",
-			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
-			"tags": ["expansion"],
-			"type": "eval",
-			"website": "",
-			"versions": [
-				{
-					"distribution": "stable",
-					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Dom_Activity_Main.js"
-				}
-			]
-		},
-		{
-			"id": "fuhui-SUB",
-			"name": "浮绘的SUB动作拓展",
-			"description": "浮绘的 mod! 一些自己写的sub类的动作 (大概喵)",
-			"author": "FuhuiNeko",
-			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
-			"tags": ["expansion"],
-			"type": "eval",
-			"website": "",
-			"versions": [
-				{
-					"distribution": "stable",
-					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Sub_Activity_Main.js"
-				}
-			]
-		},
-		{
-			"id": "dynilath's BC Responsive",
-			"name": "早乙女的BC Responsive",
-			"description": "本插件会帮助用户在BondageClub中自动触发回应，高效的动作或者说话回应，说话回应会打断聊天框的输入，提供深度的自定义选项，让你在被亲密的朋友挠鼻子和被陌生的人挠脚心之间产生不同的反应",
-			"author": "SaotomeToyStore",
-			"repository": "https://github.com/dynilath/BCResponsive",
+			"id": "echomove",
+			"name": "动作拓展",
+			"description": "Expansion on activity options",
+			"author": "Echo",
+			"repository": "https://github.com/emdsa2/-mod",
 			"tags": ["expansion"],
 			"type": "script",
-			"website": "https://dynilath.gitlab.io/SaotomeToyStore/zh/Plugins/Responsive.html",
 			"versions": [
 				{
-					"distribution": "temp",
-					"source": "https://fielr.github.io/scripts/responsive.js"
+					"distribution": "private",
+					"source": "https://fielr.github.io/scripts/echo/mod2.js"
 				},
 				{
 					"distribution": "stable",
-					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/Responsive/main.js"
+					"source": "https://emdsa2.github.io/-mod/mod2.js"
+				}
+			]
+		},
+		{
+			"id": "XiaoSuActivity",
+			"name": "动作拓展以及其他易用性功能",
+			"description": "Expansion on activity options",
+			"author": "XiaoSu",
+			"repository": "https://github.com/iceriny/XiaoSuActivity",
+			"tags": ["expansion"],
+			"type": "script",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://iceriny.github.io/XiaoSuActivity/main/XSActivity.js"
+				},
+				{
+					"distribution": "beta",
+					"source": "https://iceriny.github.io/XiaoSuActivity/dev/XSActivity_dev.js"
+				}
+			]
+		},
+		{
+			"id": "MoonCEBC",
+			"name": "Moon Cards Editor BC",
+			"description": "Adds the ability to view and edit your cards decks from online room",
+			"author": "Lunar Kitsunify",
+			"repository": "https://github.com/LunarKitsunify/MoonCEBC",
+			"tags": ["enhancements","expansion"],
+			"type": "module",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://lunarkitsunify.github.io/MoonCEBC/MoonCEBC.js"
+				},
+				{
+					"distribution": "beta",
+					"source": "https://lunarkitsunify.github.io/MoonCEBC/MoonCEBCBeta.js"
 				}
 			]
 		}
