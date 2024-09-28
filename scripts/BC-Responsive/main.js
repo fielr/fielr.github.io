@@ -1,6 +1,5 @@
 "use strict";
 var Responsive = (() => {
-const serverUrl = 'https://ddeeplb.github.io/BC-Responsive';
   var __create = Object.create;
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -9,6 +8,9 @@ const serverUrl = 'https://ddeeplb.github.io/BC-Responsive';
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
   var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
@@ -25,18 +27,26 @@ const serverUrl = 'https://ddeeplb.github.io/BC-Responsive';
     return to;
   };
   var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-  var __publicField = (obj, key, value) => {
-    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-    return value;
-  };
+  var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 
-  // node_modules/bondage-club-mod-sdk/dist/bcmodsdk.js
+  // <define:LAST_COMMIT_HASH>
+  var init_define_LAST_COMMIT_HASH = __esm({
+    "<define:LAST_COMMIT_HASH>"() {
+    }
+  });
+
+  // node_modules/.pnpm/bondage-club-mod-sdk@1.2.0/node_modules/bondage-club-mod-sdk/dist/bcmodsdk.js
   var require_bcmodsdk = __commonJS({
-    "node_modules/bondage-club-mod-sdk/dist/bcmodsdk.js"(exports) {
+    "node_modules/.pnpm/bondage-club-mod-sdk@1.2.0/node_modules/bondage-club-mod-sdk/dist/bcmodsdk.js"(exports) {
+      init_define_LAST_COMMIT_HASH();
       var bcModSdk = function() {
         "use strict";
         const o = "1.2.0";
@@ -67,8 +77,7 @@ const serverUrl = 'https://ddeeplb.github.io/BC-Responsive';
             const i3 = r3.patching.get(o2.name);
             if (i3) {
               e2.push(...i3.hooks);
-              for (const [e3, a2] of i3.patches.entries())
-                t2.has(e3) && t2.get(e3) !== a2 && c(`ModSDK: Mod '${r3.name}' is patching function ${o2.name} with same pattern that is already applied by different mod, but with different pattern:
+              for (const [e3, a2] of i3.patches.entries()) t2.has(e3) && t2.get(e3) !== a2 && c(`ModSDK: Mod '${r3.name}' is patching function ${o2.name} with same pattern that is already applied by different mod, but with different pattern:
 Pattern:
 ${e3}
 Patch1:
@@ -79,11 +88,9 @@ ${a2}`), t2.set(e3, a2), n2.add(r3.name);
           }
           e2.sort((o3, e3) => e3.priority - o3.priority);
           const r2 = function(o3, e3) {
-            if (0 === e3.size)
-              return o3;
+            if (0 === e3.size) return o3;
             let t3 = o3.toString().replaceAll("\r\n", "\n");
-            for (const [n3, r3] of e3.entries())
-              t3.includes(n3) || c(`ModSDK: Patching ${o3.name}: Patch ${n3} not applied`), t3 = t3.replaceAll(n3, r3);
+            for (const [n3, r3] of e3.entries()) t3.includes(n3) || c(`ModSDK: Patching ${o3.name}: Patch ${n3} not applied`), t3 = t3.replaceAll(n3, r3);
             return (0, eval)(`(${t3})`);
           }(o2.original, t2);
           let i2 = /* @__PURE__ */ __name(function(e3) {
@@ -96,8 +103,7 @@ ${a2}`), t2.set(e3, a2), n2.add(r3.name);
             i2 = /* @__PURE__ */ __name(function(e3) {
               var t4, i3;
               const a2 = null === (i3 = (t4 = m.errorReporterHooks).hookEnter) || void 0 === i3 ? void 0 : i3.call(t4, o2.name, n3.mod), c2 = n3.hook.apply(this, [e3, (o3) => {
-                if (1 !== arguments.length || !Array.isArray(e3))
-                  throw new Error(`Mod ${n3.mod} failed to call next hook: Expected args to be array, got ${typeof o3}`);
+                if (1 !== arguments.length || !Array.isArray(e3)) throw new Error(`Mod ${n3.mod} failed to call next hook: Expected args to be array, got ${typeof o3}`);
                 return r3.call(this, o3);
               }]);
               return null == a2 || a2(), c2;
@@ -108,29 +114,24 @@ ${a2}`), t2.set(e3, a2), n2.add(r3.name);
         __name(s, "s");
         function l(o2, e2 = false) {
           let r2 = i.get(o2);
-          if (r2)
-            e2 && (r2.precomputed = s(r2));
+          if (r2) e2 && (r2.precomputed = s(r2));
           else {
             let e3 = window;
             const a2 = o2.split(".");
-            for (let t2 = 0; t2 < a2.length - 1; t2++)
-              if (e3 = e3[a2[t2]], !n(e3))
-                throw new Error(`ModSDK: Function ${o2} to be patched not found; ${a2.slice(0, t2 + 1).join(".")} is not object`);
+            for (let t2 = 0; t2 < a2.length - 1; t2++) if (e3 = e3[a2[t2]], !n(e3)) throw new Error(`ModSDK: Function ${o2} to be patched not found; ${a2.slice(0, t2 + 1).join(".")} is not object`);
             const c2 = e3[a2[a2.length - 1]];
-            if ("function" != typeof c2)
-              throw new Error(`ModSDK: Function ${o2} to be patched not found`);
+            if ("function" != typeof c2) throw new Error(`ModSDK: Function ${o2} to be patched not found`);
             const l2 = function(o3) {
               let e4 = -1;
               for (const n2 of t.encode(o3)) {
                 let o4 = 255 & (e4 ^ n2);
-                for (let e5 = 0; e5 < 8; e5++)
-                  o4 = 1 & o4 ? -306674912 ^ o4 >>> 1 : o4 >>> 1;
+                for (let e5 = 0; e5 < 8; e5++) o4 = 1 & o4 ? -306674912 ^ o4 >>> 1 : o4 >>> 1;
                 e4 = e4 >>> 8 ^ o4;
               }
               return ((-1 ^ e4) >>> 0).toString(16).padStart(8, "0").toUpperCase();
             }(c2.toString().replaceAll("\r\n", "\n")), d2 = { name: o2, original: c2, originalHash: l2 };
-            r2 = Object.assign(Object.assign({}, d2), { precomputed: s(d2), router: () => {
-            }, context: e3, contextProperty: a2[a2.length - 1] }), r2.router = function(o3) {
+            r2 = Object.assign(Object.assign({}, d2), { precomputed: s(d2), router: /* @__PURE__ */ __name(() => {
+            }, "router"), context: e3, contextProperty: a2[a2.length - 1] }), r2.router = /* @__PURE__ */ function(o3) {
               return function(...e4) {
                 return o3.precomputed.enter.apply(this, [e4]);
               };
@@ -140,14 +141,12 @@ ${a2}`), t2.set(e3, a2), n2.add(r3.name);
         }
         __name(l, "l");
         function d() {
-          for (const o2 of i.values())
-            o2.precomputed = s(o2);
+          for (const o2 of i.values()) o2.precomputed = s(o2);
         }
         __name(d, "d");
         function p() {
           const o2 = /* @__PURE__ */ new Map();
-          for (const [e2, t2] of i)
-            o2.set(e2, { name: e2, original: t2.original, originalHash: t2.originalHash, sdkEntrypoint: t2.router, currentEntrypoint: t2.context[t2.contextProperty], hookedByMods: r(t2.precomputed.hooks.map((o3) => o3.mod)), patchedByMods: Array.from(t2.precomputed.patchesSources) });
+          for (const [e2, t2] of i) o2.set(e2, { name: e2, original: t2.original, originalHash: t2.originalHash, sdkEntrypoint: t2.router, currentEntrypoint: t2.context[t2.contextProperty], hookedByMods: r(t2.precomputed.hooks.map((o3) => o3.mod)), patchedByMods: Array.from(t2.precomputed.patchesSources) });
           return o2;
         }
         __name(p, "p");
@@ -185,8 +184,7 @@ Was the mod loaded multiple times?`), u(a2));
             "string" == typeof o3 && o3 || e(`Mod ${r2} failed to patch a function: Expected function name string, got ${typeof o3}`);
             const i3 = l(o3), a3 = c2(i3);
             n(t3) || e(`Mod ${r2} failed to patch function '${o3}': Expected patches object, got ${typeof t3}`);
-            for (const [n2, i4] of Object.entries(t3))
-              "string" == typeof i4 ? a3.patches.set(n2, i4) : null === i4 ? a3.patches.delete(n2) : e(`Mod ${r2} failed to patch function '${o3}': Invalid format of patch '${n2}'`);
+            for (const [n2, i4] of Object.entries(t3)) "string" == typeof i4 ? a3.patches.set(n2, i4) : null === i4 ? a3.patches.delete(n2) : e(`Mod ${r2} failed to patch function '${o3}': Invalid format of patch '${n2}'`);
             d();
           }), removePatches: s2("removePatches", (o3) => {
             "string" == typeof o3 && o3 || e(`Mod ${r2} failed to patch a function: Expected function name string, got ${typeof o3}`);
@@ -205,8 +203,7 @@ Was the mod loaded multiple times?`), u(a2));
         __name(g, "g");
         function h() {
           const o2 = [];
-          for (const e2 of f.values())
-            o2.push({ name: e2.name, fullName: e2.fullName, version: e2.version, repository: e2.repository });
+          for (const e2 of f.values()) o2.push({ name: e2.name, fullName: e2.fullName, version: e2.version, repository: e2.repository });
           return o2;
         }
         __name(h, "h");
@@ -227,8 +224,74 @@ One of mods you are using is using an old version of SDK. It will work for now b
     init: () => init,
     unload: () => unload
   });
+  init_define_LAST_COMMIT_HASH();
+
+  // public/styles/main.css
+  var main_default = ".ResponsiveMessageContent {\r\n  display: inline;\r\n}\r\n\r\n.ResponsiveVersion {\r\n  font-weight: bold;\r\n  color: rgb(203, 185, 23);\r\n}\r\n\r\n#TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.ResponsiveMessage,\r\n#TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.ResponsiveMessage {\r\n  background-color: #111;\r\n  border: 2px solid #440171;\r\n  padding-left: 5px;\r\n  display: block;\r\n  white-space: normal;\r\n  color: #eee;\r\n}\r\n\r\n#TextAreaChatLog div.ChatMessage.ResponsiveMessage {\r\n  background-color: #eee;\r\n  border: 2px solid #440171;\r\n  padding-left: 5px;\r\n  display: block;\r\n  white-space: wrap;\r\n  color: #111;\r\n}\r\n\r\n#TextAreaChatLog[data-colortheme='dark'] a.ResponsiveText,\r\n#TextAreaChatLog[data-colortheme='dark2'] a.ResponsiveText {\r\n  cursor: pointer;\r\n  font-weight: bold;\r\n  color: #eee;\r\n}\r\n\r\n#TextAreaChatLog a.ResponsiveText {\r\n  cursor: pointer;\r\n  font-weight: bold;\r\n  color: #111;\r\n}\r\n\r\n#ResponsiveGratitude {\r\n  position: fixed;\r\n  width: 25%;\r\n  height: 50%;\r\n  top: 15%;\r\n  left: 50%;\r\n}\r\n\r\n.ResponsiveH {\r\n  font-size: 1em;\r\n  color: #333;\r\n}\r\n\r\n.ResponsiveP {\r\n  font-size: 0.6em;\r\n  color: #555;\r\n  line-height: 1.5;\r\n}\r\n\r\n.ResponsiveP:last-child {\r\n  font-size: 0.8em;\r\n  color: #ff69b4;\r\n}\r\n";
+
+  // src/Base/Modules.ts
+  init_define_LAST_COMMIT_HASH();
+  var modulesMap = /* @__PURE__ */ new Map();
+  function modules() {
+    return [...modulesMap.values()];
+  }
+  __name(modules, "modules");
+  function registerModule(module) {
+    modulesMap.set(module.constructor.name, module);
+    return module;
+  }
+  __name(registerModule, "registerModule");
+
+  // src/Base/SettingUtils.ts
+  init_define_LAST_COMMIT_HASH();
+
+  // src/Screens/MainMenu.ts
+  init_define_LAST_COMMIT_HASH();
+
+  // src/Base/BaseSetting.ts
+  init_define_LAST_COMMIT_HASH();
+
+  // src/Translation.ts
+  init_define_LAST_COMMIT_HASH();
+  var _Localization = class _Localization {
+    static async load() {
+      const lang = TranslationLanguage.toLowerCase();
+      this.Translation = await _Localization.fetchLanguageFile(lang);
+    }
+    static getText(srcTag) {
+      return this.Translation[srcTag] || srcTag || "";
+    }
+    static async fetchLanguageFile(lang) {
+      const response = await fetch(`${"https://ddeeplb.github.io/BC-Responsive/public"}/i18n/${lang}.lang`);
+      if (lang != "en" && !response.ok) {
+        return _Localization.fetchLanguageFile("en");
+      }
+      const langFileContent = await response.text();
+      return this.parseLanguageFile(langFileContent);
+    }
+    static parseLanguageFile(content) {
+      const translations = {};
+      const lines = content.split("\n");
+      for (const line of lines) {
+        if (line.trim() === "" || line.trim().startsWith("#")) {
+          continue;
+        }
+        const [key, value] = line.split("=");
+        translations[key.trim()] = value.trim();
+      }
+      return translations;
+    }
+  };
+  __name(_Localization, "Localization");
+  __publicField(_Localization, "Translation", new Object());
+  var Localization = _Localization;
+  var getText = /* @__PURE__ */ __name((string) => Localization.getText(string), "getText");
+
+  // src/Utilities/Data.ts
+  init_define_LAST_COMMIT_HASH();
 
   // src/Utilities/Definition.ts
+  init_define_LAST_COMMIT_HASH();
   var MT = {
     CHANGELOG: 30,
     INFO: 15,
@@ -239,16 +302,16 @@ One of mods you are using is using an old version of SDK. It will work for now b
   var CMD_TOGGLE = `${cmdKeyword} toggle`;
   var CMD_CHANGELOG = `${cmdKeyword} changelog`;
   var CMD_VERSION = `${cmdKeyword} version`;
-  var CMD_FIX_DATA = `${cmdKeyword} fix-data`;
   var CMD_DEBUG_DATA = `${cmdKeyword} debug-data`;
   var ModName = `Responsive`;
   var FullModName = `Bondage Club Responsive`;
-  var ModVersion = `0.6.4`;
+  var MOD_VERSION_CAPTION = true ? `${"0.6.5"} - ${"c8c43481"}` : "0.6.5";
   var ModRepository = `https://github.com/dDeepLb/BC-Responsive`;
   var DebugMode = false;
 
   // src/Utilities/String.ts
-  var _String = class {
+  init_define_LAST_COMMIT_HASH();
+  var __String = class __String {
     static encode(string) {
       return LZString.compressToBase64(JSON.stringify(string));
     }
@@ -260,8 +323,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
         data = decoded;
       } catch {
       }
-      if (data)
-        return data;
+      if (data) return data;
     }
     static shuffle(string) {
       let temp = JSON.parse(JSON.stringify(string));
@@ -274,7 +336,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
       return ret;
     }
   };
-  __name(_String, "_String");
+  __name(__String, "_String");
+  var _String = __String;
 
   // src/Utilities/Data.ts
   var PlayerStorage = /* @__PURE__ */ __name(() => Player[ModName], "PlayerStorage");
@@ -295,8 +358,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
   }
   __name(dataTake, "dataTake");
   function dataStore() {
-    if (!ExtensionStorage())
-      Player.ExtensionSettings[ModName] = "";
+    if (!ExtensionStorage()) Player.ExtensionSettings[ModName] = "";
     let Data = {
       Version: PlayerStorage().Version,
       GlobalModule: PlayerStorage().GlobalModule,
@@ -360,250 +422,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
   }
   __name(clearOldData, "clearOldData");
 
-  // src/Base/BaseModule.ts
-  var BaseModule = class {
-    get settingsScreen() {
-      return null;
-    }
-    get settingsStorage() {
-      return this.constructor.name;
-    }
-    get settings() {
-      if (!this.settingsStorage)
-        return {};
-      if (!PlayerStorage()) {
-        Player[ModName] = {};
-        this.registerDefaultSettings();
-      } else if (!PlayerStorage()[this.settingsStorage])
-        this.registerDefaultSettings();
-      return PlayerStorage()[this.settingsStorage];
-    }
-    get enabled() {
-      if (!PlayerStorage()?.GlobalModule)
-        return false;
-      return PlayerStorage().GlobalModule.ResponsiveEnabled && this.settings.ResponsiveEnabled && (ServerPlayerIsInChatRoom() || CurrentModule == "Room" && CurrentScreen == "Crafting");
-    }
-    Init() {
-      this.registerDefaultSettings();
-    }
-    registerDefaultSettings() {
-      const storage = this.settingsStorage;
-      const defaults = this.defaultSettings;
-      if (!storage || !defaults)
-        return;
-      PlayerStorage()[storage] = Object.assign(defaults, PlayerStorage()[storage] ?? {});
-    }
-    get defaultSettings() {
-      return null;
-    }
-    Load() {
-    }
-    Run() {
-    }
-    Unload() {
-    }
-  };
-  __name(BaseModule, "BaseModule");
-
-  // src/Base/Modules.ts
-  var modulesMap = /* @__PURE__ */ new Map();
-  function modules() {
-    return [...modulesMap.values()];
-  }
-  __name(modules, "modules");
-  function registerModule(module) {
-    modulesMap.set(module.constructor.name, module);
-    return module;
-  }
-  __name(registerModule, "registerModule");
-
-  // src/Utilities/RibbonMenu.ts
-  var _RibbonMenu = class {
-    static getYPos(modIndex) {
-      return this.START_Y - this.MOD_Y * (modIndex % 6);
-    }
-    static registerMod(modName) {
-      if (!window.RibbonMenuMods)
-        window.RibbonMenuMods = [];
-      if (window.RibbonMenuMods.length >= 6)
-        return console.warn(`${modName} can't be added to Ribbon Menu. Is is full`);
-      window.RibbonMenuMods.push(modName);
-    }
-    static getModIndex(modName) {
-      return window.RibbonMenuMods?.indexOf(modName);
-    }
-    static drawModButton(modIndex, callback) {
-      if (PreferenceSubscreen === "" && modIndex !== void 0)
-        callback(modIndex);
-      return;
-    }
-    static handleModClick(modIndex, callback) {
-      if (PreferenceSubscreen === "" && modIndex !== void 0) {
-        if (MouseIn(1815, _RibbonMenu.getYPos(modIndex), 90, 90))
-          callback(modIndex);
-      }
-      return;
-    }
-  };
-  var RibbonMenu = _RibbonMenu;
-  __name(RibbonMenu, "RibbonMenu");
-  __publicField(RibbonMenu, "START_Y", 820);
-  __publicField(RibbonMenu, "MOD_Y", 110);
-
-  // src/Utilities/SDK.ts
-  var import_bondage_club_mod_sdk = __toESM(require_bcmodsdk());
-
-  // src/Utilities/Other.ts
-  function getCharacter(memberNumber) {
-    return ChatRoomCharacter.find((c) => c.MemberNumber == memberNumber) ?? void 0;
-  }
-  __name(getCharacter, "getCharacter");
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-  __name(getRandomInt, "getRandomInt");
-  function injectStyle(styleSrc, styleId) {
-    const checkStyle = !!document.getElementById(styleId);
-    if (checkStyle)
-      return;
-    const styleElement = document.createElement("style");
-    styleElement.id = styleId;
-    styleElement.appendChild(document.createTextNode(styleSrc));
-    document.head.appendChild(styleElement);
-  }
-  __name(injectStyle, "injectStyle");
-
-  // src/Utilities/Console.ts
-  var STYLES = {
-    INFO: "color: #32CCCC",
-    LOG: "color: #CCCC32",
-    DEBUG: "color: #9E4BCF"
-  };
-  function conLog(...args) {
-    if (typeof args[0] === "string")
-      console.log(`%cBCR: ${args[0]}`, STYLES.LOG, ...args.slice(1));
-    else
-      console.log(`%cBCR:`, STYLES.LOG, ...args);
-  }
-  __name(conLog, "conLog");
-  function conWarn(...args) {
-    if (typeof args[0] === "string")
-      console.warn(`%cBCR: ${args[0]}`, STYLES.LOG, ...args.slice(1));
-    else
-      console.warn(`%cBCR: `, STYLES.LOG, ...args);
-  }
-  __name(conWarn, "conWarn");
-  function conErr(...args) {
-    if (typeof args[0] === "string")
-      console.error(`%cBCR: ${args[0]}`, STYLES.LOG, ...args.slice(1));
-    else
-      console.error(`%cBCR:`, STYLES.LOG, ...args);
-  }
-  __name(conErr, "conErr");
-  function conDebug(...args) {
-    if (DebugMode) {
-      if (typeof args[0] === "string")
-        console.debug(`%cBCR: ${args[0]}`, STYLES.DEBUG, ...args.slice(1));
-      else
-        console.debug(`%cBCR:`, STYLES.LOG, ...args);
-    }
-  }
-  __name(conDebug, "conDebug");
-
-  // src/Utilities/SDK.ts
-  var SDK = import_bondage_club_mod_sdk.default.registerMod(
-    {
-      name: ModName,
-      fullName: FullModName,
-      version: ModVersion,
-      repository: ModRepository
-    },
-    {
-      allowReplace: false
-    }
-  );
-  var patchedFunctions = /* @__PURE__ */ new Map();
-  function initPatchableFunction(target) {
-    let result = patchedFunctions.get(target);
-    if (!result) {
-      result = {
-        name: target,
-        hooks: []
-      };
-      patchedFunctions.set(target, result);
-    }
-    return result;
-  }
-  __name(initPatchableFunction, "initPatchableFunction");
-  function hookFunction(target, priority, hook, module = null) {
-    const data = initPatchableFunction(target);
-    if (data.hooks.some((h) => h.hook === hook)) {
-      conErr(`Duplicate hook for "${target}"`, hook);
-      return () => null;
-    }
-    const removeCallback = SDK.hookFunction(target, priority, hook);
-    data.hooks.push({
-      hook,
-      priority,
-      module,
-      removeCallback
-    });
-    data.hooks.sort((a, b) => b.priority - a.priority);
-    return removeCallback;
-  }
-  __name(hookFunction, "hookFunction");
-  function onActivity(priority, module, callback) {
-    hookFunction(
-      "ChatRoomMessage",
-      priority,
-      (args, next) => {
-        let data = args[0];
-        let sender = getCharacter(data.Sender);
-        if (data.Type == "Activity")
-          callback(data, sender, data.Content, data.Dictionary);
-        next(args);
-      },
-      module
-    );
-  }
-  __name(onActivity, "onActivity");
-
-  // src/Translation.ts
-  var _Localization = class {
-    static async load() {
-      const lang = TranslationLanguage.toLowerCase();
-      this.Translation = await _Localization.fetchLanguageFile(lang);
-    }
-    static getText(srcTag) {
-      return this.Translation[srcTag] || srcTag || "";
-    }
-    static async fetchLanguageFile(lang) {
-      const response = await fetch(`${serverUrl}/translations/${lang}.lang`);
-      if (lang != "en" && !response.ok) {
-        return _Localization.fetchLanguageFile("en");
-      }
-      const langFileContent = await response.text();
-      return this.parseLanguageFile(langFileContent);
-    }
-    static parseLanguageFile(content) {
-      const translations = {};
-      const lines = content.split("\n");
-      for (const line of lines) {
-        if (line.trim() === "" || line.trim().startsWith("#")) {
-          continue;
-        }
-        const [key, value] = line.split("=");
-        translations[key.trim()] = value.trim();
-      }
-      return translations;
-    }
-  };
-  var Localization = _Localization;
-  __name(Localization, "Localization");
-  __publicField(Localization, "Translation", new Object());
-  var getText = /* @__PURE__ */ __name((string) => Localization.getText(string), "getText");
-
   // src/Base/SettingDefinitions.ts
+  init_define_LAST_COMMIT_HASH();
   var SETTING_FUNC_PREFIX = "PreferenceSubscreen";
   var SETTING_NAME_PREFIX = "BCR";
   var SETTING_FUNC_NAMES = ["Load", "Run", "Click", "Unload", "Exit"];
@@ -617,11 +437,10 @@ One of mods you are using is using an old version of SDK. It will work for now b
   __name(setSubscreen, "setSubscreen");
 
   // src/Base/BaseSetting.ts
-  var _GuiSubscreen = class {
-    module;
+  var _GuiSubscreen = class _GuiSubscreen {
     constructor(module) {
-      if (module)
-        this.module = module;
+      __publicField(this, "module");
+      if (module) this.module = module;
       SETTING_FUNC_NAMES.forEach((name) => {
         const fName = SETTING_FUNC_PREFIX + SETTING_NAME_PREFIX + this.name + name;
         if (typeof this[name] === "function" && typeof window[fName] !== "function")
@@ -673,19 +492,15 @@ One of mods you are using is using an old version of SDK. It will work for now b
       this.multipageStructure.forEach((item, ix, arr) => {
         if (ix != PreferencePageCurrent - 1) {
           item.forEach((setting) => {
-            if (setting.type == "text" || setting.type == "number")
-              this.elementHide(setting.id);
+            if (setting.type == "text" || setting.type == "number") this.elementHide(setting.id);
           });
         }
       });
     }
     Load() {
-      conDebug(`Loading ${PreferenceSubscreen.slice(3).trim()} GUI`);
       for (const module of modules()) {
-        if (!module.settingsScreen)
-          continue;
-        if (!Object.keys(module.settings).length)
-          module.registerDefaultSettings();
+        if (!module.settingsScreen) continue;
+        if (!Object.keys(module.settings).length) module.registerDefaultSettings();
       }
       this.multipageStructure.forEach(
         (s) => s.forEach((item) => {
@@ -741,10 +556,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
       _GuiSubscreen.TEXT_ALIGN_BAK = MainCanvas.textAlign;
       _GuiSubscreen.START_X = 550;
       MainCanvas.textAlign = "left";
-      if (MouseIn(1815, 75, 90, 90))
-        return this.Exit();
-      if (this.multipageStructure.length > 1)
-        PreferencePageChangeClick(1595, 75, this.multipageStructure.length);
+      if (MouseIn(1815, 75, 90, 90)) return this.Exit();
+      if (this.multipageStructure.length > 1) PreferencePageChangeClick(1595, 75, this.multipageStructure.length);
       this.structure.forEach((item, ix, arr) => {
         switch (item.type) {
           case "checkbox":
@@ -753,8 +566,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
             }
             break;
           case "button":
-            if (MouseIn(item.position[0], item.position[1], item.size[0], item.size[1]))
-              item.callback();
+            if (MouseIn(item.position[0], item.position[1], item.size[0], item.size[1])) item.callback();
             break;
         }
       });
@@ -791,8 +603,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
       var isHovering = MouseIn(this.getXPos(order), this.getYPos(order) - 32, 600, 64);
       DrawTextFit(getText(label), this.getXPos(order), this.getYPos(order), 600, isHovering ? "Red" : "Black", "Gray");
       DrawCheckbox(this.getXPos(order) + 600, this.getYPos(order) - 32, 64, 64, "", value ?? false, disabled);
-      if (isHovering)
-        this.tooltip(getText(description));
+      if (isHovering) this.tooltip(getText(description));
     }
     drawBetterButton(position, size, label, color, image = "", disabled = false) {
       var isHovering = MouseIn(position[0], position[1] - 32, size[0], size[1]);
@@ -812,28 +623,24 @@ One of mods you are using is using an old version of SDK. It will work for now b
       var isHovering = MouseIn(this.getXPos(order), this.getYPos(order) - 32, 600, 64);
       DrawTextFit(getText(label), this.getXPos(order), this.getYPos(order), 600, isHovering ? "Red" : "Black", "Gray");
       ElementPosition(elementId, this.getXPos(order) + 750 + 225, this.getYPos(order), 800, 64);
-      if (disabled)
-        ElementSetAttribute(elementId, "disabled", "true");
-      if (!disabled)
-        document.getElementById(elementId)?.removeAttribute("disabled");
-      if (isHovering)
-        this.tooltip(getText(description));
+      if (disabled) ElementSetAttribute(elementId, "disabled", "true");
+      if (!disabled) document.getElementById(elementId)?.removeAttribute("disabled");
+      if (isHovering) this.tooltip(getText(description));
     }
     drawLabel(label, description, order) {
       var isHovering = MouseIn(this.getXPos(order), this.getYPos(order) - 32, 600, 64);
       DrawTextFit(getText(label), this.getXPos(order), this.getYPos(order), 600, isHovering ? "Red" : "Black", "Gray");
-      if (isHovering)
-        this.tooltip(getText(description));
+      if (isHovering) this.tooltip(getText(description));
     }
   };
+  __name(_GuiSubscreen, "GuiSubscreen");
+  __publicField(_GuiSubscreen, "START_X", 180);
+  __publicField(_GuiSubscreen, "START_Y", 205);
+  __publicField(_GuiSubscreen, "X_MOD", 950);
+  __publicField(_GuiSubscreen, "Y_MOD", 75);
+  __publicField(_GuiSubscreen, "POS_BAK", _GuiSubscreen.START_X);
+  __publicField(_GuiSubscreen, "TEXT_ALIGN_BAK");
   var GuiSubscreen = _GuiSubscreen;
-  __name(GuiSubscreen, "GuiSubscreen");
-  __publicField(GuiSubscreen, "START_X", 180);
-  __publicField(GuiSubscreen, "START_Y", 205);
-  __publicField(GuiSubscreen, "X_MOD", 950);
-  __publicField(GuiSubscreen, "Y_MOD", 75);
-  __publicField(GuiSubscreen, "POS_BAK", _GuiSubscreen.START_X);
-  __publicField(GuiSubscreen, "TEXT_ALIGN_BAK");
   function drawTooltip(x, y, width, text, align) {
     const bak = MainCanvas.textAlign;
     MainCanvas.textAlign = align;
@@ -845,18 +652,22 @@ One of mods you are using is using an old version of SDK. It will work for now b
   __name(drawTooltip, "drawTooltip");
 
   // src/Screens/Reset.ts
-  var GuiReset = class extends GuiSubscreen {
+  init_define_LAST_COMMIT_HASH();
+  var _GuiReset = class _GuiReset extends GuiSubscreen {
+    constructor() {
+      super(...arguments);
+      __publicField(this, "allowedConfirmTime", 0);
+      __publicField(this, "doResetForManualSettings", false);
+      __publicField(this, "doResetSettings", true);
+      __publicField(this, "doResetResponses", true);
+      __publicField(this, "doResetProfiles", false);
+    }
     get name() {
       return "reset";
     }
     get icon() {
       return "";
     }
-    allowedConfirmTime = 0;
-    doResetForManualSettings = false;
-    doResetSettings = true;
-    doResetResponses = true;
-    doResetProfiles = false;
     Load() {
       this.allowedConfirmTime = Date.now() + 1e4;
       super.Load();
@@ -919,14 +730,10 @@ One of mods you are using is using an old version of SDK. It will work for now b
       MainCanvas.textAlign = GuiSubscreen.TEXT_ALIGN_BAK;
     }
     Click() {
-      if (this.allowedConfirmTime === null)
-        return;
-      if (MouseIn(1520, 690, 200, 80))
-        return this.Exit();
-      if (MouseIn(1e3, 690, 200, 80) && Date.now() >= this.allowedConfirmTime)
-        return this.Confirm();
-      if (MouseIn(this.getXPos(4) + 600, this.getYPos(4) - 32, 64, 64))
-        return this.doResetForManualSettings = !this.doResetForManualSettings;
+      if (this.allowedConfirmTime === null) return;
+      if (MouseIn(1520, 690, 200, 80)) return this.Exit();
+      if (MouseIn(1e3, 690, 200, 80) && Date.now() >= this.allowedConfirmTime) return this.Confirm();
+      if (MouseIn(this.getXPos(4) + 600, this.getYPos(4) - 32, 64, 64)) return this.doResetForManualSettings = !this.doResetForManualSettings;
       if (MouseIn(this.getXPos(6) + 600, this.getYPos(6) - 32, 64, 64) && !this.doResetForManualSettings)
         return this.doResetSettings = !this.doResetSettings;
       if (MouseIn(this.getXPos(7) + 600, this.getYPos(7) - 32, 64, 64) && !this.doResetForManualSettings)
@@ -942,12 +749,15 @@ One of mods you are using is using an old version of SDK. It will work for now b
         dataErase(this.doResetSettings, this.doResetResponses, this.doResetProfiles);
       }
       this.setSubscreen(null);
+      PreferenceSubscreenExtensionsClear();
     }
   };
-  __name(GuiReset, "GuiReset");
+  __name(_GuiReset, "GuiReset");
+  var GuiReset = _GuiReset;
 
   // src/Screens/Support.ts
-  var _GuiSupport = class extends GuiSubscreen {
+  init_define_LAST_COMMIT_HASH();
+  var _GuiSupport = class _GuiSupport extends GuiSubscreen {
     get name() {
       return "Support";
     }
@@ -980,13 +790,11 @@ One of mods you are using is using an old version of SDK. It will work for now b
       ];
     }
     static getSupporter() {
-      if (_GuiSupport.thankYouNext < CommonTime())
-        _GuiSupport.doNextThankYou();
+      if (_GuiSupport.thankYouNext < CommonTime()) _GuiSupport.doNextThankYou();
       return `${getText("support.other.thankyou")}, ${_GuiSupport.thankYou}`;
     }
     static doNextThankYou() {
-      if (_GuiSupport.thankYou && _GuiSupport.thankYouList.length < 2)
-        return;
+      if (_GuiSupport.thankYou && _GuiSupport.thankYouList.length < 2) return;
       _GuiSupport.thankYou = CommonRandomItemFromList(_GuiSupport.thankYou, _GuiSupport.thankYouList);
       _GuiSupport.thankYouNext = CommonTime() + 4e3;
     }
@@ -1017,12 +825,14 @@ One of mods you are using is using an old version of SDK. It will work for now b
       super.Exit();
     }
   };
+  __name(_GuiSupport, "GuiSupport");
+  __publicField(_GuiSupport, "thankYouList", ["Ellena", "weboos", "Jamie"]);
+  __publicField(_GuiSupport, "thankYouNext", 0);
+  __publicField(_GuiSupport, "thankYou", "");
   var GuiSupport = _GuiSupport;
-  __name(GuiSupport, "GuiSupport");
-  __publicField(GuiSupport, "thankYouList", ["Ellena", "weboos", "Jamie"]);
-  __publicField(GuiSupport, "thankYouNext", 0);
-  __publicField(GuiSupport, "thankYou", "");
-  var gratitudeHtml = `
+  var gratitudeHtml = (
+    /*html*/
+    `
 <h1 class="ResponsiveH">Dear Supporters!</h1>
 <p class="ResponsiveP">
   I want to take a moment to express my heartfelt gratitude for considering supporting me. Your willingness to stand by
@@ -1039,17 +849,18 @@ One of mods you are using is using an old version of SDK. It will work for now b
 </p>
 <p class="ResponsiveP">Thank you all~</p>
 <p class="ResponsiveP">With love, Monikka\u2665</p>
-`;
+`
+  );
 
   // src/Screens/MainMenu.ts
-  var MainMenu = class extends GuiSubscreen {
-    subscreens = [];
-    get name() {
-      return "mainmenu";
-    }
+  var _MainMenu = class _MainMenu extends GuiSubscreen {
     constructor(module) {
       super(module);
+      __publicField(this, "subscreens", []);
       this.subscreens = module.subscreens;
+    }
+    get name() {
+      return "mainmenu";
     }
     Load() {
       if (!GUI.instance?.currentSubscreen) {
@@ -1065,7 +876,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
       MainCanvas.textAlign = "left";
       DrawCharacter(Player, 50, 50, 0.9, false);
       DrawText(
-        getText("mainmenu.title").replace("$ModVersion", ModVersion) + "  " + GuiSupport.getSupporter(),
+        getText("mainmenu.title").replace("$ModVersion", MOD_VERSION_CAPTION) + "  " + GuiSupport.getSupporter(),
         GuiSubscreen.START_X,
         GuiSubscreen.START_Y - GuiSubscreen.Y_MOD,
         "Black",
@@ -1077,8 +888,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
       for (const screen of this.subscreens) {
         const PX = Math.floor(i / 6);
         const PY = i % 6;
-        if (screen.name == "mainmenu")
-          continue;
+        if (screen.name == "mainmenu") continue;
         DrawButton(GuiSubscreen.START_X + 430 * PX, 190 + 120 * PY, 450, 90, "", "White", "", "");
         DrawImageResize(screen.icon, GuiSubscreen.START_X + 430 * PX + 10, 190 + 120 * PY + 10, 70, 70);
         MainCanvas.textAlign = "left";
@@ -1100,16 +910,14 @@ One of mods you are using is using an old version of SDK. It will work for now b
       MainCanvas.textAlign = prev;
     }
     Click() {
-      if (MouseIn(1815, 75, 90, 90))
-        return this.Exit();
+      if (MouseIn(1815, 75, 90, 90)) return this.Exit();
       let tmp = GuiSubscreen.START_X;
       GuiSubscreen.START_X = 550;
       let i = 0;
       for (const screen of this.subscreens) {
         const PX = Math.floor(i / 6);
         const PY = i % 6;
-        if (screen.name == "mainmenu")
-          continue;
+        if (screen.name == "mainmenu") continue;
         if (MouseIn(GuiSubscreen.START_X + 430 * PX, 190 + 120 * PY, 450, 90)) {
           this.setSubscreen(screen);
           return;
@@ -1117,26 +925,78 @@ One of mods you are using is using an old version of SDK. It will work for now b
         i++;
       }
       GuiSubscreen.START_X = tmp;
-      if (MouseIn(1500, 630, 405, 80))
-        this.setSubscreen(new GuiReset());
-      if (MouseIn(1500, 730, 400, 80))
-        window.open("https://github.com/dDeepLb/BC-Responsive/wiki/", "_blank");
-      if (MouseIn(1500, 830, 400, 80))
-        this.setSubscreen(new GuiSupport());
+      if (MouseIn(1500, 630, 405, 80)) this.setSubscreen(new GuiReset());
+      if (MouseIn(1500, 730, 400, 80)) window.open("https://github.com/dDeepLb/BC-Responsive/wiki/", "_blank");
+      if (MouseIn(1500, 830, 400, 80)) this.setSubscreen(new GuiSupport());
     }
     Exit() {
       CharacterAppearanceForceUpCharacter = -1;
       CharacterLoadCanvas(Player);
       this.setSubscreen(null);
+      PreferenceSubscreenExtensionsClear();
     }
   };
-  __name(MainMenu, "MainMenu");
+  __name(_MainMenu, "MainMenu");
+  var MainMenu = _MainMenu;
+
+  // src/Base/BaseModule.ts
+  init_define_LAST_COMMIT_HASH();
+  var _BaseModule = class _BaseModule {
+    get settingsScreen() {
+      return null;
+    }
+    /** Allows changing the subkey for that module settings storage */
+    get settingsStorage() {
+      return this.constructor.name;
+    }
+    get settings() {
+      if (!this.settingsStorage) return {};
+      if (!PlayerStorage()) {
+        Player[ModName] = {};
+        this.registerDefaultSettings();
+      } else if (!PlayerStorage()[this.settingsStorage]) this.registerDefaultSettings();
+      return PlayerStorage()[this.settingsStorage];
+    }
+    get enabled() {
+      if (!PlayerStorage()?.GlobalModule) return false;
+      return PlayerStorage().GlobalModule.ResponsiveEnabled && this.settings.ResponsiveEnabled && (ServerPlayerIsInChatRoom() || CurrentModule == "Room" && CurrentScreen == "Crafting");
+    }
+    Init() {
+      this.registerDefaultSettings();
+    }
+    registerDefaultSettings() {
+      const storage = this.settingsStorage;
+      const defaults = this.defaultSettings;
+      if (!storage || !defaults) return;
+      PlayerStorage()[storage] = Object.assign(defaults, PlayerStorage()[storage] ?? {});
+    }
+    get defaultSettings() {
+      return null;
+    }
+    Load() {
+    }
+    Run() {
+    }
+    Unload() {
+    }
+  };
+  __name(_BaseModule, "BaseModule");
+  var BaseModule = _BaseModule;
 
   // src/Base/SettingUtils.ts
-  var _GUI = class extends BaseModule {
-    _subscreens;
-    _mainMenu;
-    _currentSubscreen = null;
+  var _GUI = class _GUI extends BaseModule {
+    constructor() {
+      super();
+      __publicField(this, "_subscreens");
+      __publicField(this, "_mainMenu");
+      __publicField(this, "_currentSubscreen", null);
+      if (_GUI.instance) {
+        throw new Error("Duplicate initialization");
+      }
+      this._mainMenu = new MainMenu(this);
+      this._subscreens = [this._mainMenu];
+      _GUI.instance = this;
+    }
     get subscreens() {
       return this._subscreens;
     }
@@ -1152,8 +1012,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
       }
       if (typeof subscreen === "string") {
         const scr = this._subscreens?.find((s) => s.name === subscreen);
-        if (!scr)
-          throw `Failed to find screen name ${subscreen}`;
+        if (!scr) throw `Failed to find screen name ${subscreen}`;
         this._currentSubscreen = scr;
       } else {
         this._currentSubscreen = subscreen;
@@ -1165,60 +1024,44 @@ One of mods you are using is using an old version of SDK. It will work for now b
         subscreenName = SETTING_NAME_PREFIX + this._currentSubscreen?.name;
         this._currentSubscreen.Load();
       }
-      PreferenceSubscreen = subscreenName;
     }
     get currentCharacter() {
       return Player;
-    }
-    constructor() {
-      super();
-      if (_GUI.instance) {
-        throw new Error("Duplicate initialization");
-      }
-      this._mainMenu = new MainMenu(this);
-      this._subscreens = [this._mainMenu];
-      _GUI.instance = this;
     }
     get defaultSettings() {
       return null;
     }
     Load() {
       for (const module of modules()) {
-        if (!module.settingsScreen)
-          continue;
+        if (!module.settingsScreen) continue;
         this._subscreens.push(new module.settingsScreen(module));
       }
       this._mainMenu.subscreens = this._subscreens;
-      let modIndex = RibbonMenu.getModIndex("Responsive");
-      hookFunction("PreferenceRun", 10 /* OverrideBehavior */, (args, next) => {
-        if (this._currentSubscreen) {
-          MainCanvas.textAlign = "left";
-          this._currentSubscreen.Run();
-          MainCanvas.textAlign = "center";
-          this.drawDebug();
-          return;
-        }
-        next(args);
-        RibbonMenu.drawModButton(modIndex, (modIndex2) => {
-          DrawButton(1815, RibbonMenu.getYPos(modIndex2), 90, 90, "", "White", "Icons/Arousal.png", getText("infosheet.button.responsive_popup"));
-        });
-      });
-      hookFunction("PreferenceClick", 10 /* OverrideBehavior */, (args, next) => {
-        if (this._currentSubscreen) {
-          this._currentSubscreen.Click();
-          return;
-        }
-        next(args);
-        RibbonMenu.handleModClick(modIndex, (modIndex2) => {
+      PreferenceRegisterExtensionSetting({
+        Identifier: "Responsive",
+        ButtonText: getText("infosheet.button.mod_button"),
+        Image: `Icons/Arousal.png`,
+        load: /* @__PURE__ */ __name(() => {
           setSubscreen(new MainMenu(this));
-        });
-      });
-      hookFunction("InformationSheetExit", 10 /* OverrideBehavior */, (args, next) => {
-        if (this._currentSubscreen) {
-          this._currentSubscreen.Exit();
-          return;
-        }
-        return next(args);
+        }, "load"),
+        run: /* @__PURE__ */ __name(() => {
+          if (this._currentSubscreen) {
+            MainCanvas.textAlign = "left";
+            this._currentSubscreen.Run();
+            MainCanvas.textAlign = "center";
+            this.drawDebug();
+          }
+        }, "run"),
+        click: /* @__PURE__ */ __name(() => {
+          if (this._currentSubscreen) {
+            this._currentSubscreen.Click();
+          }
+        }, "click"),
+        exit: /* @__PURE__ */ __name(() => {
+          if (this._currentSubscreen) {
+            this._currentSubscreen.Exit();
+          }
+        }, "exit")
       });
     }
     drawDebug() {
@@ -1243,310 +1086,44 @@ One of mods you are using is using an old version of SDK. It will work for now b
       }
     }
   };
+  __name(_GUI, "GUI");
+  __publicField(_GUI, "instance", null);
   var GUI = _GUI;
-  __name(GUI, "GUI");
-  __publicField(GUI, "instance", null);
 
-  // src/Screens/Global.ts
-  var GuiGlobal = class extends GuiSubscreen {
-    get name() {
-      return "settings";
-    }
-    get icon() {
-      return "Icons/Preference.png";
-    }
-    get settings() {
-      return super.settings;
-    }
-    get structure() {
-      return [
-        {
-          type: "checkbox",
-          label: "settings.setting.responsive_enabled.name",
-          description: "settings.setting.responsive_enabled.desc",
-          setting: () => this.settings?.ResponsiveEnabled ?? true,
-          setSetting: (val) => this.settings.ResponsiveEnabled = val
-        },
-        {
-          type: "checkbox",
-          label: "settings.setting.responsesEnabled.name",
-          description: "settings.setting.responsesEnabled.desc",
-          setting: () => this.settings?.responsesEnabled ?? true,
-          setSetting: (val) => this.settings.responsesEnabled = val
-        },
-        {
-          type: "checkbox",
-          label: "settings.setting.chartalk_enabled.name",
-          description: "settings.setting.chartalk_enabled.desc",
-          setting: () => this.settings?.CharTalkEnabled ?? true,
-          setSetting: (val) => this.settings.CharTalkEnabled = val
-        },
-        {
-          type: "checkbox",
-          label: "settings.setting.interruption_enabled.name",
-          description: "settings.setting.interruption_enabled.desc",
-          setting: () => this.settings?.doMessageInterruption ?? true,
-          setSetting: (val) => this.settings.doMessageInterruption = val
-        },
-        {
-          type: "checkbox",
-          label: "settings.setting.leave_message_enabled.name",
-          description: "settings.setting.leave_message_enabled.desc",
-          setting: () => this.settings?.doLeaveMessage ?? true,
-          setSetting: (val) => this.settings.doLeaveMessage = val
-        },
-        {
-          type: "checkbox",
-          label: "settings.setting.doPreventMessageIfBcxBlock.name",
-          description: "settings.setting.doPreventMessageIfBcxBlock.desc",
-          setting: () => this.settings?.doPreventMessageIfBcxBlock ?? false,
-          setSetting: (val) => this.settings.doPreventMessageIfBcxBlock = val
-        },
-        {
-          type: "checkbox",
-          label: "settings.setting.new_version_message_enabled.name",
-          description: "settings.setting.new_version_message_enabled.desc",
-          setting: () => this.settings?.doShowNewVersionMessage ?? true,
-          setSetting: (val) => this.settings.doShowNewVersionMessage = val
-        }
-      ];
-    }
-    Load() {
-      super.Load();
-    }
-  };
-  __name(GuiGlobal, "GuiGlobal");
+  // src/Modules/CharTalk.ts
+  init_define_LAST_COMMIT_HASH();
 
-  // src/Modules/Global.ts
-  var GlobalModule = class extends BaseModule {
-    get settingsScreen() {
-      return GuiGlobal;
-    }
-    get settings() {
-      return super.settings;
-    }
-    get defaultSettings() {
-      return {
-        ResponsiveEnabled: true,
-        responsesEnabled: true,
-        CharTalkEnabled: true,
-        doShowNewVersionMessage: true,
-        doLeaveMessage: true,
-        doPreventMessageIfBcxBlock: false,
-        doMessageInterruption: true
-      };
-    }
-    Load() {
-    }
-    Run() {
-    }
-  };
-  __name(GlobalModule, "GlobalModule");
+  // src/Utilities/ChatMessages.ts
+  init_define_LAST_COMMIT_HASH();
 
-  // src/Screens/Profiles.ts
-  var GuiProfiles = class extends GuiSubscreen {
-    PreferenceText = "";
-    ProfileNames = ["", "", ""];
-    get name() {
-      return "profiles";
-    }
-    get icon() {
-      return "Icons/Title.png";
-    }
-    get settings() {
-      return super.settings;
-    }
-    tmpGlbl = GuiSubscreen.START_X;
-    Load() {
-      super.Load();
-      for (let i = 0; i < 3; i++) {
-        let profileIndex = i + 1;
-        if (!PlayerStorage()?.ProfilesModule?.[profileIndex]) {
-          PlayerStorage().ProfilesModule[profileIndex] = {
-            data: {},
-            name: ""
-          };
-        }
-        this.ProfileNames[i] = PlayerStorage()?.ProfilesModule?.[profileIndex]?.name ?? "";
-      }
-      CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
-    }
-    Run() {
-      let prev = MainCanvas.textAlign;
-      super.Run();
-      MainCanvas.textAlign = "left";
-      for (let i = 0; i < 3; i++) {
-        let profileIndex = i + 1;
-        if (this.ProfileNames[i] === "")
-          DrawText(getText("profiles.text.profile") + ` ${profileIndex}`, this.getXPos(profileIndex), this.getYPos(profileIndex), "Black", "Gray");
-        if (this.ProfileNames[i] !== "")
-          DrawText(this.ProfileNames[i], this.getXPos(profileIndex), this.getYPos(profileIndex), "Black", "Gray");
-        this.drawButton("profiles.button.save", "white", profileIndex, 250);
-        this.drawButton("profiles.button.load", "white", profileIndex, 500);
-        this.drawButton("profiles.button.delete", "IndianRed", profileIndex, 750);
-      }
-      if (this.PreferenceText)
-        DrawText(this.PreferenceText, GuiSubscreen.START_X + 250, GuiSubscreen.START_Y - GuiSubscreen.Y_MOD, "Black", "Gray");
-      MainCanvas.textAlign = prev;
-    }
-    Click() {
-      super.Click();
-      for (let i = 0; i < 3; i++) {
-        let profileIndex = i + 1;
-        this.handleProfilesSaving(profileIndex);
-        this.handleProfilesLoading(profileIndex);
-        this.handleProfilesDeleting(profileIndex);
-      }
-    }
-    Exit() {
-      CharacterAppearanceForceUpCharacter = -1;
-      CharacterLoadCanvas(Player);
-      this.PreferenceText = "";
-      super.Exit();
-    }
-    saveProfile(profileId, profileName) {
-      if (profileId < 1 || profileId > 3) {
-        conWarn(`Invalid profile id ${profileId}`);
-        return false;
-      }
-      if (!Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
-        PlayerStorage().ProfilesModule[profileId] = {};
-      }
-      let saveData = {
-        GlobalModule: PlayerStorage().GlobalModule,
-        ResponsesModule: PlayerStorage().ResponsesModule
-      };
-      PlayerStorage().ProfilesModule[profileId] = {
-        name: profileName,
-        data: saveData
-      };
-      return true;
-    }
-    loadProfile(profileId) {
-      if (profileId < 1 || profileId > 3) {
-        conWarn(`Invalid profile id ${profileId}`);
-        return false;
-      }
-      if (!Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
-        return false;
-      }
-      let data = PlayerStorage().ProfilesModule[profileId].data;
-      if (!data) {
-        return false;
-      }
-      if (data) {
-        PlayerStorage().GlobalModule = data.GlobalModule;
-        PlayerStorage().ResponsesModule = data.ResponsesModule;
-      }
-      return true;
-    }
-    deleteProfile(profileId) {
-      if (profileId < 1 || profileId > 3) {
-        conWarn(`Invalid profile id ${profileId}`);
-        return false;
-      }
-      if (!Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
-        return false;
-      }
-      if (Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
-        PlayerStorage().ProfilesModule[profileId] = {};
-        return true;
-      }
-    }
-    handleProfilesSaving(profileIndex) {
-      let formerIndex = profileIndex - 1;
-      if (MouseIn(this.getXPos(profileIndex) + 250, this.getYPos(profileIndex) - 32, 200, 64)) {
-        let promptedName = prompt(getText("profiles.prompt"));
-        if (promptedName === null)
-          return;
-        this.ProfileNames[formerIndex] = promptedName;
-        if (this.ProfileNames[formerIndex] === "") {
-          this.saveProfile(profileIndex, "");
-          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.has_been_saved")}`;
-        }
-        if (this.ProfileNames[formerIndex] !== "") {
-          this.saveProfile(profileIndex, this.ProfileNames[formerIndex]);
-          this.PreferenceText = `${getText("profiles.text.profile")} "${this.ProfileNames[formerIndex]}" ${getText(
-            "profiles.text.has_been_saved"
-          )}`;
-        }
-        return;
-      }
-    }
-    handleProfilesLoading(profileIndex) {
-      let formerIndex = profileIndex - 1;
-      if (MouseIn(this.getXPos(profileIndex) + 500, this.getYPos(profileIndex) - 32, 200, 64)) {
-        if (!this.loadProfile(profileIndex)) {
-          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.needs_to_be_saved")}`;
-          return;
-        }
-        if (this.ProfileNames[formerIndex] === "")
-          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.has_been_loaded")}`;
-        if (this.ProfileNames[formerIndex] !== "")
-          this.PreferenceText = `${getText("profiles.text.profile")} "${this.ProfileNames[formerIndex]}" ${getText(
-            "profiles.text.has_been_loaded"
-          )}`;
-        return;
-      }
-    }
-    handleProfilesDeleting(profileIndex) {
-      let formerIndex = profileIndex - 1;
-      if (MouseIn(this.getXPos(profileIndex) + 750, this.getYPos(profileIndex) - 32, 200, 64)) {
-        if (this.ProfileNames[formerIndex] === null)
-          return;
-        if (this.deleteProfile(profileIndex)) {
-          if (this.ProfileNames[formerIndex] === "") {
-            this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.has_been_deleted")}`;
-            return;
-          }
-          if (this.ProfileNames[formerIndex] !== "") {
-            this.PreferenceText = `${getText("profiles.text.profile")} "${this.ProfileNames[formerIndex]}" ${getText(
-              "profiles.text.has_been_deleted"
-            )}`;
-            this.ProfileNames[formerIndex] = "";
-            return;
-          }
-        }
-        if (!this.deleteProfile(profileIndex)) {
-          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.not_saved_or_already_deleted")}`;
-          return;
-        }
-        return;
-      }
-    }
-  };
-  __name(GuiProfiles, "GuiProfiles");
-
-  // src/Modules/Profiles.ts
-  var ProfilesModule = class extends BaseModule {
-    get settings() {
-      return super.settings;
-    }
-    get settingsScreen() {
-      return GuiProfiles;
-    }
-    get defaultSettings() {
-      return {};
-    }
-    Load() {
-    }
-    Run() {
-    }
-  };
-  __name(ProfilesModule, "ProfilesModule");
+  // src/Utilities/Other.ts
+  init_define_LAST_COMMIT_HASH();
+  function getCharacter(memberNumber) {
+    return ChatRoomCharacter.find((c) => c.MemberNumber == memberNumber) ?? void 0;
+  }
+  __name(getCharacter, "getCharacter");
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+  __name(getRandomInt, "getRandomInt");
+  function injectStyle(styleSrc, styleId) {
+    const checkStyle = !!document.getElementById(styleId);
+    if (checkStyle) return;
+    const styleElement = document.createElement("style");
+    styleElement.id = styleId;
+    styleElement.appendChild(document.createTextNode(styleSrc));
+    document.head.appendChild(styleElement);
+  }
+  __name(injectStyle, "injectStyle");
 
   // src/Utilities/ChatMessages.ts
   function activityDeconstruct(dict) {
     let SourceCharacter, TargetCharacter, ActivityGroup, ActivityName;
     for (let v of dict) {
-      if (v.TargetCharacter)
-        TargetCharacter = { MemberNumber: v.TargetCharacter };
-      else if (v.SourceCharacter)
-        SourceCharacter = { MemberNumber: v.SourceCharacter };
-      else if (v.FocusGroupName)
-        ActivityGroup = v.FocusGroupName;
-      else if (v.ActivityName)
-        ActivityName = v.ActivityName;
+      if (v.TargetCharacter) TargetCharacter = { MemberNumber: v.TargetCharacter };
+      else if (v.SourceCharacter) SourceCharacter = { MemberNumber: v.SourceCharacter };
+      else if (v.FocusGroupName) ActivityGroup = v.FocusGroupName;
+      else if (v.ActivityName) ActivityName = v.ActivityName;
     }
     if (SourceCharacter === void 0 || TargetCharacter === void 0 || ActivityGroup === void 0 || ActivityName === void 0)
       return void 0;
@@ -1558,8 +1135,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
   }
   __name(isSimpleChat, "isSimpleChat");
   function chatRoomAutoInterceptMessage(cur_msg, msg, source) {
-    if (!msg)
-      return;
+    if (!msg) return;
     const data = PlayerStorage().GlobalModule;
     if (data.doMessageInterruption && isSimpleChat(cur_msg)) {
       return chatRoomInterceptMessage(cur_msg, msg);
@@ -1572,8 +1148,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
   }
   __name(orgasmMessage, "orgasmMessage");
   function leaveMessage() {
-    if (isSimpleChat(ElementValue("InputChat")))
-      chatRoomAutoInterceptMessage(ElementValue("InputChat"), " ");
+    if (isSimpleChat(ElementValue("InputChat"))) chatRoomAutoInterceptMessage(ElementValue("InputChat"), " ");
   }
   __name(leaveMessage, "leaveMessage");
   function activityMessage(dict, entry) {
@@ -1604,15 +1179,13 @@ One of mods you are using is using an old version of SDK. It will work for now b
   }
   __name(sendAction, "sendAction");
   function chatRoomInterceptMessage(cur_msg, msg) {
-    if (!msg)
-      return;
+    if (!msg) return;
     ElementValue("InputChat", cur_msg + "... " + msg);
     ChatRoomSendChat();
   }
   __name(chatRoomInterceptMessage, "chatRoomInterceptMessage");
   function chatRoomNormalMessage(msg) {
-    if (!msg)
-      return;
+    if (!msg) return;
     let backupChatRoomTargetMemberNumber = ChatRoomTargetMemberNumber;
     ChatRoomSetTarget(-1);
     let oldmsg = ElementValue("InputChat");
@@ -1650,7 +1223,102 @@ One of mods you are using is using an old version of SDK. It will work for now b
   }
   __name(typedResponse, "typedResponse");
 
+  // src/Utilities/SDK.ts
+  init_define_LAST_COMMIT_HASH();
+  var import_bondage_club_mod_sdk = __toESM(require_bcmodsdk());
+
+  // src/Utilities/Console.ts
+  init_define_LAST_COMMIT_HASH();
+  var STYLES = {
+    INFO: "color: #32CCCC",
+    LOG: "color: #CCCC32",
+    DEBUG: "color: #9E4BCF"
+  };
+  function conLog(...args) {
+    if (typeof args[0] === "string") console.log(`%cBCR: ${args[0]}`, STYLES.LOG, ...args.slice(1));
+    else console.log(`%cBCR:`, STYLES.LOG, ...args);
+  }
+  __name(conLog, "conLog");
+  function conWarn(...args) {
+    if (typeof args[0] === "string") console.warn(`%cBCR: ${args[0]}`, STYLES.LOG, ...args.slice(1));
+    else console.warn(`%cBCR: `, STYLES.LOG, ...args);
+  }
+  __name(conWarn, "conWarn");
+  function conErr(...args) {
+    if (typeof args[0] === "string") console.error(`%cBCR: ${args[0]}`, STYLES.LOG, ...args.slice(1));
+    else console.error(`%cBCR:`, STYLES.LOG, ...args);
+  }
+  __name(conErr, "conErr");
+  function conDebug(...args) {
+    if (DebugMode) {
+      if (typeof args[0] === "string") console.debug(`%cBCR: ${args[0]}`, STYLES.DEBUG, ...args.slice(1));
+      else console.debug(`%cBCR:`, STYLES.LOG, ...args);
+    }
+  }
+  __name(conDebug, "conDebug");
+
+  // src/Utilities/SDK.ts
+  var SDK = import_bondage_club_mod_sdk.default.registerMod(
+    {
+      name: ModName,
+      fullName: FullModName,
+      version: MOD_VERSION_CAPTION,
+      repository: ModRepository
+    },
+    {
+      allowReplace: false
+    }
+  );
+  var patchedFunctions = /* @__PURE__ */ new Map();
+  function initPatchableFunction(target) {
+    let result = patchedFunctions.get(target);
+    if (!result) {
+      result = {
+        name: target,
+        hooks: []
+      };
+      patchedFunctions.set(target, result);
+    }
+    return result;
+  }
+  __name(initPatchableFunction, "initPatchableFunction");
+  function hookFunction(target, priority, hook, module = null) {
+    const data = initPatchableFunction(target);
+    if (data.hooks.some((h) => h.hook === hook)) {
+      conErr(`Duplicate hook for "${target}"`, hook);
+      return () => null;
+    }
+    const removeCallback = SDK.hookFunction(target, priority, hook);
+    data.hooks.push({
+      hook,
+      priority,
+      module,
+      removeCallback
+    });
+    data.hooks.sort((a, b) => b.priority - a.priority);
+    return removeCallback;
+  }
+  __name(hookFunction, "hookFunction");
+  function onActivity(priority, module, callback) {
+    hookFunction(
+      "ChatRoomMessage",
+      priority,
+      (args, next) => {
+        let data = args[0];
+        let sender = getCharacter(data.Sender);
+        if (data.Type == "Activity") callback(data, sender, data.Content, data.Dictionary);
+        next(args);
+      },
+      module
+    );
+  }
+  __name(onActivity, "onActivity");
+
+  // src/Modules/Responses.ts
+  init_define_LAST_COMMIT_HASH();
+
   // src/Utilities/Handlers.ts
+  init_define_LAST_COMMIT_HASH();
   var doesBcxAllowsTalking = /* @__PURE__ */ __name(() => {
     const isRuleWorking = /* @__PURE__ */ __name((ruleName) => {
       const rule = window.bcx.getModApi(ModName).getRuleState(ruleName);
@@ -1673,62 +1341,47 @@ One of mods you are using is using an old version of SDK. It will work for now b
     return true;
   }, "doesBcxAllowsTalking");
   var orgasmHandle = /* @__PURE__ */ __name((c) => {
-    if (!PlayerStorage().GlobalModule.ResponsiveEnabled)
-      return;
-    if (!PlayerStorage().GlobalModule.responsesEnabled)
-      return;
-    if (CurrentScreen !== "ChatRoom" || !Player)
-      return;
-    if (Player.MemberNumber !== c.MemberNumber)
-      return;
-    if (!PlayerStorage().ResponsesModule.extraResponses.orgasm)
-      return;
-    if (ActivityOrgasmRuined)
-      return;
-    if (window.bcx && !doesBcxAllowsTalking())
-      return;
+    if (!PlayerStorage().GlobalModule.ResponsiveEnabled) return;
+    if (!PlayerStorage().GlobalModule.responsesEnabled) return;
+    if (CurrentScreen !== "ChatRoom" || !Player) return;
+    if (Player.MemberNumber !== c.MemberNumber) return;
+    if (!PlayerStorage().ResponsesModule.extraResponses.orgasm) return;
+    if (ActivityOrgasmRuined) return;
+    if (window.bcx && !doesBcxAllowsTalking()) return;
     ResponsesModule.isOrgasm = true;
     orgasmMessage();
   }, "orgasmHandle");
   var activityHandle = /* @__PURE__ */ __name((dict, entry) => {
-    if (!PlayerStorage().GlobalModule.ResponsiveEnabled)
-      return;
-    if (!PlayerStorage().GlobalModule.responsesEnabled)
-      return;
-    if (CurrentScreen !== "ChatRoom" || !Player)
-      return;
-    if (dict.TargetCharacter.MemberNumber !== Player.MemberNumber)
-      return;
-    if (!entry || !entry?.responses)
-      return;
-    if (!entry.selfTrigger && dict.TargetCharacter.MemberNumber === dict.SourceCharacter.MemberNumber)
-      return;
-    if (Player.GhostList.includes(dict.SourceCharacter.MemberNumber))
-      return;
-    if (window.bcx && !doesBcxAllowsTalking())
-      return;
+    if (!PlayerStorage().GlobalModule.ResponsiveEnabled) return;
+    if (!PlayerStorage().GlobalModule.responsesEnabled) return;
+    if (CurrentScreen !== "ChatRoom" || !Player) return;
+    if (dict.TargetCharacter.MemberNumber !== Player.MemberNumber) return;
+    if (!entry || !entry?.responses) return;
+    if (!entry.selfTrigger && dict.TargetCharacter.MemberNumber === dict.SourceCharacter.MemberNumber) return;
+    if (Player.GhostList.includes(dict.SourceCharacter.MemberNumber)) return;
+    if (window.bcx && !doesBcxAllowsTalking()) return;
     activityMessage(dict, entry);
   }, "activityHandle");
   var leaveHandle = /* @__PURE__ */ __name((data) => {
-    if (!PlayerStorage().GlobalModule.ResponsiveEnabled)
-      return;
-    if (!PlayerStorage().GlobalModule.doLeaveMessage)
-      return;
-    if (CurrentScreen !== "ChatRoom" || !Player)
-      return;
-    if (!(CurrentScreen == "ChatRoom" && ChatRoomData.Name != data.ChatRoomName))
-      return;
-    if (window.bcx && !doesBcxAllowsTalking())
-      return;
+    if (!PlayerStorage().GlobalModule.ResponsiveEnabled) return;
+    if (!PlayerStorage().GlobalModule.doLeaveMessage) return;
+    if (CurrentScreen !== "ChatRoom" || !Player) return;
+    if (!(CurrentScreen == "ChatRoom" && ChatRoomData.Name != data.ChatRoomName)) return;
+    if (window.bcx && !doesBcxAllowsTalking()) return;
     leaveMessage();
   }, "leaveHandle");
 
   // src/Screens/Responses.ts
-  var _GuiResponses = class extends GuiSubscreen {
-    activityIndex = 0;
-    selfAllowed = false;
-    masterSet = false;
-    copiedEntry = {};
+  init_define_LAST_COMMIT_HASH();
+  var _GuiResponses = class _GuiResponses extends GuiSubscreen {
+    constructor() {
+      super(...arguments);
+      __publicField(this, "activityIndex", 0);
+      __publicField(this, "selfAllowed", false);
+      // to not call ActivityCanBeDoneOnSelf() every draw call;
+      __publicField(this, "masterSet", false);
+      __publicField(this, "copiedEntry", {});
+    }
     get name() {
       return "responses";
     }
@@ -1745,8 +1398,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
       return entry;
     }
     get activities() {
-      if (!Player.FocusGroup)
-        return [];
+      if (!Player.FocusGroup) return [];
       else
         return AssetActivitiesForGroup("Female3DCG", Player.FocusGroup.Name, "any").filter(
           (a) => this.activityHasDictionaryText(this.getActivityLabelTag(a, Player.FocusGroup))
@@ -1761,50 +1413,50 @@ One of mods you are using is using an old version of SDK. It will work for now b
             id: "extra_low",
             label: "responses.setting.low_response.name",
             description: "responses.setting.low_response.desc",
-            setting: () => _GuiResponses.stringListShow(this.settings?.extraResponses?.low),
-            setSetting: (val) => {
+            setting: /* @__PURE__ */ __name(() => _GuiResponses.stringListShow(this.settings?.extraResponses?.low), "setting"),
+            setSetting: /* @__PURE__ */ __name((val) => {
               this.settings.extraResponses.low = _GuiResponses.validateInput(val) ?? this.settings.extraResponses.low;
-            }
+            }, "setSetting")
           },
           {
             type: "text",
             id: "extra_light",
             label: "responses.setting.light_response.name",
             description: "responses.setting.light_response.desc",
-            setting: () => _GuiResponses.stringListShow(this.settings?.extraResponses?.light),
-            setSetting: (val) => {
+            setting: /* @__PURE__ */ __name(() => _GuiResponses.stringListShow(this.settings?.extraResponses?.light), "setting"),
+            setSetting: /* @__PURE__ */ __name((val) => {
               this.settings.extraResponses.light = _GuiResponses.validateInput(val) ?? this.settings.extraResponses.light;
-            }
+            }, "setSetting")
           },
           {
             type: "text",
             id: "extra_medium",
             label: "responses.setting.medium_response.name",
             description: "responses.setting.medium_response.desc",
-            setting: () => _GuiResponses.stringListShow(this.settings?.extraResponses?.medium),
-            setSetting: (val) => {
+            setting: /* @__PURE__ */ __name(() => _GuiResponses.stringListShow(this.settings?.extraResponses?.medium), "setting"),
+            setSetting: /* @__PURE__ */ __name((val) => {
               this.settings.extraResponses.medium = _GuiResponses.validateInput(val) ?? this.settings.extraResponses.medium;
-            }
+            }, "setSetting")
           },
           {
             type: "text",
             id: "extra_hot",
             label: "responses.setting.hot_response.name",
             description: "responses.setting.hot_response.desc",
-            setting: () => _GuiResponses.stringListShow(this.settings?.extraResponses?.hot),
-            setSetting: (val) => {
+            setting: /* @__PURE__ */ __name(() => _GuiResponses.stringListShow(this.settings?.extraResponses?.hot), "setting"),
+            setSetting: /* @__PURE__ */ __name((val) => {
               this.settings.extraResponses.hot = _GuiResponses.validateInput(val) ?? this.settings.extraResponses.hot;
-            }
+            }, "setSetting")
           },
           {
             type: "text",
             id: "extra_orgasm",
             label: "responses.setting.orgasm_response.name",
             description: "responses.setting.orgasm_response.desc",
-            setting: () => _GuiResponses.stringListShow(this.settings?.extraResponses?.orgasm),
-            setSetting: (val) => {
+            setting: /* @__PURE__ */ __name(() => _GuiResponses.stringListShow(this.settings?.extraResponses?.orgasm), "setting"),
+            setSetting: /* @__PURE__ */ __name((val) => {
               this.settings.extraResponses.orgasm = _GuiResponses.validateInput(val) ?? this.settings.extraResponses.orgasm;
-            }
+            }, "setSetting")
           }
         ]
       ];
@@ -1814,8 +1466,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
       return foundActivity?.TargetSelf ? (typeof foundActivity.TargetSelf === "boolean" ? foundActivity.Target : foundActivity.TargetSelf).includes(group) : false;
     }
     Load() {
-      if (!this.settings)
-        conDebug(`Loading Responses GUI`);
+      if (!this.settings) conDebug(`Loading Responses GUI`);
       super.Load();
       ElementCreateTextArea("mainResponses");
       this.elementHide("mainResponses");
@@ -1859,8 +1510,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
           DrawText(getText("responses.text.select_zone"), this.getXPos(0), this.getYPos(0), "Black", "White");
         }
       }
-      if (PreferencePageCurrent == 2)
-        this.elementHide("mainResponses");
+      if (PreferencePageCurrent == 2) this.elementHide("mainResponses");
       MainCanvas.textAlign = prev;
     }
     Click() {
@@ -1872,14 +1522,11 @@ One of mods you are using is using an old version of SDK. It will work for now b
           if (Group.IsItem() && !Group.MirrorActivitiesFrom && AssetActivitiesForGroup("Female3DCG", Group.Name).length) {
             const Zone = Group.Zone.find((z) => DialogClickedInZone(Player, z, 0.9, 50, 50, 1));
             if (Zone) {
-              if (Player.FocusGroup)
-                this.saveResponseEntry(this.currentResponsesEntry);
-              if (Player.FocusGroup === Group)
-                return this.deselectEntry();
+              if (Player.FocusGroup) this.saveResponseEntry(this.currentResponsesEntry);
+              if (Player.FocusGroup === Group) return this.deselectEntry();
               Player.FocusGroup = Group;
               let activities = this.activities;
-              if (this.activityIndex >= activities.length)
-                this.activityIndex = 0;
+              if (this.activityIndex >= activities.length) this.activityIndex = 0;
               this.loadResponseEntry(this.currentResponsesEntry);
             }
           }
@@ -1888,10 +1535,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
           let activities = this.activities;
           if (MouseIn(this.getXPos(0), this.getYPos(0), 600, 64)) {
             this.saveResponseEntry(this.currentResponsesEntry);
-            if (MouseX <= this.getXPos(0) + 300)
-              this.activityIndex = (activities.length + this.activityIndex - 1) % activities.length;
-            else
-              this.activityIndex = (this.activityIndex + 1) % activities.length;
+            if (MouseX <= this.getXPos(0) + 300) this.activityIndex = (activities.length + this.activityIndex - 1) % activities.length;
+            else this.activityIndex = (this.activityIndex + 1) % activities.length;
             this.loadResponseEntry(this.currentResponsesEntry);
           }
         }
@@ -1921,28 +1566,21 @@ One of mods you are using is using an old version of SDK. It will work for now b
       return this.settings?.mainResponses?.find((a) => a.actName == actName && a.groupName.includes(grpName));
     }
     activityHasDictionaryText(KeyWord) {
-      if (!ActivityDictionary)
-        ActivityDictionaryLoad();
-      if (!ActivityDictionary)
-        return;
-      for (let D = 0; D < ActivityDictionary.length; D++)
-        if (ActivityDictionary[D][0] == KeyWord)
-          return true;
+      if (!ActivityDictionary) ActivityDictionaryLoad();
+      if (!ActivityDictionary) return;
+      for (let D = 0; D < ActivityDictionary.length; D++) if (ActivityDictionary[D][0] == KeyWord) return true;
       return false;
     }
     getActivityLabelTag(activity, group) {
       let groupName = group.Name;
       if (Player.HasPenis()) {
-        if (groupName == "ItemVulva")
-          groupName = "ItemPenis";
-        if (groupName == "ItemVulvaPiercings")
-          groupName = "ItemGlans";
+        if (groupName == "ItemVulva") groupName = "ItemPenis";
+        if (groupName == "ItemVulvaPiercings") groupName = "ItemGlans";
       }
       return `Label-ChatOther-${groupName}-${activity.Name}`;
     }
     getActivityLabel(activity, group) {
-      if (!activity)
-        return "ACTIVITY NOT FOUND";
+      if (!activity) return "ACTIVITY NOT FOUND";
       let tag = this.getActivityLabelTag(activity, group);
       return ActivityDictionaryText(tag);
     }
@@ -1959,20 +1597,17 @@ One of mods you are using is using an old version of SDK. It will work for now b
       let unmerge;
       const validResponses = _GuiResponses.validateInput(responses);
       if (responses != "" && validResponses) {
-        if (!entry)
-          entry = this.createEntryIfNeeded(entry);
+        if (!entry) entry = this.createEntryIfNeeded(entry);
         if (!this.masterSet) {
           merge = this.mergeEntry(entry, validResponses);
           unmerge = this.unmergeEntry(entry, validResponses);
         }
-        if (this.masterSet || !(merge || unmerge))
-          entry.responses = validResponses ?? entry.responses;
+        if (this.masterSet || !(merge || unmerge)) entry.responses = validResponses ?? entry.responses;
         this.settings.mainResponses.sort((a, b) => a.actName.localeCompare(b.actName));
       }
     }
     clearEntry(entry) {
-      if (!entry)
-        return;
+      if (!entry) return;
       let temp = this.settings?.mainResponses?.find((ent) => ent.actName === entry.actName && ent.groupName === entry.groupName);
       if (temp?.groupName.length <= 1) {
         this.settings.mainResponses = this.settings?.mainResponses.filter((a) => {
@@ -1983,26 +1618,50 @@ One of mods you are using is using an old version of SDK. It will work for now b
       }
       this.elementSetValue("mainResponses", []);
     }
+    /**
+     * Get entry >
+     *
+     * find response that has same `actName`, that doesn't includes current `groupName` and responses are the same with current entry >
+     *
+     * push `groupName` to that response >
+     *
+     * clear current entry
+     */
     mergeEntry(entry, validResponses) {
       const stringifiedValidResponses = JSON.stringify(validResponses);
       let mergingEntry = this.settings?.mainResponses?.find((ent) => {
-        return ent.actName == this.currentAct().Name && !ent.groupName.includes(this.currentGroup().Name) && (JSON.stringify(ent.responses) === stringifiedValidResponses || ent.selfTrigger === entry.selfTrigger);
+        return ent.actName == this.currentAct().Name && // Actions are same
+        !ent.groupName.includes(this.currentGroup().Name) && // Group array don't have selected group
+        (JSON.stringify(ent.responses) === stringifiedValidResponses || // Responses are the same
+        ent.selfTrigger === entry.selfTrigger);
       });
-      if (!mergingEntry)
-        return false;
+      if (!mergingEntry) return false;
       mergingEntry.groupName.push(this.currentGroup()?.Name);
       const entr = this.settings?.mainResponses?.find((ent) => ent.actName === entry.actName && ent.groupName === entry.groupName);
       entr?.groupName?.splice(entr?.groupName?.indexOf(this.currentGroup()?.Name), 1);
       this.clearEntry(entry);
       return true;
     }
+    /**
+     * Get entry >
+     *
+     * find response that has same `actName`, that includes current `groupName` and responses are not the same with current entry >
+     *
+     * remove `groupName` from that response >
+     *
+     * create new entry with this data
+     */
     unmergeEntry(entry, validResponses) {
       const stringifiedCurrentResponses = JSON.stringify(validResponses);
       let unmergingEntry = this.settings?.mainResponses?.find((ent) => {
-        return ent.actName == this.currentAct().Name && Array.isArray(ent.groupName) && ent.groupName.length > 1 && ent.groupName.includes(this.currentGroup().Name) && (JSON.stringify(ent.responses) !== stringifiedCurrentResponses || ent.selfTrigger !== entry.selfTrigger);
+        return ent.actName == this.currentAct().Name && // Actions are same
+        Array.isArray(ent.groupName) && // Group name is type of array
+        ent.groupName.length > 1 && // Group array has more than one entry
+        ent.groupName.includes(this.currentGroup().Name) && // Group array has selected group
+        (JSON.stringify(ent.responses) !== stringifiedCurrentResponses || // Responses are not the same
+        ent.selfTrigger !== entry.selfTrigger);
       });
-      if (!unmergingEntry)
-        return false;
+      if (!unmergingEntry) return false;
       unmergingEntry.groupName.splice(unmergingEntry.groupName.indexOf(this.currentGroup()?.Name), 1);
       const newEntry = this.createNewEntry(this.currentAct().Name, this.currentGroup().Name, validResponses, entry.selfTrigger);
       this.settings.mainResponses.push(newEntry);
@@ -2028,10 +1687,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
       this.copiedEntry = entry;
     }
     pasteEntry(entry) {
-      if (Object.keys(this.copiedEntry).length === 0)
-        return;
-      if (!entry)
-        entry = this.createEntryIfNeeded(entry);
+      if (Object.keys(this.copiedEntry).length === 0) return;
+      if (!entry) entry = this.createEntryIfNeeded(entry);
       entry.responses = this.copiedEntry.responses ?? [""];
       this.loadResponseEntry(entry);
       if (_GuiResponses.activityCanBeDoneOnSelf(this.currentAct()?.Name, this.currentGroup()?.Name))
@@ -2084,8 +1741,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
     }
     elementSetValue(elementId, value) {
       let element = document.getElementById(elementId);
-      if (!!element && value != null)
-        element.value = value;
+      if (!!element && value != null) element.value = value;
     }
     elementPosition(elementId, label, description, order, disabled = false) {
       var isHovering = MouseIn(this.getXPos(order), this.getYPos(order) - 32, 600, 64);
@@ -2099,23 +1755,17 @@ One of mods you are using is using an old version of SDK. It will work for now b
         "Gray"
       );
       ElementPosition(elementId, this.getXPos(order) + 750 + 225, this.getYPos(order), 800, 64);
-      if (disabled)
-        ElementSetAttribute(elementId, "disabled", "true");
-      if (!disabled)
-        document.getElementById(elementId)?.removeAttribute("disabled");
-      if (isHovering)
-        this.tooltip(getText(description));
+      if (disabled) ElementSetAttribute(elementId, "disabled", "true");
+      if (!disabled) document.getElementById(elementId)?.removeAttribute("disabled");
+      if (isHovering) this.tooltip(getText(description));
     }
   };
-  var GuiResponses = _GuiResponses;
-  __name(GuiResponses, "GuiResponses");
-  __publicField(GuiResponses, "validateInput", (input) => {
+  __name(_GuiResponses, "GuiResponses");
+  __publicField(_GuiResponses, "validateInput", /* @__PURE__ */ __name((input) => {
     let raw = `[${input}]`;
     const validateStringList = /* @__PURE__ */ __name((input2) => {
-      if (!Array.isArray(input2))
-        return void 0;
-      if (!input2.every((_) => typeof _ === "string"))
-        return void 0;
+      if (!Array.isArray(input2)) return void 0;
+      if (!input2.every((_) => typeof _ === "string")) return void 0;
       return input2;
     }, "validateStringList");
     try {
@@ -2124,15 +1774,16 @@ One of mods you are using is using an old version of SDK. It will work for now b
     } catch (e) {
       return void 0;
     }
-  });
-  __publicField(GuiResponses, "stringListShow", (input) => {
-    if (!input || input.length === 0)
-      return "";
+  }, "validateInput"));
+  __publicField(_GuiResponses, "stringListShow", /* @__PURE__ */ __name((input) => {
+    if (!input || input.length === 0) return "";
     let result = JSON.stringify(input);
     return result.substring(1, result.length - 1);
-  });
+  }, "stringListShow"));
+  var GuiResponses = _GuiResponses;
 
   // src/Utilities/DefaultResponsesEntries.ts
+  init_define_LAST_COMMIT_HASH();
   var DefaultResponses = {
     pain: ["Aie!", "Aoouch!", "Aaaaie!", "Ouch", "Aow"],
     tickle: ["Hahaha!", "Mmmmhahaha!", "Muhahah...", "Ha!Ha!"],
@@ -2147,6 +1798,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
     let oldSettings = null;
     if (Player?.OnlineSettings?.BCResponsive?.data) {
       oldSettings = JSON.parse(
+        //@ts-ignore
         LZString.decompressFromBase64(Player?.OnlineSettings?.BCResponsive?.data)
       );
     }
@@ -2306,7 +1958,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
   __name(getDefaultResponsesEntries, "getDefaultResponsesEntries");
 
   // src/Modules/Responses.ts
-  var ResponsesModule = class extends BaseModule {
+  var _ResponsesModule = class _ResponsesModule extends BaseModule {
+    // Just for Char Talk stuff
     get settings() {
       return super.settings;
     }
@@ -2319,8 +1972,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
     Load() {
       onActivity(0 /* Observe */, 1 /* Responses */, (data, sender, msg, metadata) => {
         const dict = activityDeconstruct(metadata);
-        if (!dict)
-          return;
+        if (!dict) return;
         let entry = this.getResponsesEntry(dict?.ActivityName, dict?.ActivityGroup);
         activityHandle(dict, entry);
         conDebug(dict);
@@ -2330,10 +1982,8 @@ One of mods you are using is using an old version of SDK. It will work for now b
         1 /* AddBehavior */,
         (args, next) => {
           let data = args[0];
-          if (!data.ChatRoomName || !ChatRoomData || data.BeepType !== "Leash")
-            return next(args);
-          if (!Player.OnlineSharedSettings?.AllowPlayerLeashing)
-            return next(args);
+          if (!data.ChatRoomName || !ChatRoomData || data.BeepType !== "Leash") return next(args);
+          if (!Player.OnlineSharedSettings?.AllowPlayerLeashing) return next(args);
           leaveHandle(data);
           next(args);
         },
@@ -2355,111 +2005,537 @@ One of mods you are using is using an old version of SDK. It will work for now b
       return this.settings.mainResponses.find((ent) => ent.actName === actName && ent.groupName.includes(grpName));
     }
   };
-  __name(ResponsesModule, "ResponsesModule");
-  __publicField(ResponsesModule, "isOrgasm", false);
+  __name(_ResponsesModule, "ResponsesModule");
+  __publicField(_ResponsesModule, "isOrgasm", false);
+  var ResponsesModule = _ResponsesModule;
 
-  // src/Static/main.css
-  var main_default = ".ResponsiveMessageContent {\r\n  display: inline;\r\n}\r\n\r\n.ResponsiveVersion {\r\n  font-weight: bold;\r\n  color: rgb(203, 185, 23);\r\n}\r\n\r\n#TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.ResponsiveMessage,\r\n#TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.ResponsiveMessage {\r\n  background-color: #111;\r\n  border: 2px solid #440171;\r\n  padding-left: 5px;\r\n  display: block;\r\n  white-space: normal;\r\n  color: #eee;\r\n}\r\n\r\n#TextAreaChatLog div.ChatMessage.ResponsiveMessage {\r\n  background-color: #eee;\r\n  border: 2px solid #440171;\r\n  padding-left: 5px;\r\n  display: block;\r\n  white-space: wrap;\r\n  color: #111;\r\n}\r\n\r\n#TextAreaChatLog[data-colortheme='dark'] a.ResponsiveText,\r\n#TextAreaChatLog[data-colortheme='dark2'] a.ResponsiveText {\r\n  cursor: pointer;\r\n  font-weight: bold;\r\n  color: #eee;\r\n}\r\n\r\n#TextAreaChatLog a.ResponsiveText {\r\n  cursor: pointer;\r\n  font-weight: bold;\r\n  color: #111;\r\n}\r\n\r\n#ResponsiveGratitude {\r\n  position: fixed;\r\n  width: 25%;\r\n  height: 50%;\r\n  top: 15%;\r\n  left: 50%;\r\n}\r\n\r\n.ResponsiveH {\r\n  font-size: 1em;\r\n  color: #333;\r\n}\r\n\r\n.ResponsiveP {\r\n  font-size: 0.6em;\r\n  color: #555;\r\n  line-height: 1.5;\r\n}\r\n\r\n.ResponsiveP:last-child {\r\n  font-size: 0.8em;\r\n  color: #ff69b4;\r\n}\r\n";
+  // src/Modules/CharTalk.ts
+  var letterExpressionMap = [
+    { regex: /[.?!…~]/, expr: [null, 600] },
+    { regex: /[,;]/, expr: [null, 250] },
+    //Latin
+    { regex: /[a]/, expr: ["Open", 400] },
+    { regex: /[oeu]/, expr: ["HalfOpen", 300] },
+    { regex: /[bp]/, expr: [null, 200] },
+    { regex: /[mn]/, expr: [null, 500] },
+    { regex: /[ij]/, expr: ["Smirk", 400] },
+    { regex: /[kqrw]/, expr: ["HalfOpen", 300] },
+    { regex: /[fv]/, expr: ["LipBite", 300] },
+    { regex: /[cdt]/, expr: ["TonguePinch", 200] },
+    { regex: /[slz]/, expr: ["TonguePinch", 400] },
+    { regex: /[ghx]/, expr: ["Angry", 300] },
+    //Cyrillic
+    { regex: /[ая]/, expr: ["Open", 400] },
+    { regex: /[оеуєю]/, expr: ["HalfOpen", 300] },
+    { regex: /[бп]/, expr: [null, 200] },
+    { regex: /[мн]/, expr: [null, 500] },
+    { regex: /[иіжїы]/, expr: ["Smirk", 400] },
+    { regex: /[yкр]/, expr: ["HalfOpen", 300] },
+    { regex: /[фв]/, expr: ["LipBite", 300] },
+    { regex: /[цдт]/, expr: ["TonguePinch", 200] },
+    { regex: /[слз]/, expr: ["TonguePinch", 400] },
+    { regex: /[гх]/, expr: ["Angry", 300] }
+  ];
+  var _CharTalkModule = class _CharTalkModule extends BaseModule {
+    Load() {
+      ChatRoomRegisterMessageHandler({
+        Description: "Processes mouth moving on the client",
+        Priority: 500,
+        Callback: /* @__PURE__ */ __name((data, sender, msg, metadata) => {
+          if (data.Type == "Chat") {
+            _CharTalkModule.charTalkHandle(sender, msg);
+            return false;
+          }
+        }, "Callback")
+      });
+      hookFunction(
+        "CommonDrawAppearanceBuild",
+        0 /* Observe */,
+        (args, next) => {
+          const c = args[0];
+          if (!_CharTalkModule.animation?.[c.MemberNumber]) return next(args);
+          const mouth = InventoryGet(c, "Mouth");
+          if (!mouth) return next(args);
+          if (!mouth.Property) mouth.Property = {};
+          const realExpression = mouth?.Property?.Expression || null;
+          mouth.Property.Expression = _CharTalkModule.currentExpression?.[c.MemberNumber] || null;
+          const returnValue = next(args);
+          mouth.Property.Expression = realExpression;
+          return returnValue;
+        },
+        3 /* CharTalk */
+      );
+    }
+    /**
+     * Gets the sent message, checks it for validity,
+     * then splits it in chunks and turns it into a list of expression changes
+     * before pushing them into the animator.
+     */
+    static animateSpeech(c, msg) {
+      const chunks = _CharTalkModule.chunkSubstr(msg, 3);
+      const animation = chunks.map((chunk) => {
+        const match = letterExpressionMap.find(({ regex }) => regex.test(chunk)) ?? { expr: [null, 200] };
+        return match.expr;
+      });
+      _CharTalkModule.runExpressionAnimation(c, animation);
+    }
+    /**
+     * Runs animation by changing mouth expression every `step[1]`ms
+     */
+    static runExpressionAnimationStep(c) {
+      if (!_CharTalkModule.animation?.[c.MemberNumber]) return;
+      let step = _CharTalkModule.animation[c.MemberNumber][_CharTalkModule.animationFrame++];
+      _CharTalkModule.setLocalMouthExpression(c, step?.[0]);
+      if (_CharTalkModule.animationFrame < _CharTalkModule.animation?.[c.MemberNumber].length) {
+        setTimeout(() => _CharTalkModule.runExpressionAnimationStep(c), step[1]);
+      } else {
+        delete _CharTalkModule.animation[c.MemberNumber];
+      }
+    }
+    static runExpressionAnimation(c, list) {
+      if (_CharTalkModule.animation?.[c.MemberNumber]) return;
+      _CharTalkModule.animation[c.MemberNumber] = list;
+      _CharTalkModule.animationFrame = 0;
+      const mouth = InventoryGet(c, "Mouth")?.Property;
+      if (mouth?.Expression && _CharTalkModule.animation[c.MemberNumber] !== null) {
+        _CharTalkModule.animation?.[c.MemberNumber].push([mouth?.Expression, 0]);
+      }
+      _CharTalkModule.runExpressionAnimationStep(c);
+    }
+    /**
+     * Splits a string into chunks of "size" length
+     */
+    static chunkSubstr(str, size) {
+      const numChunks = Math.ceil(str.length / size);
+      const chunks = new Array(numChunks);
+      for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+        chunks[i] = str.substring(o, o + size);
+      }
+      return chunks;
+    }
+    static setLocalMouthExpression(c, expressionName) {
+      const mouth = InventoryGet(c, "Mouth");
+      if (expressionName != null && !mouth.Asset.Group.AllowExpression.includes(expressionName)) return;
+      _CharTalkModule.currentExpression[c.MemberNumber] = expressionName;
+      CharacterRefresh(c, false);
+    }
+  };
+  __name(_CharTalkModule, "CharTalkModule");
+  __publicField(_CharTalkModule, "doAnimateMouth", true);
+  /**
+   * The list of expressions to animate with their duration.
+   */
+  __publicField(_CharTalkModule, "animation", {});
+  __publicField(_CharTalkModule, "currentExpression", {});
+  __publicField(_CharTalkModule, "animationFrame", 0);
+  __publicField(_CharTalkModule, "charTalkHandle", /* @__PURE__ */ __name((c, msg) => {
+    if (!PlayerStorage().GlobalModule.ResponsiveEnabled) return;
+    if (!PlayerStorage().GlobalModule.CharTalkEnabled) return;
+    if (!c) return;
+    const fIsSimpleChat = !!isSimpleChat(msg);
+    if (fIsSimpleChat && _CharTalkModule.doAnimateMouth && c == Player && !ResponsesModule.isOrgasm) {
+      _CharTalkModule.animateSpeech(c, msg);
+    } else if (fIsSimpleChat && _CharTalkModule.doAnimateMouth && c != Player) {
+      _CharTalkModule.animateSpeech(c, msg);
+    }
+    if (!fIsSimpleChat) {
+      _CharTalkModule.doAnimateMouth = false;
+      return;
+    }
+    if (fIsSimpleChat && !_CharTalkModule.doAnimateMouth) {
+      _CharTalkModule.doAnimateMouth = true;
+      _CharTalkModule.animateSpeech(c, msg);
+    }
+    if (ResponsesModule.isOrgasm) {
+      ResponsesModule.isOrgasm = false;
+    }
+  }, "charTalkHandle"));
+  var CharTalkModule = _CharTalkModule;
+
+  // src/Modules/Global.ts
+  init_define_LAST_COMMIT_HASH();
+
+  // src/Screens/Global.ts
+  init_define_LAST_COMMIT_HASH();
+  var _GuiGlobal = class _GuiGlobal extends GuiSubscreen {
+    get name() {
+      return "settings";
+    }
+    get icon() {
+      return "Icons/Preference.png";
+    }
+    get settings() {
+      return super.settings;
+    }
+    get structure() {
+      return [
+        {
+          type: "checkbox",
+          label: "settings.setting.responsive_enabled.name",
+          description: "settings.setting.responsive_enabled.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.ResponsiveEnabled ?? true, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.ResponsiveEnabled = val, "setSetting")
+        },
+        {
+          type: "checkbox",
+          label: "settings.setting.responsesEnabled.name",
+          description: "settings.setting.responsesEnabled.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.responsesEnabled ?? true, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.responsesEnabled = val, "setSetting")
+        },
+        {
+          type: "checkbox",
+          label: "settings.setting.chartalk_enabled.name",
+          description: "settings.setting.chartalk_enabled.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.CharTalkEnabled ?? true, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.CharTalkEnabled = val, "setSetting")
+        },
+        {
+          type: "checkbox",
+          label: "settings.setting.interruption_enabled.name",
+          description: "settings.setting.interruption_enabled.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.doMessageInterruption ?? true, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.doMessageInterruption = val, "setSetting")
+        },
+        {
+          type: "checkbox",
+          label: "settings.setting.leave_message_enabled.name",
+          description: "settings.setting.leave_message_enabled.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.doLeaveMessage ?? true, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.doLeaveMessage = val, "setSetting")
+        },
+        {
+          type: "checkbox",
+          label: "settings.setting.doPreventMessageIfBcxBlock.name",
+          description: "settings.setting.doPreventMessageIfBcxBlock.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.doPreventMessageIfBcxBlock ?? false, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.doPreventMessageIfBcxBlock = val, "setSetting")
+        },
+        {
+          type: "checkbox",
+          label: "settings.setting.new_version_message_enabled.name",
+          description: "settings.setting.new_version_message_enabled.desc",
+          setting: /* @__PURE__ */ __name(() => this.settings?.doShowNewVersionMessage ?? true, "setting"),
+          setSetting: /* @__PURE__ */ __name((val) => this.settings.doShowNewVersionMessage = val, "setSetting")
+        }
+      ];
+    }
+    Load() {
+      super.Load();
+    }
+  };
+  __name(_GuiGlobal, "GuiGlobal");
+  var GuiGlobal = _GuiGlobal;
+
+  // src/Modules/Global.ts
+  var _GlobalModule = class _GlobalModule extends BaseModule {
+    get settingsScreen() {
+      return GuiGlobal;
+    }
+    get settings() {
+      return super.settings;
+    }
+    get defaultSettings() {
+      return {
+        ResponsiveEnabled: true,
+        responsesEnabled: true,
+        CharTalkEnabled: true,
+        doShowNewVersionMessage: true,
+        doLeaveMessage: true,
+        //doAddMoansOnHighArousal: true,
+        doPreventMessageIfBcxBlock: false,
+        doMessageInterruption: true
+      };
+    }
+    Load() {
+    }
+    Run() {
+    }
+  };
+  __name(_GlobalModule, "GlobalModule");
+  var GlobalModule = _GlobalModule;
+
+  // src/Modules/Profiles.ts
+  init_define_LAST_COMMIT_HASH();
+
+  // src/Screens/Profiles.ts
+  init_define_LAST_COMMIT_HASH();
+  var _GuiProfiles = class _GuiProfiles extends GuiSubscreen {
+    constructor() {
+      super(...arguments);
+      __publicField(this, "PreferenceText", "");
+      __publicField(this, "ProfileNames", ["", "", ""]);
+      __publicField(this, "tmpGlbl", GuiSubscreen.START_X);
+    }
+    get name() {
+      return "profiles";
+    }
+    get icon() {
+      return "Icons/Title.png";
+    }
+    get settings() {
+      return super.settings;
+    }
+    Load() {
+      super.Load();
+      for (let i = 0; i < 3; i++) {
+        let profileIndex = i + 1;
+        if (!PlayerStorage()?.ProfilesModule?.[profileIndex]) {
+          PlayerStorage().ProfilesModule[profileIndex] = {
+            data: {},
+            name: ""
+          };
+        }
+        this.ProfileNames[i] = PlayerStorage()?.ProfilesModule?.[profileIndex]?.name ?? "";
+      }
+      CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
+    }
+    Run() {
+      let prev = MainCanvas.textAlign;
+      super.Run();
+      MainCanvas.textAlign = "left";
+      for (let i = 0; i < 3; i++) {
+        let profileIndex = i + 1;
+        if (this.ProfileNames[i] === "")
+          DrawText(getText("profiles.text.profile") + ` ${profileIndex}`, this.getXPos(profileIndex), this.getYPos(profileIndex), "Black", "Gray");
+        if (this.ProfileNames[i] !== "")
+          DrawText(this.ProfileNames[i], this.getXPos(profileIndex), this.getYPos(profileIndex), "Black", "Gray");
+        this.drawButton("profiles.button.save", "white", profileIndex, 250);
+        this.drawButton("profiles.button.load", "white", profileIndex, 500);
+        this.drawButton("profiles.button.delete", "IndianRed", profileIndex, 750);
+      }
+      if (this.PreferenceText)
+        DrawText(this.PreferenceText, GuiSubscreen.START_X + 250, GuiSubscreen.START_Y - GuiSubscreen.Y_MOD, "Black", "Gray");
+      MainCanvas.textAlign = prev;
+    }
+    Click() {
+      super.Click();
+      for (let i = 0; i < 3; i++) {
+        let profileIndex = i + 1;
+        this.handleProfilesSaving(profileIndex);
+        this.handleProfilesLoading(profileIndex);
+        this.handleProfilesDeleting(profileIndex);
+      }
+    }
+    Exit() {
+      CharacterAppearanceForceUpCharacter = -1;
+      CharacterLoadCanvas(Player);
+      this.PreferenceText = "";
+      super.Exit();
+    }
+    saveProfile(profileId, profileName) {
+      if (profileId < 1 || profileId > 3) {
+        conWarn(`Invalid profile id ${profileId}`);
+        return false;
+      }
+      if (!Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
+        PlayerStorage().ProfilesModule[profileId] = {};
+      }
+      let saveData = {
+        GlobalModule: PlayerStorage().GlobalModule,
+        ResponsesModule: PlayerStorage().ResponsesModule
+      };
+      PlayerStorage().ProfilesModule[profileId] = {
+        name: profileName,
+        data: saveData
+      };
+      return true;
+    }
+    loadProfile(profileId) {
+      if (profileId < 1 || profileId > 3) {
+        conWarn(`Invalid profile id ${profileId}`);
+        return false;
+      }
+      if (!Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
+        return false;
+      }
+      let data = PlayerStorage().ProfilesModule[profileId].data;
+      if (!data) {
+        return false;
+      }
+      if (data) {
+        PlayerStorage().GlobalModule = data.GlobalModule;
+        PlayerStorage().ResponsesModule = data.ResponsesModule;
+      }
+      return true;
+    }
+    deleteProfile(profileId) {
+      if (profileId < 1 || profileId > 3) {
+        conWarn(`Invalid profile id ${profileId}`);
+        return false;
+      }
+      if (!Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
+        return false;
+      }
+      if (Object.keys(PlayerStorage()?.ProfilesModule?.[profileId]).length) {
+        PlayerStorage().ProfilesModule[profileId] = {};
+        return true;
+      }
+    }
+    handleProfilesSaving(profileIndex) {
+      let formerIndex = profileIndex - 1;
+      if (MouseIn(this.getXPos(profileIndex) + 250, this.getYPos(profileIndex) - 32, 200, 64)) {
+        let promptedName = prompt(getText("profiles.prompt"));
+        if (promptedName === null) return;
+        this.ProfileNames[formerIndex] = promptedName;
+        if (this.ProfileNames[formerIndex] === "") {
+          this.saveProfile(profileIndex, "");
+          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.has_been_saved")}`;
+        }
+        if (this.ProfileNames[formerIndex] !== "") {
+          this.saveProfile(profileIndex, this.ProfileNames[formerIndex]);
+          this.PreferenceText = `${getText("profiles.text.profile")} "${this.ProfileNames[formerIndex]}" ${getText(
+            "profiles.text.has_been_saved"
+          )}`;
+        }
+        return;
+      }
+    }
+    handleProfilesLoading(profileIndex) {
+      let formerIndex = profileIndex - 1;
+      if (MouseIn(this.getXPos(profileIndex) + 500, this.getYPos(profileIndex) - 32, 200, 64)) {
+        if (!this.loadProfile(profileIndex)) {
+          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.needs_to_be_saved")}`;
+          return;
+        }
+        if (this.ProfileNames[formerIndex] === "")
+          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.has_been_loaded")}`;
+        if (this.ProfileNames[formerIndex] !== "")
+          this.PreferenceText = `${getText("profiles.text.profile")} "${this.ProfileNames[formerIndex]}" ${getText(
+            "profiles.text.has_been_loaded"
+          )}`;
+        return;
+      }
+    }
+    handleProfilesDeleting(profileIndex) {
+      let formerIndex = profileIndex - 1;
+      if (MouseIn(this.getXPos(profileIndex) + 750, this.getYPos(profileIndex) - 32, 200, 64)) {
+        if (this.ProfileNames[formerIndex] === null) return;
+        if (this.deleteProfile(profileIndex)) {
+          if (this.ProfileNames[formerIndex] === "") {
+            this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.has_been_deleted")}`;
+            return;
+          }
+          if (this.ProfileNames[formerIndex] !== "") {
+            this.PreferenceText = `${getText("profiles.text.profile")} "${this.ProfileNames[formerIndex]}" ${getText(
+              "profiles.text.has_been_deleted"
+            )}`;
+            this.ProfileNames[formerIndex] = "";
+            return;
+          }
+        }
+        if (!this.deleteProfile(profileIndex)) {
+          this.PreferenceText = `${getText("profiles.text.profile")} ${profileIndex} ${getText("profiles.text.not_saved_or_already_deleted")}`;
+          return;
+        }
+        return;
+      }
+    }
+  };
+  __name(_GuiProfiles, "GuiProfiles");
+  var GuiProfiles = _GuiProfiles;
+
+  // src/Modules/Profiles.ts
+  var _ProfilesModule = class _ProfilesModule extends BaseModule {
+    get settings() {
+      return super.settings;
+    }
+    get settingsScreen() {
+      return GuiProfiles;
+    }
+    get defaultSettings() {
+      return {};
+    }
+    Load() {
+    }
+    Run() {
+    }
+  };
+  __name(_ProfilesModule, "ProfilesModule");
+  var ProfilesModule = _ProfilesModule;
+
+  // src/Modules/Version.ts
+  init_define_LAST_COMMIT_HASH();
 
   // src/Utilities/Messages.ts
-  var BCR_CMDS = `
+  init_define_LAST_COMMIT_HASH();
+  var BCR_CMDS = (
+    /*html*/
+    `
   <div class="ResponsiveMessageContent">
     <b style='color:#440171; text-shadow: 0.05em 0.05em #690092;'>BC Responsive</b>: Available commands (Clickable)
     <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_TOGGLE}")'>Toggle Responsive</a>
     <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_CHANGELOG}")'>Show Changelog</a>
     <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_VERSION}")'>Show Version</a><br>
-    <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_FIX_DATA}")'>Fix Data</a>
     <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_DEBUG_DATA}")'>Debug Data</a><br>
     <br><a href='https://github.com/dDeepLb/BC-Responsive/wiki' target='_blank'><b>Open Wiki</b></a>
   </div>
-  `;
-  var BCR_NEW_VERSION = `
+  `
+  );
+  var BCR_NEW_VERSION = (
+    /*html*/
+    `
   <div class='ResponsiveMessageContent'>
-    <b style='color:#690092; text-shadow: 0.05em 0.05em #440171;'>BC Responsive</b><b>: New Version!</b> [${ModVersion}]<br>
+    <b style='color:#690092; text-shadow: 0.05em 0.05em #440171;'>BC Responsive</b><b>: New Version!</b> [${MOD_VERSION_CAPTION}]<br>
     <br><b style='color:#CC3232; text-shadow: 0.05em 0.05em #920009;'>Please, reload your page~</b><br>
     <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_CHANGELOG}")'><b>Changelog (Click)</b></a>
     <br><a class="ResponsiveText" onClick='window.CommandSet("${CMD_BCR}")'><b>Show Help (Click)</b></a>
   </div>
- `;
-  var BCR_VERSION_MSG = `
-  <p class='ResponsiveMessageContent'>Current version of <b style='color:#690092; text-shadow: 0.05em 0.05em #440171;'>BC Responsive: v${ModVersion}</b></p>
-  `;
-  var BCR_TOGGLE_ENABLED = `
+ `
+  );
+  var BCR_VERSION_MSG = (
+    /*html*/
+    `
+  <p class='ResponsiveMessageContent'>Current version of <b style='color:#690092; text-shadow: 0.05em 0.05em #440171;'>BC Responsive: v${MOD_VERSION_CAPTION}</b></p>
+  `
+  );
+  var BCR_TOGGLE_ENABLED = (
+    /*html*/
+    `
     <p class='ResponsiveMessageContent'><b>BC Responsive</b> has been enabled</p>
-    `;
-  var BCR_TOGGLE_DISABLED = `
+    `
+  );
+  var BCR_TOGGLE_DISABLED = (
+    /*html*/
+    `
     <p class='ResponsiveMessageContent'><b>BC Responsive</b> has been disabled</p>
-    `;
-  var BCR_CHANGELOG = `
+    `
+  );
+  var BCR_CHANGELOG = (
+    /*html*/
+    `
   <div class="ResponsiveMessageContent">
+    <b class="ResponsiveVersion">0.6.5</b>
+    <br>\u2022 Move mod button to Extensions Settings. Preferences > Extensions > Responsive Settings.
+    <br>\u2022 Fixed crash in some cases by automating data repairing.<br>
+
     <b class="ResponsiveVersion">0.6.4</b>
     <br>\u2022 Fixed Character Talk wasn't working.<br>
 
     <b class="ResponsiveVersion">0.6.3</b>
     <br>\u2022 Fixed bug introduced in R104.
     <br>\u2022 Removed feature to add moans on high arousal.<br>
-    
-    <b class="ResponsiveVersion">0.6.2</b>
-    <br>\u2022 Added Chinese Translation by XiaoSu (\u5C0F\u9165).
-    <br>\u2022 Added missing translation tags in Responses Menu.<br>
   </div>
 
   <br><a href='https://github.com/dDeepLb/BC-Responsive/wiki/Full-Changelog' target='_blank'><b>Full Changelog (Click)</b></a>
-  `;
+  `
+  );
   function sendLocalSmart(id, message, timeoutInSeconds) {
     const div = document.createElement("div");
     div.id = id;
     div.setAttribute("class", "ChatMessage ResponsiveMessage");
     div.setAttribute("data-time", ChatRoomCurrentTime());
     div.setAttribute("data-sender", Player?.MemberNumber + "");
-    div.innerHTML = message.replaceAll("\n	", "") + `<br><a class="ResponsiveText" onClick='document.getElementById("${id}").remove();'><b>Close (Click)</b></a>`;
+    div.innerHTML = message.replaceAll("\n	", "") + /*html*/
+    `<br><a class="ResponsiveText" onClick='document.getElementById("${id}").remove();'><b>Close (Click)</b></a>`;
     ChatRoomAppendChat(div);
-    if (!timeoutInSeconds)
-      return;
+    if (!timeoutInSeconds) return;
     setTimeout(() => div?.remove(), timeoutInSeconds * 1e3);
   }
   __name(sendLocalSmart, "sendLocalSmart");
 
-  // src/Utilities/Commands.ts
-  function loadCommands() {
-    CommandCombine({
-      Tag: CMD_BCR,
-      Description: ": To open the Responsive commands overview.",
-      Action: (args, command, parsed) => {
-        switch (args) {
-          case "toggle":
-            const data = PlayerStorage().GlobalModule;
-            data.ResponsiveEnabled = !data.ResponsiveEnabled;
-            if (data.ResponsiveEnabled) {
-              sendLocalSmart("bcr_toggle_enb", BCR_TOGGLE_ENABLED, MT.INFO);
-            }
-            if (!data.ResponsiveEnabled) {
-              sendLocalSmart("bcr_toggle_dis", BCR_TOGGLE_DISABLED, MT.INFO);
-            }
-            break;
-          case "changelog":
-            sendLocalSmart("bcr_clog", BCR_CHANGELOG);
-            break;
-          case "version":
-            sendLocalSmart("bcr_ver", BCR_VERSION_MSG, MT.INFO);
-            break;
-          case "debug-data":
-            navigator.clipboard.writeText(LZString.compressToBase64(JSON.stringify(Player.Responsive)));
-            break;
-          case "data-fix":
-            dataFix();
-            break;
-          default:
-            sendLocalSmart("bcr_cmds", BCR_CMDS, MT.COMMANDS);
-            break;
-        }
-      }
-    });
-  }
-  __name(loadCommands, "loadCommands");
-
   // src/Modules/Version.ts
-  var _VersionModule = class extends BaseModule {
+  var _VersionModule = class _VersionModule extends BaseModule {
     Load() {
       hookFunction(
         "ChatRoomSync",
@@ -2495,7 +2571,7 @@ One of mods you are using is using an old version of SDK. It will work for now b
     }
     static saveVersion() {
       if (PlayerStorage()) {
-        PlayerStorage().Version = ModVersion;
+        PlayerStorage().Version = "0.6.5";
       }
     }
     static loadVersion() {
@@ -2506,151 +2582,51 @@ One of mods you are using is using an old version of SDK. It will work for now b
     }
     static checkIfNewVersion() {
       let LoadedVersion = _VersionModule.loadVersion();
-      if (_VersionModule.isNewVersion(LoadedVersion, ModVersion)) {
+      if (_VersionModule.isNewVersion(LoadedVersion, "0.6.5")) {
         _VersionModule.isItNewVersion = true;
       }
       _VersionModule.saveVersion();
     }
   };
+  __name(_VersionModule, "VersionModule");
+  __publicField(_VersionModule, "isItNewVersion", false);
   var VersionModule = _VersionModule;
-  __name(VersionModule, "VersionModule");
-  __publicField(VersionModule, "isItNewVersion", false);
 
-  // src/Modules/CharTalk.ts
-  var letterExpressionMap = [
-    { regex: /[.?!…~]/, expr: [null, 600] },
-    { regex: /[,;]/, expr: [null, 250] },
-    { regex: /[a]/, expr: ["Open", 400] },
-    { regex: /[oeu]/, expr: ["HalfOpen", 300] },
-    { regex: /[bp]/, expr: [null, 200] },
-    { regex: /[mn]/, expr: [null, 500] },
-    { regex: /[ij]/, expr: ["Smirk", 400] },
-    { regex: /[kqrw]/, expr: ["HalfOpen", 300] },
-    { regex: /[fv]/, expr: ["LipBite", 300] },
-    { regex: /[cdt]/, expr: ["TonguePinch", 200] },
-    { regex: /[slz]/, expr: ["TonguePinch", 400] },
-    { regex: /[ghx]/, expr: ["Angry", 300] },
-    { regex: /[ая]/, expr: ["Open", 400] },
-    { regex: /[оеуєю]/, expr: ["HalfOpen", 300] },
-    { regex: /[бп]/, expr: [null, 200] },
-    { regex: /[мн]/, expr: [null, 500] },
-    { regex: /[иіжїы]/, expr: ["Smirk", 400] },
-    { regex: /[yкр]/, expr: ["HalfOpen", 300] },
-    { regex: /[фв]/, expr: ["LipBite", 300] },
-    { regex: /[цдт]/, expr: ["TonguePinch", 200] },
-    { regex: /[слз]/, expr: ["TonguePinch", 400] },
-    { regex: /[гх]/, expr: ["Angry", 300] }
-  ];
-  var _CharTalkModule = class extends BaseModule {
-    Load() {
-      ChatRoomRegisterMessageHandler({
-        Description: "Processes mouth moving on the client",
-        Priority: 500,
-        Callback: (data, sender, msg, metadata) => {
-          if (data.Type == "Chat") {
-            _CharTalkModule.charTalkHandle(sender, msg);
-            return false;
-          }
+  // src/Utilities/Commands.ts
+  init_define_LAST_COMMIT_HASH();
+  function loadCommands() {
+    CommandCombine({
+      Tag: CMD_BCR,
+      Description: ": To open the Responsive commands overview.",
+      Action: /* @__PURE__ */ __name((args, command, parsed) => {
+        switch (args) {
+          case "toggle":
+            const data = PlayerStorage().GlobalModule;
+            data.ResponsiveEnabled = !data.ResponsiveEnabled;
+            if (data.ResponsiveEnabled) {
+              sendLocalSmart("bcr_toggle_enb", BCR_TOGGLE_ENABLED, MT.INFO);
+            }
+            if (!data.ResponsiveEnabled) {
+              sendLocalSmart("bcr_toggle_dis", BCR_TOGGLE_DISABLED, MT.INFO);
+            }
+            break;
+          case "changelog":
+            sendLocalSmart("bcr_clog", BCR_CHANGELOG);
+            break;
+          case "version":
+            sendLocalSmart("bcr_ver", BCR_VERSION_MSG, MT.INFO);
+            break;
+          case "debug-data":
+            navigator.clipboard.writeText(LZString.compressToBase64(JSON.stringify(Player.Responsive)));
+            break;
+          default:
+            sendLocalSmart("bcr_cmds", BCR_CMDS, MT.COMMANDS);
+            break;
         }
-      });
-      hookFunction(
-        "CommonDrawAppearanceBuild",
-        0 /* Observe */,
-        (args, next) => {
-          const c = args[0];
-          if (!_CharTalkModule.animation?.[c.MemberNumber])
-            return next(args);
-          const mouth = InventoryGet(c, "Mouth");
-          if (!mouth)
-            return next(args);
-          if (!mouth.Property)
-            mouth.Property = {};
-          const realExpression = mouth?.Property?.Expression || null;
-          mouth.Property.Expression = _CharTalkModule.currentExpression?.[c.MemberNumber] || null;
-          const returnValue = next(args);
-          mouth.Property.Expression = realExpression;
-          return returnValue;
-        },
-        3 /* CharTalk */
-      );
-    }
-    static animateSpeech(c, msg) {
-      const chunks = _CharTalkModule.chunkSubstr(msg, 3);
-      const animation = chunks.map((chunk) => {
-        const match = letterExpressionMap.find(({ regex }) => regex.test(chunk)) ?? { expr: [null, 200] };
-        return match.expr;
-      });
-      _CharTalkModule.runExpressionAnimation(c, animation);
-    }
-    static runExpressionAnimationStep(c) {
-      if (!_CharTalkModule.animation?.[c.MemberNumber])
-        return;
-      let step = _CharTalkModule.animation[c.MemberNumber][_CharTalkModule.animationFrame++];
-      _CharTalkModule.setLocalMouthExpression(c, step?.[0]);
-      if (_CharTalkModule.animationFrame < _CharTalkModule.animation?.[c.MemberNumber].length) {
-        setTimeout(() => _CharTalkModule.runExpressionAnimationStep(c), step[1]);
-      } else {
-        delete _CharTalkModule.animation[c.MemberNumber];
-      }
-    }
-    static runExpressionAnimation(c, list) {
-      if (_CharTalkModule.animation?.[c.MemberNumber])
-        return;
-      _CharTalkModule.animation[c.MemberNumber] = list;
-      _CharTalkModule.animationFrame = 0;
-      const mouth = InventoryGet(c, "Mouth")?.Property;
-      if (mouth?.Expression && _CharTalkModule.animation[c.MemberNumber] !== null) {
-        _CharTalkModule.animation?.[c.MemberNumber].push([mouth?.Expression, 0]);
-      }
-      _CharTalkModule.runExpressionAnimationStep(c);
-    }
-    static chunkSubstr(str, size) {
-      const numChunks = Math.ceil(str.length / size);
-      const chunks = new Array(numChunks);
-      for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
-        chunks[i] = str.substring(o, o + size);
-      }
-      return chunks;
-    }
-    static setLocalMouthExpression(c, expressionName) {
-      const mouth = InventoryGet(c, "Mouth");
-      if (expressionName != null && !mouth.Asset.Group.AllowExpression.includes(expressionName))
-        return;
-      _CharTalkModule.currentExpression[c.MemberNumber] = expressionName;
-      CharacterRefresh(c, false);
-    }
-  };
-  var CharTalkModule = _CharTalkModule;
-  __name(CharTalkModule, "CharTalkModule");
-  __publicField(CharTalkModule, "doAnimateMouth", true);
-  __publicField(CharTalkModule, "animation", {});
-  __publicField(CharTalkModule, "currentExpression", {});
-  __publicField(CharTalkModule, "animationFrame", 0);
-  __publicField(CharTalkModule, "charTalkHandle", (c, msg) => {
-    if (!PlayerStorage().GlobalModule.ResponsiveEnabled)
-      return;
-    if (!PlayerStorage().GlobalModule.CharTalkEnabled)
-      return;
-    if (!c)
-      return;
-    const fIsSimpleChat = !!isSimpleChat(msg);
-    if (fIsSimpleChat && _CharTalkModule.doAnimateMouth && c == Player && !ResponsesModule.isOrgasm) {
-      _CharTalkModule.animateSpeech(c, msg);
-    } else if (fIsSimpleChat && _CharTalkModule.doAnimateMouth && c != Player) {
-      _CharTalkModule.animateSpeech(c, msg);
-    }
-    if (!fIsSimpleChat) {
-      _CharTalkModule.doAnimateMouth = false;
-      return;
-    }
-    if (fIsSimpleChat && !_CharTalkModule.doAnimateMouth) {
-      _CharTalkModule.doAnimateMouth = true;
-      _CharTalkModule.animateSpeech(c, msg);
-    }
-    if (ResponsesModule.isOrgasm) {
-      ResponsesModule.isOrgasm = false;
-    }
-  });
+      }, "Action")
+    });
+  }
+  __name(loadCommands, "loadCommands");
 
   // src/Responsive.ts
   function initWait() {
@@ -2670,12 +2646,10 @@ One of mods you are using is using an old version of SDK. It will work for now b
     }
   }
   __name(initWait, "initWait");
-  function init() {
-    if (window.ResponsiveLoaded)
-      return;
-    Localization.load();
+  async function init() {
+    if (window.ResponsiveLoaded) return;
+    await Localization.load();
     injectStyle(main_default, "bcr_style");
-    RibbonMenu.registerMod("Responsive");
     dataTake();
     loadCommands();
     if (!initModules()) {
@@ -2683,10 +2657,11 @@ One of mods you are using is using an old version of SDK. It will work for now b
       return;
     }
     clearOldData();
+    dataFix();
     VersionModule.checkIfNewVersion();
     dataStore();
     window.ResponsiveLoaded = true;
-    conLog(`Loaded! Version: ${ModVersion}`);
+    conLog(`Loaded! Version: ${MOD_VERSION_CAPTION}`);
   }
   __name(init, "init");
   function initModules() {
