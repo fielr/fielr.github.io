@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.9
+// @version      1.4.10
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -33,7 +33,7 @@ var MagicButton = (function (exports) {
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.9'
+	    version: '1.4.10'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -257,9 +257,9 @@ var MagicButton = (function (exports) {
 	    });
 	    // Draw
 	    modApi.hookFunction("DrawText", HOOK_PRIORITY.normal, (args, next) => {
-	        if (modActive && args[0] === DialogFindPlayer("TimerUnknown")) {
+	        if (modActive && args[0] === InterfaceTextGet("TimerUnknown")) {
 	            const property = DialogFocusSourceItem?.Property;
-	            args[0] = DialogFindPlayer("TimerLeft") + " " + TimerToString(property?.RemoveTimer - CurrentTime);
+	            args[0] = InterfaceTextGet("TimerLeft") + " " + TimerToString(property?.RemoveTimer - CurrentTime);
 	            next(args);
 	        }
 	        else {
