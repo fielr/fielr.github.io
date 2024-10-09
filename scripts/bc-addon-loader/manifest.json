@@ -411,6 +411,38 @@
 			]
 		},
 		{
+			"id": "fuhui-DOM",
+			"name": "浮绘的DOM动作拓展",
+			"description": "浮绘的 mod! 一些自己写的dom类的动作 (大概喵)",
+			"author": "FuhuiNeko",
+			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
+			"tags": ["expansion"],
+			"type": "eval",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Dom_Activity_Main.js"
+				}
+			]
+		},
+		{
+			"id": "fuhui-SUB",
+			"name": "浮绘的SUB动作拓展",
+			"description": "浮绘的 mod! 一些自己写的sub类的动作 (大概喵)",
+			"author": "FuhuiNeko",
+			"repository": "https://github.com/FuhuiNeko/BC_Mods/",
+			"tags": ["expansion"],
+			"type": "eval",
+			"website": "",
+			"versions": [
+				{
+					"distribution": "stable",
+					"source": "https://raw.githubusercontent.com/FuhuiNeko/BC_Mods/main/Fuhui_Sub_Activity_Main.js"
+				}
+			]
+		},
+		{
 			"id": "XiaoSuActivity",
 			"name": "动作拓展以及其他易用性功能",
 			"description": "Expansion on activity options",
