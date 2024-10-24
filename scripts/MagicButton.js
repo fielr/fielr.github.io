@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.11
+// @version      1.4.12
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -41,7 +41,7 @@ var MagicButton = (function (exports) {
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.11'
+	    version: '1.4.12'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -339,30 +339,46 @@ var MagicButton = (function (exports) {
 	            StruggleProgress = 100;
 	        }
 	    });
-	    // Speech
-	    modApi.hookFunction("SpeechTransformProcess", HOOK_PRIORITY.overrideBehaviour, (args, next) => {
-	        if (modActive) {
-	            args[2] = args[2].filter(effect => effect !== "gagGarble");
-	        }
-	        return next(args);
-	    });
 	}
+
+	let antiGarble = false;
+	function getAntiGarble() {
+	    return antiGarble;
+	}
+	function setAntiGarble() {
+	    antiGarble = !antiGarble;
+	}
+	modApi.hookFunction("SpeechTransformProcess", HOOK_PRIORITY.overrideBehaviour, (args, next) => {
+	    if (getAntiGarble()) {
+	        args[2] = args[2].filter(effect => effect !== "gagGarble");
+	    }
+	    return next(args);
+	});
 
 	const buttons = {
 	    dialogSwitch: [68, 948, 52, 52],
 	    dialogUnlock: [68, 890, 52, 52],
-	    chatroomButton: [0, 815, 45, 45]
+	    chatroomButton: [0, 815, 45, 45],
+	    antiGarble: [0, 770, 45, 45]
 	};
 	function ChatroomButton() {
 	    modApi.hookFunction("ChatRoomMenuDraw", HOOK_PRIORITY.addBehaviour, (args, next) => {
 	        DrawButton(...buttons.chatroomButton, "❤️", modActive ? "aquamarine" : "white");
+	        DrawButton(...buttons.antiGarble, "💡", getAntiGarble() ? "aquamarine" : "white");
 	        next(args);
 	    });
 	    modApi.hookFunction("ChatRoomClick", HOOK_PRIORITY.normal, (args, next) => {
 	        if (MouseIn(...buttons.chatroomButton)) {
-	            return switchActive$1();
+	            switchActive$1();
 	        }
-	        next(args);
+	        else if (MouseIn(...buttons.antiGarble)) {
+	            setAntiGarble();
+	            // @ts-expect-error ts-18084 Player is defined.
+	            Player.ImmersionSettings.ShowUngarbledMessages = true;
+	        }
+	        else {
+	            next(args);
+	        }
 	    });
 	}
 	function DialogButton() {
