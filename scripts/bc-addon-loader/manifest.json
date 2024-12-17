@@ -292,6 +292,10 @@
 				{
 					"distribution": "stable",
 					"source": "https://dynilath.gitlab.io/SaotomeToyStoreVendor/NotifyPlus/main.js"
+				},
+				{
+					"distribution": "local",
+					"source": "http://localhost:3042/NotifyPlus/main.js"
 				}
 			]
 		},
