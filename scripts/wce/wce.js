@@ -5247,7 +5247,7 @@ var require_dexie = __commonJS({
           });
         }
       }
-      var DEXIE_VERSION = "4.0.10";
+      var DEXIE_VERSION = "4.0.11";
       var maxString = String.fromCharCode(65535);
       var minKey = -Infinity;
       var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
@@ -5908,15 +5908,15 @@ var require_dexie = __commonJS({
           }
         });
       }
-      var PropModSymbol2 = Symbol();
       var PropModification2 = function() {
         function PropModification3(spec) {
-          Object.assign(this, spec);
+          this["@@propmod"] = spec;
         }
         PropModification3.prototype.execute = function(value) {
           var _a2;
-          if (this.add !== void 0) {
-            var term = this.add;
+          var spec = this["@@propmod"];
+          if (spec.add !== void 0) {
+            var term = spec.add;
             if (isArray(term)) {
               return __spreadArray(__spreadArray([], isArray(value) ? value : [], true), term, true).sort();
             }
@@ -5931,8 +5931,8 @@ var require_dexie = __commonJS({
             }
             throw new TypeError("Invalid term ".concat(term));
           }
-          if (this.remove !== void 0) {
-            var subtrahend_1 = this.remove;
+          if (spec.remove !== void 0) {
+            var subtrahend_1 = spec.remove;
             if (isArray(subtrahend_1)) {
               return isArray(value) ? value.filter(function(item) {
                 return !subtrahend_1.includes(item);
@@ -5949,9 +5949,9 @@ var require_dexie = __commonJS({
             }
             throw new TypeError("Invalid subtrahend ".concat(subtrahend_1));
           }
-          var prefixToReplace = (_a2 = this.replacePrefix) === null || _a2 === void 0 ? void 0 : _a2[0];
+          var prefixToReplace = (_a2 = spec.replacePrefix) === null || _a2 === void 0 ? void 0 : _a2[0];
           if (prefixToReplace && typeof value === "string" && value.startsWith(prefixToReplace)) {
-            return this.replacePrefix[1] + value.substring(prefixToReplace.length);
+            return spec.replacePrefix[1] + value.substring(prefixToReplace.length);
           }
           return value;
         };
@@ -10024,7 +10024,6 @@ var require_dexie = __commonJS({
         liveQuery: liveQuery2,
         Entity: Entity2,
         cmp: cmp2,
-        PropModSymbol: PropModSymbol2,
         PropModification: PropModification2,
         replacePrefix: replacePrefix2,
         add: add2,
@@ -10045,7 +10044,6 @@ var import_wrapper_exports = {};
 __export(import_wrapper_exports, {
   Dexie: () => Dexie,
   Entity: () => Entity,
-  PropModSymbol: () => PropModSymbol,
   PropModification: () => PropModification,
   RangeSet: () => RangeSet,
   add: () => add,
@@ -10057,7 +10055,7 @@ __export(import_wrapper_exports, {
   remove: () => remove,
   replacePrefix: () => replacePrefix
 });
-var import_dexie, DexieSymbol, Dexie, liveQuery, mergeRanges, rangesOverlap, RangeSet, cmp, Entity, PropModSymbol, PropModification, replacePrefix, add, remove, import_wrapper_default;
+var import_dexie, DexieSymbol, Dexie, liveQuery, mergeRanges, rangesOverlap, RangeSet, cmp, Entity, PropModification, replacePrefix, add, remove, import_wrapper_default;
 var init_import_wrapper = __esm({
   "node_modules/dexie/import-wrapper.mjs"() {
     import_dexie = __toESM(require_dexie(), 1);
@@ -10073,7 +10071,6 @@ var init_import_wrapper = __esm({
       RangeSet,
       cmp,
       Entity,
-      PropModSymbol,
       PropModification,
       replacePrefix,
       add,
@@ -10285,11 +10282,11 @@ function disableLeashing() {
 }
 
 // src/util/constants.ts
-var FBC_VERSION = "6.3.6";
+var FBC_VERSION = "6.3.7";
 var settingsVersion = 63.6;
-var SUPPORTED_GAME_VERSIONS = ["R110", "R111"];
-var fbcChangelog = `WCE v6.3.6
-* BC R111 compatibility and other fixes
+var SUPPORTED_GAME_VERSIONS = ["R112"];
+var fbcChangelog = `WCE v6.3.7
+* BC R112 compatibility and other fixes
 * fixes extended wardrobe creation for new accounts (just reenable it again now)
 * for a full changelog visit our new website: https://wce-docs.vercel.app/blog
 
@@ -12500,216 +12497,13 @@ function fbcSettingValue(key) {
 // src/util/functionHashes.ts
 function expectedHashes(gameVersion) {
   switch (gameVersion.toLowerCase()) {
-    case "r110":
-      return {
-        ActivityChatRoomArousalSync: "BFF3DED7",
-        ActivitySetArousal: "3AE28123",
-        ActivitySetArousalTimer: "1342AFE2",
-        ActivityTimerProgress: "6CD388A7",
-        AppearanceClick: "48B83523",
-        // Screens/Character/Appearance/Appearance.js (21.5.2024)
-        AppearanceLoad: "4360C485",
-        AppearanceRun: "8B7558CB",
-        // Screens/Character/Appearance/Appearance.js (13.5.2024)
-        CharacterAppearanceBuildCanvas: "C05FE035",
-        // Screens/Character/Appearance/Appearance.js
-        CharacterAppearanceMustHide: "9C34DF21",
-        CharacterAppearanceVisible: "0740043C",
-        CharacterAppearanceWardrobeLoad: "A5B63A03",
-        CharacterBuildDialog: "85F79C6E",
-        CharacterCompressWardrobe: "2A05ECD1",
-        CharacterDelete: "57AA5D48",
-        CharacterGetCurrent: "69F45A41",
-        CharacterLoadCanvas: "EAB81BC4",
-        CharacterLoadOnline: "407FEDDE",
-        // Scripts/Character.js
-        CharacterNickname: "A794EFF5",
-        CharacterRefresh: "301DA9CF",
-        CharacterSetCurrent: "F46573D8",
-        CharacterSetFacialExpression: "EC032BEE",
-        // Scripts/Character.js (6.5.2024)
-        CharacterSetActivePose: "566A14D7",
-        ChatAdminRoomCustomizationClick: "9D859B28",
-        ChatAdminRoomCustomizationProcess: "AF01C65A",
-        ChatRoomAppendChat: "12890378",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomCharacterUpdate: "DE2DC592",
-        ChatRoomCharacterViewDraw: "732C91C9",
-        // Screens/Online/ChatRoom/ChatRoomCharacterView.js (19.4.2024 )
-        ChatRoomCharacterViewIsActive: "CD8066FA",
-        ChatRoomClearAllElements: "ECF65628",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomCurrentTime: "A462DD3A",
-        ChatRoomDrawCharacterStatusIcons: "B5209E11",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomGenerateChatRoomChatMessage: "3BDE0884",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomHideElements: "D58ECB5C",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomHTMLEntities: "0A7ADB1D",
-        ChatRoomKeyDown: "9F45A713",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomLeave: "DAFE49DC",
-        ChatRoomListManipulation: "75D28A8B",
-        ChatRoomMapViewCharacterIsVisible: "286C447D",
-        ChatRoomMapViewCharacterOnWhisperRange: "B0D08E96",
-        ChatRoomMapViewIsActive: "D181020D",
-        ChatRoomMenuBuild: "F76AEFC3",
-        ChatRoomMenuClick: "259784BA",
-        // Screens/Online/ChatRoom/ChatRoom.js (6.5.2024)
-        ChatRoomMenuDraw: "83275135",
-        // Screens/Online/ChatRoom/ChatRoom.js (6.5.2024)
-        ChatRoomMessage: "E75ED29B",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomRegisterMessageHandler: "C432923A",
-        ChatRoomSendChat: "ACB10CE5",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomStart: "9B822A9A",
-        ChatRoomSyncMemberJoin: "2A9CB40B",
-        // Screens/Online/ChatRoom/ChatRoom.js
-        CommandCombine: "80F9D4AF",
-        // Screens/Online/ChatRoom/Commands.js
-        CommandExecute: "D1DEB2AD",
-        // Screens/Online/ChatRoom/Commands.js
-        CommonClick: "1F6DF7CB",
-        CommonColorIsValid: "390A2CE4",
-        CommonSetScreen: "85E69EBB",
-        // Scripts/Common.js
-        CraftingClick: "5E7225EA",
-        // Screens/Room/Crafting/Crafting.js
-        CraftingConvertSelectedToItem: "F5211D40",
-        CraftingRun: "4CD7AB08",
-        // Screens/Room/Crafting/Crafting.js
-        DialogCanUnlock: "A86B2558",
-        DialogDrawItemMenu: "FCE556C2",
-        DialogLeave: "C37553DC",
-        DialogMenuButtonBuild: "3FDE2F94",
-        // Scripts/Dialog.js (13.5.2024)
-        DialogMenuButtonClick: "C1F5E0AF",
-        // Scripts/Dialog.js (2.5.2024)
-        DrawArousalMeter: "BB0755AF",
-        DrawArousalThermometer: "7ED6D822",
-        DrawBackNextButton: "7263249E",
-        // Scripts/Drawing.js
-        DrawButton: "B747DF6E",
-        DrawCharacter: "B175AF5E",
-        DrawCheckbox: "00FD87EB",
-        DrawImageEx: "E01BE7E7",
-        DrawImageResize: "D205975A",
-        DrawItemPreview: "6A7A1E2A",
-        DrawProcess: "9776CBC2",
-        DrawText: "C1BF0F50",
-        DrawTextFit: "F9A1B11E",
-        ElementCreate: "A3E07B07",
-        ElementCreateInput: "0755ED07",
-        ElementCreateTextArea: "4E040819",
-        // Scripts/Element.js
-        ElementIsScrolledToEnd: "1CC4FE11",
-        ElementPosition: "81836C4E",
-        // Scripts/Element.js
-        ElementScrollToEnd: "1AC45575",
-        ElementValue: "4F26C62F",
-        FriendListShowBeep: "5B91D5DA",
-        // Screens/Character/FriendList/FriendList.js
-        GameRun: "337CB358",
-        // Scripts/Game.js
-        GLDrawResetCanvas: "81214642",
-        InformationSheetRun: "5B5C7751",
-        // Screens/Character/InformationSheet/InformationSheet.js
-        InterfaceTextGet: "66603471",
-        // Scripts/Text.js (2.5.2024)
-        InventoryGet: "E666F671",
-        "Layering.Load": "589C88CD",
-        // Scripts/Layering.js
-        "Layering._ResetClickListener": "5EDCC26F",
-        // Scripts/Layering.js
-        LoginClick: "ADA7E2B7",
-        // Screens/Character/Login/Login.js
-        LoginDoLogin: "D4000B03",
-        // Screens/Character/Login/Login.js
-        LoginRun: "D1DB7A8A",
-        // Screens/Character/Login/Login.js
-        LoginSetSubmitted: "C88F4A8E",
-        LoginStatusReset: "18619F02",
-        MouseIn: "CA8B839E",
-        NotificationDrawFavicon: "AB88656B",
-        NotificationRaise: "E8F29646",
-        NotificationTitleUpdate: "0E92F3ED",
-        OnlineGameAllowChange: "3779F42C",
-        OnlineProfileClick: "521146DF",
-        OnlineProfileUnload: "A8651F30",
-        OnlineProfileLoad: "BE8B009B",
-        OnlineProfileRun: "7F57EF9A",
-        PoseSetActive: "22C02050",
-        PreferenceExit: "27E40748",
-        PreferenceInitPlayer: "B12FA731",
-        // Screens/Character/Preference/Preference.js (6.5.2024)
-        PreferenceSubscreenArousalClick: "84F49886",
-        PreferenceSubscreenArousalRun: "96A6157B",
-        PreferenceSubscreenImmersionClick: "0EF82344",
-        PreferenceSubscreenImmersionRun: "276FA30B",
-        RelogRun: "10AF5A60",
-        RelogExit: "2DFB2DAD",
-        ServerAccountBeep: "8782A099",
-        // Scripts/Server.js
-        ServerAppearanceBundle: "4D069622",
-        ServerAppearanceLoadFromBundle: "946537FD",
-        ServerConnect: "845E50A6",
-        ServerDisconnect: "433A71F9",
-        ServerInit: "B6CEF7F1",
-        ServerOpenFriendList: "FA8D3CDE",
-        ServerPlayerAppearanceSync: "A014E0B7",
-        ServerPlayerExtensionSettingsSync: "1776666B",
-        ServerSend: "ABE74E75",
-        ServerSendQueueProcess: "BD4277AC",
-        SkillGetWithRatio: "3EB4BC45",
-        SpeechTransformBabyTalk: "C812EE0E",
-        // Scripts/Speech.js
-        SpeechTransformGagGarble: "691A05BF",
-        // Scripts/Speech.js
-        SpeechTransformGagGarbleIntensity: "F61ECBDA",
-        // Scripts/Speech.js
-        SpeechTransformProcess: "666DDA2F",
-        // Scripts/Speech.js
-        SpeechTransformShouldBabyTalk: "634BCD64",
-        // Scripts/Speech.js
-        SpeechTransformStutter: "A930F55E",
-        // Scripts/Speech.js
-        SpeechTransformStutterIntensity: "4754768A",
-        // Scripts/Speech.js
-        StruggleDexterityProcess: "D185D348",
-        // Scripts/Struggle.js
-        StruggleFlexibilityCheck: "727CE05B",
-        StruggleFlexibilityProcess: "1A0B96EF",
-        // Scripts/Struggle.js
-        StruggleLockPickDraw: "6FE841B9",
-        // Scripts/Struggle.js
-        StruggleMinigameHandleExpression: "1B3ABF55",
-        StruggleMinigameStop: "FB05E8A9",
-        StruggleStrengthProcess: "B1A1457D",
-        // StruggleStrengthProcess
-        TextGet: "4DDE5794",
-        TextLoad: "0D535190",
-        TimerInventoryRemove: "2588CA11",
-        TimerProcess: "BFB7FFE2",
-        TitleExit: "F13F533C",
-        ValidationSanitizeProperties: "843D3952",
-        WardrobeClick: "33405B1D",
-        WardrobeExit: "12D14AE4",
-        WardrobeFastLoad: "AAB9F25B",
-        WardrobeFastSave: "D1E906FD",
-        WardrobeFixLength: "CA3334C6",
-        WardrobeLoad: "C343A4C7",
-        WardrobeLoadCharacterNames: "F39DF5E3",
-        WardrobeRun: "633B3570"
-      };
     default:
       return {
         ActivityChatRoomArousalSync: "BFF3DED7",
         ActivitySetArousal: "3AE28123",
         ActivitySetArousalTimer: "1342AFE2",
         ActivityTimerProgress: "6CD388A7",
-        AppearanceClick: "48B83523",
+        AppearanceClick: "2F2F08AD",
         // Screens/Character/Appearance/Appearance.js (21.5.2024)
         AppearanceLoad: "4360C485",
         AppearanceRun: "8B7558CB",
@@ -12728,7 +12522,7 @@ function expectedHashes(gameVersion) {
         // Scripts/Character.js
         CharacterNickname: "A794EFF5",
         CharacterRefresh: "301DA9CF",
-        CharacterSetCurrent: "F46573D8",
+        CharacterSetCurrent: "9B71AC3E",
         CharacterSetFacialExpression: "EC032BEE",
         // Scripts/Character.js (6.5.2024)
         CharacterSetActivePose: "566A14D7",
@@ -12740,27 +12534,25 @@ function expectedHashes(gameVersion) {
         ChatRoomCharacterViewDraw: "732C91C9",
         // Screens/Online/ChatRoom/ChatRoomCharacterView.js (19.4.2024 )
         ChatRoomCharacterViewIsActive: "CD8066FA",
-        ChatRoomClearAllElements: "ECF65628",
-        // Screens/Online/ChatRoom/ChatRoom.js
         ChatRoomCurrentTime: "A462DD3A",
-        ChatRoomDrawCharacterStatusIcons: "B5209E11",
+        ChatRoomDrawCharacterStatusIcons: "3D957FC2",
         // Screens/Online/ChatRoom/ChatRoom.js
         ChatRoomGenerateChatRoomChatMessage: "3BDE0884",
         // Screens/Online/ChatRoom/ChatRoom.js
         ChatRoomHideElements: "D58ECB5C",
         // Screens/Online/ChatRoom/ChatRoom.js
         ChatRoomHTMLEntities: "0A7ADB1D",
-        ChatRoomKeyDown: "9F45A713",
+        ChatRoomKeyDown: "A4974D73",
         // Screens/Online/ChatRoom/ChatRoom.js
-        ChatRoomLeave: "DAFE49DC",
+        ChatRoomLeave: "BD1A285F",
         ChatRoomListManipulation: "75D28A8B",
         ChatRoomMapViewCharacterIsVisible: "286C447D",
         ChatRoomMapViewCharacterOnWhisperRange: "B0D08E96",
         ChatRoomMapViewIsActive: "D181020D",
-        ChatRoomMenuBuild: "F76AEFC3",
-        ChatRoomMenuClick: "259784BA",
+        ChatRoomMenuBuild: "BE8ACFBE",
+        ChatRoomMenuClick: "BE001739",
         // Screens/Online/ChatRoom/ChatRoom.js (6.5.2024)
-        ChatRoomMenuDraw: "83275135",
+        ChatRoomMenuDraw: "6DBEC23B",
         // Screens/Online/ChatRoom/ChatRoom.js (6.5.2024)
         ChatRoomMessage: "E75ED29B",
         // Screens/Online/ChatRoom/ChatRoom.js
@@ -12774,7 +12566,7 @@ function expectedHashes(gameVersion) {
         // Screens/Online/ChatRoom/Commands.js
         CommandExecute: "D1DEB2AD",
         // Screens/Online/ChatRoom/Commands.js
-        CommonClick: "1F6DF7CB",
+        CommonClick: "918C74F3",
         CommonColorIsValid: "390A2CE4",
         CommonSetScreen: "85E69EBB",
         // Scripts/Common.js
@@ -12784,11 +12576,10 @@ function expectedHashes(gameVersion) {
         CraftingRun: "4CD7AB08",
         // Screens/Room/Crafting/Crafting.js
         DialogCanUnlock: "A86B2558",
-        DialogDrawItemMenu: "FCE556C2",
-        DialogLeave: "C37553DC",
-        DialogMenuButtonBuild: "3FDE2F94",
+        DialogLeave: "AD3A0840",
+        DialogMenuButtonBuild: "88CE1D73",
         // Scripts/Dialog.js (13.5.2024)
-        DialogMenuButtonClick: "C1F5E0AF",
+        DialogMenuButtonClick: "2CA1256C",
         // Scripts/Dialog.js (2.5.2024)
         DrawArousalMeter: "BB0755AF",
         DrawArousalThermometer: "7ED6D822",
@@ -12800,11 +12591,11 @@ function expectedHashes(gameVersion) {
         DrawImageEx: "E01BE7E7",
         DrawImageResize: "D205975A",
         DrawItemPreview: "6A7A1E2A",
-        DrawProcess: "9776CBC2",
+        DrawProcess: "7DA972D9",
         DrawText: "C1BF0F50",
         DrawTextFit: "F9A1B11E",
         ElementCreate: "A3E07B07",
-        ElementCreateInput: "0755ED07",
+        ElementCreateInput: "7F1709DA",
         ElementCreateTextArea: "4E040819",
         // Scripts/Element.js
         ElementIsScrolledToEnd: "1CC4FE11",
@@ -12822,17 +12613,17 @@ function expectedHashes(gameVersion) {
         InterfaceTextGet: "66603471",
         // Scripts/Text.js (2.5.2024)
         InventoryGet: "E666F671",
-        "Layering.Load": "589C88CD",
+        "Layering.Load": "8FA7D9CB",
         // Scripts/Layering.js
         "Layering._ResetClickListener": "5EDCC26F",
         // Scripts/Layering.js
-        LoginClick: "ADA7E2B7",
+        LoginClick: "5B9765F8",
         // Screens/Character/Login/Login.js
-        LoginDoLogin: "D4000B03",
+        LoginDoLogin: "E9145D39",
         // Screens/Character/Login/Login.js
-        LoginRun: "D1DB7A8A",
+        LoginRun: "181BE041",
         // Screens/Character/Login/Login.js
-        LoginStatusReset: "18619F02",
+        LoginStatusReset: "43C3FCD2",
         MouseIn: "CA8B839E",
         NotificationDrawFavicon: "AB88656B",
         NotificationRaise: "E8F29646",
@@ -12850,7 +12641,7 @@ function expectedHashes(gameVersion) {
         PreferenceSubscreenArousalRun: "96A6157B",
         PreferenceSubscreenImmersionClick: "0EF82344",
         PreferenceSubscreenImmersionRun: "276FA30B",
-        RelogRun: "10AF5A60",
+        RelogRun: "843E8F94",
         RelogExit: "2DFB2DAD",
         ServerAccountBeep: "8782A099",
         // Scripts/Server.js
@@ -13308,11 +13099,11 @@ function wceStyles() {
   }
   #wce-chat-baby-talk[data-state="ignore"]::before,
   #wce-chat-stutters[data-state="ignore"]::before {
-    ${GameVersion === "R106" ? "background-color" : "--button-color"}: #bbb;
+    --button-color: #bbb;
   }
   #wce-chat-baby-talk[data-state="preserve"]::before,
   #wce-chat-stutters[data-state="preserve"]::before {
-    ${GameVersion === "R106" ? "background-color" : "--button-color"}: #666;
+    --button-color: #666;
   }
   `
   );
@@ -14390,8 +14181,6 @@ async function automaticReconnect() {
           }
           const idx = parseInt(pos);
           if (MouseIn(10, idx, 350, 60)) {
-            ElementValue("InputName", loginData.posMaps[idx]);
-            ElementValue("InputPassword", loginData.passwords[loginData.posMaps[idx]]);
             LoginDoLogin(loginData.posMaps[idx], loginData.passwords[loginData.posMaps[idx]]);
           } else if (MouseIn(355, idx, 60, 60)) {
             clearPassword(loginData.posMaps[idx]);
@@ -14419,15 +14208,7 @@ async function automaticReconnect() {
       logWarn("No saved credentials for account", Player.AccountName);
       return;
     }
-    if (GameVersion === "R110") {
-      LoginSetSubmitted();
-      ServerSend("AccountLogin", {
-        AccountName: Player.AccountName,
-        Password: passwords[Player.AccountName]
-      });
-    } else {
-      LoginDoLogin(Player.AccountName, passwords[Player.AccountName]);
-    }
+    LoginDoLogin(Player.AccountName, passwords[Player.AccountName]);
     if (!await waitFor(
       () => CurrentScreen !== "Relog",
       () => !breakCircuit
@@ -14810,10 +14591,12 @@ function cacheClearer() {
   globalThis.bceClearCaches = clearCaches;
   function doClearCaches() {
     debug("Clearing caches");
-    if (GLDrawCanvas.GL?.textureCache) {
-      GLDrawCanvas.GL.textureCache.clear();
+    if (GLDrawCanvas) {
+      if (GLDrawCanvas.GL?.textureCache) {
+        GLDrawCanvas.GL.textureCache.clear();
+      }
+      GLDrawResetCanvas();
     }
-    GLDrawResetCanvas();
     debug("Clearing old characters from cache");
     const oldOnlineCharacters = Character.filter((c) => c.IsOnline?.() && !ChatRoomCharacter.some((cc) => cc.MemberNumber === c.MemberNumber));
     oldOnlineCharacters.forEach((c) => CharacterDelete(c));
@@ -17372,7 +17155,8 @@ function discreetMode() {
           }
           return false;
         }
-        if (!isString(args[0]) && ignoredImages.test(args[0]?.src)) return false;
+        if (args[0] instanceof HTMLCanvasElement) return false;
+        if (args[0] instanceof HTMLImageElement && ignoredImages.test(args[0].src)) return false;
       }
       return next(args);
     }
@@ -17401,7 +17185,7 @@ function discreetMode() {
             blur: Player.GetBlurLevel(),
             darken: DrawGetDarkFactor(),
             tints: Player.GetTints(),
-            sizeMode: ChatRoomData.Custom.SizeMode
+            sizeMode: ChatRoomData.Custom?.SizeMode
           };
           ChatRoomCharacterViewLoopCharacters((charIdx, charX, charY, _space, roomZoom) => {
             if (charIdx % charsPerRow === 0) {
@@ -18024,90 +17808,6 @@ function richOnlineProfile() {
   );
 }
 
-// src/functions/crafting.ts
-async function crafting() {
-  await waitFor(() => Array.isArray(Commands) && Commands.length > 0);
-  const importPosition = [1485, 15, 90, 90];
-  const exportPosition = [1585, 15, 90, 90];
-  function importCraft() {
-    FUSAM.modals.open({
-      prompt: displayText("Paste the craft here"),
-      input: { initial: "", readonly: false, type: "textarea" },
-      callback: (action, str) => {
-        if (action !== "submit" || !str) return;
-        try {
-          const craft = parseJSON(LZString.decompressFromBase64(str));
-          if (!isNonNullObject(craft)) {
-            logError(craft);
-            throw new Error(`invalid craft type ${typeof craft} ${str}`);
-          }
-          for (const [key, value] of objEntries(craft)) {
-            if (!isString(value) && !Number.isInteger(value) && value !== false && value !== true && value !== null && !isNonNullObject(value)) {
-              logWarn("potentially invalid craft bundle:", key, "was", value);
-            }
-          }
-          CraftingSelectedItem = CraftingConvertItemToSelected(craft);
-          CraftingModeSet("Name");
-        } catch (e) {
-          logError("importing craft", e);
-        }
-      }
-    });
-  }
-  if (GameVersion === "R107") {
-    SDK.hookFunction(
-      "CraftingClick",
-      HOOK_PRIORITIES.AddBehaviour,
-      (args, next) => {
-        if (CraftingMode === "Name") {
-          if (MouseIn(...exportPosition)) {
-            const exportString = LZString.compressToBase64(JSON.stringify(CraftingConvertSelectedToItem()));
-            FUSAM.modals.open({
-              prompt: displayText("Copy the craft here"),
-              input: { initial: exportString, readonly: true, type: "textarea" },
-              callback: () => {
-                debug("exported craft");
-              }
-            });
-            navigator.clipboard.writeText(exportString);
-          } else if (MouseIn(...importPosition)) {
-            importCraft();
-          }
-        }
-        return next(args);
-      }
-    );
-    SDK.hookFunction(
-      "CraftingRun",
-      HOOK_PRIORITIES.ModifyBehaviourMedium,
-      (args, next) => {
-        const ret = next(args);
-        if (CraftingMode === "Name") {
-          DrawButton(...importPosition, displayText("Import"), "white");
-          DrawButton(...exportPosition, displayText("Export"), "white");
-        }
-        return ret;
-      }
-    );
-  }
-  SDK.hookFunction(
-    "DrawItemPreview",
-    HOOK_PRIORITIES.AddBehaviour,
-    (args, next) => {
-      const ret = next(args);
-      const [item, , x, y] = args;
-      if (item) {
-        const { Craft } = item;
-        if (MouseIn(x, y, DialogInventoryGrid.itemWidth, DialogInventoryGrid.itemHeight) && Craft) {
-          drawTooltip(x, y, DialogInventoryGrid.itemWidth, displayText(Craft.Property), "center");
-          drawTooltip(1e3, y - 70, 975, `${displayText("Description:")} ${CraftingDescription.Decode(Craft.Description) || "<no description>"}`, "left");
-        }
-      }
-      return ret;
-    }
-  );
-}
-
 // src/functions/numericArousalMeters.ts
 function numericArousalMeters() {
   let isExpanded = false;
@@ -18341,7 +18041,6 @@ async function registerAllFunctions() {
   registerFunction(pastProfiles, "pastProfiles");
   registerFunction(pendingMessages, "pendingMessages");
   registerFunction(hideHiddenItemsIcon, "hideHiddenItemsIcon");
-  registerFunction(crafting, "crafting");
   registerFunction(itemAntiCheat, "itemAntiCheat");
   registerFunction(leashFix, "leashFix");
   registerFunction(hookBCXAPI, "hookBCXAPI");
