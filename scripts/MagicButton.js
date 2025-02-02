@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MagicButton
 // @namespace    https://www.bondageprojects.com/
-// @version      1.4.12
+// @version      1.4.13
 // @description  Act as not tied.
 // @author       fielr
 // @match        https://bondageprojects.elementfx.com/*
@@ -41,7 +41,7 @@ var MagicButton = (function (exports) {
 	const modApi = bcModSdk.registerMod({
 	    name: 'MagicButton',
 	    fullName: 'MagicButton',
-	    version: '1.4.12'
+	    version: '1.4.13'
 	});
 	const HOOK_PRIORITY = {
 	    observe: 0,
@@ -54,8 +54,13 @@ var MagicButton = (function (exports) {
 	    Checked: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAxCAYAAABznEEcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANESURBVGhD7dlJqI1hHMfxax4jM6UMGROFosiQhbKwsEAsrISlUhZkKUNmGVZS7CTFQgqlbKQMG5EpLGSe5/H7ve7R29tzzn3uGe59bt1ffTp37DzP+z7v/xlOXVvaUr10aHhNNe0bXksmxU60Q1/Mx1KMxXN8wW+0ivTEajzCH/zEJSyGv2sVmYwLsAMF3oHH2Io+SDoO70Pw6mc7UfAeJzESyWY53iHUgQI7aEeTi1VoNu4g1PC88/ifqBLWDBmMNRhW/13p+Hxc+/dlOumIVfDBDV31vCsYjaQyHTfxC6FGZ73CMqQyguozFGdQrBplfcVODEAy6YS1+I5Qo7Ps5DlMhTN6ErEhM3AfoUbn3cI82PFk4pA4jVCD8z5gE7oimfTABrxAqNF5FzEGycThsAR3EWpw3kvMQlIZD4dRTDn9gS1IKtZ2h9FrhBqdZSfPYjiSylw8QajReTewAFWrRpbDSmvzQFxFqMF5PgdWI3d3Fce1/QjMgUuDXiinM/2wGx8RanSew2gCKo6NnYYjuIfb2IZRaEocDq51Yie1p3DYVRw7MAlO827OC2/wFjvg0IiNS+tTiFlaaCUqXtzZgXGwA9+Qf5PP2IeY2dNhtB7ZC1GM5fQ4XBBWHIeLJwuhN8pyezgEpZ6RRQhdiBCrkTu7qiyxHS4ueUNvlOXV9Y7YkVAmwt1X6H/z3sD5o2qnGI7fmNlUTlqb0R/Z9MZexOwR/JsTKHYxyoqHVo770BuGfILls/CMOBw8tYutRg9Q9bVRFxxE7FiWG/f96A6rmicRMf/vxVqHmhylOhx8cGOqSoF/exQOo9Dv86xGx1DT0zyr1AHELNYKvCOhn4d4MDAFNc8gbIdHh6GGlOsZPKJptp2aQ8sThlBjyuGsvwtOhM2ew7AShRrWFJfhHNIi8XOBPYjdF4e44V+BzmiRuLzwGXFGd0iEGtkYK14SH5LYCIdW7Kq04DpcWCYVH/aYqmXZfYiFKLVYbJFYtSy/jc0j7ubcTCV1fpqNz4gTYrGZ3btgNXJrm9xdyMaZ3Qc2tFayAHhQltT5abF4gOCQcR9iZ3y1nG5EN9Q81brNftrjCnYmvPJ+muMRjVWsLW1pPamr+wsoLy24cJhcqgAAAABJRU5ErkJggg=="
 	};
 	let modActive = false;
-	function switchActive$1() {
-	    modActive = !modActive;
+	function switchActive$1(status) {
+	    if (status === undefined) {
+	        modActive = !modActive;
+	    }
+	    else {
+	        modActive = status;
+	    }
 	}
 
 	function cheatHooks () {
@@ -428,7 +433,10 @@ var MagicButton = (function (exports) {
 	    {
 	        Tag: "hidem",
 	        Description: "隐藏 magicbutton 按钮",
-	        Action: () => hideButtons = true
+	        Action: () => {
+	            hideButtons = true;
+	            switchActive$1(false);
+	        }
 	    },
 	    {
 	        Tag: "showm",
